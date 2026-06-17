@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: "#features", label: "คุณสมบัติ" },
   { href: "#pricing", label: "ราคา" },
   { href: "#contact", label: "ติดต่อ" },
+  { href: "/showcase", label: "Showcase" },
 ];
 
 export default function PublicLayout({
