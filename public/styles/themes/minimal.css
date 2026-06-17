@@ -1,0 +1,76 @@
+/* ============================================
+   Template: minimal
+   เรียบสะอาด neutral — zinc ramp + accent น้ำเงิน, primary เกือบดำ
+   ============================================ */
+
+[data-theme="minimal"] {
+  /* Brand — neutral zinc (primary = near-black) */
+  --brand-50: #fafafa;
+  --brand-100: #f4f4f5;
+  --brand-200: #e4e4e7;
+  --brand-300: #d4d4d8;
+  --brand-400: #a1a1aa;
+  --brand-500: #3f3f46;
+  --brand-600: #27272a;
+  --brand-700: #18181b;
+  --brand-800: #09090b;
+  --brand-900: #000000;
+
+  /* Accent — blue */
+  --accent-100: #dbeafe;
+  --accent-400: #60a5fa;
+  --accent-500: #3b82f6;
+  --accent-600: #2563eb;
+
+  /* Surface / semantic */
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --muted: #71717a;
+  --muted-surface: #f4f4f5;
+  --border: #e4e4e7;
+  --ring: #a1a1aa;
+  --on-brand: #ffffff;
+
+  /* Status */
+  --success: #16a34a;
+  --success-surface: #dcfce7;
+  --warning: #d97706;
+  --warning-surface: #fef3c7;
+  --error: #dc2626;
+  --error-surface: #fee2e2;
+
+  /* Fonts */
+  --font-body: var(--font-noto-thai), system-ui, sans-serif;
+  --font-heading-family: var(--font-noto-thai), system-ui, sans-serif;
+}
+
+[data-theme="minimal"].dark,
+.dark[data-theme="minimal"] {
+  /* Flip ramp: 50–300 = dark surfaces/borders, 500–900 = light text.
+     brand-500 becomes light → on-brand must be dark so primary button text reads. */
+  --brand-50: #27272a;
+  --brand-100: #3f3f46;
+  --brand-200: #52525b;
+  --brand-300: #71717a;
+  --brand-500: #e4e4e7;
+  --brand-600: #f4f4f5;
+  --brand-700: #fafafa;
+  --brand-800: #ffffff;
+  --brand-900: #ffffff;
+  --on-brand: #09090b;
+
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --muted: #a1a1aa;
+  --muted-surface: #18181b;
+  --border: #27272a;
+  --ring: #52525b;
+
+  --success-surface: #14532d;
+  --warning-surface: #451a03;
+  --error-surface: #450a0a;
+}

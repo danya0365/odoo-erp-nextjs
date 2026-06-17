@@ -1,8 +1,7 @@
-// Root layout
+// app/layout.tsx (ส่วนที่เกี่ยวกับ theme/font — ตัดให้เห็นเฉพาะจุดสำคัญ)
 //  - next/font โหลดฟอนต์ "ครั้งเดียวทั้งแอป" แล้ว expose เป็น CSS variable
 //  - <html data-theme="cafe"> = ค่าเริ่มต้น (SSR) ; ThemeScript จะแก้ก่อน paint ตาม localStorage
 //  - suppressHydrationWarning เพราะ data-theme/.dark ถูก mutate โดย script ฝั่ง client
-import type { Metadata } from "next";
 import { Noto_Sans_Thai, Noto_Serif_Thai } from "next/font/google";
 import "@/public/styles/index.css";
 
@@ -24,11 +23,6 @@ const notoSerifThai = Noto_Serif_Thai({
   subsets: ["thai", "latin"],
   display: "swap",
 });
-
-export const metadata: Metadata = {
-  title: "Odoo ERP",
-  description: "ระบบ ERP สำหรับธุรกิจของคุณ",
-};
 
 export default function RootLayout({
   children,
