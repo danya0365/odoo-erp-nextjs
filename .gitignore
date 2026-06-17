@@ -32,6 +32,19 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# local libSQL database (dev)
+local.db
+local.db-*
+
+# test artifacts
+/.tmp
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+tests/e2e/.auth
 
 # vercel
 .vercel
