@@ -21,6 +21,7 @@ export interface IPartnerRepository {
   create(input: CreatePartnerInput): Promise<Partner>;
   /** scope ด้วย shopId เสมอ */
   findById(shopId: string, id: string): Promise<Partner | null>;
+  findByEmail(shopId: string, email: string): Promise<Partner | null>;
   list(shopId: string, query: PageQuery): Promise<Page<Partner>>;
   update(shopId: string, id: string, input: UpdatePartnerInput): Promise<Partner>;
   setActive(shopId: string, id: string, isActive: boolean): Promise<Partner>;

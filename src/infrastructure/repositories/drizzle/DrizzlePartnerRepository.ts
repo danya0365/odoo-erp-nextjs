@@ -63,6 +63,13 @@ export class DrizzlePartnerRepository implements IPartnerRepository {
     return row ? toPartner(row) : null;
   }
 
+  async findByEmail(shopId: string, email: string): Promise<Partner | null> {
+    const row = await this.db.query.partners.findFirst({
+      where: and(eq(schema.partners.shopId, shopId), eq(schema.partners.email, email)),
+    });
+    return row ? toPartner(row) : null;
+  }
+
   async list(shopId: string, query: PageQuery): Promise<Page<Partner>> {
     const { offset, limit } = toOffsetLimit(query);
     const filters: SQL[] = [eq(schema.partners.shopId, shopId)];

@@ -476,6 +476,19 @@ export interface PayrollRunWithSlips extends PayrollRun {
   slips: Payslip[];
 }
 
+// ── e-Commerce storefront ──
+export interface OnlineOrder {
+  id: string;
+  shopId: string;
+  orderNumber: string;
+  customerName: string;
+  email: string;
+  phone: string | null;
+  salesOrderId: string; // ใบขายที่สร้างเข้า pipeline
+  totalAmount: number; // minor
+  createdAt: string;
+}
+
 export type PartnerType = "customer" | "vendor" | "both";
 
 export interface Partner {
