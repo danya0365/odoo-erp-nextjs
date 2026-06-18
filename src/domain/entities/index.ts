@@ -59,7 +59,12 @@ export interface StockLocation {
 }
 
 export type StockMoveType = "in" | "out" | "adjust";
-export type StockSourceType = "adjustment" | "delivery" | "receipt" | "transfer";
+export type StockSourceType =
+  | "adjustment"
+  | "delivery"
+  | "receipt"
+  | "transfer"
+  | "manufacturing";
 
 export interface ReorderRule {
   id: string;
@@ -393,6 +398,43 @@ export interface PosOrderLine {
 
 export interface PosOrderWithLines extends PosOrder {
   lines: PosOrderLine[];
+}
+
+// ── Manufacturing (BOM + ใบสั่งผลิต) ──
+export interface Bom {
+  id: string;
+  shopId: string;
+  productId: string; // สินค้าสำเร็จรูปที่ผลิตได้
+  name: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BomLine {
+  id: string;
+  shopId: string;
+  bomId: string;
+  componentId: string; // วัตถุดิบ (product)
+  qtyPerUnit: number; // scale QTY_SCALE — ใช้ต่อสินค้าสำเร็จรูป 1 หน่วย
+}
+
+export interface BomWithLines extends Bom {
+  lines: BomLine[];
+}
+
+export type ManufacturingOrderStatus = "draft" | "confirmed" | "done" | "cancelled";
+
+export interface ManufacturingOrder {
+  id: string;
+  shopId: string;
+  docNumber: string | null; // ออกตอน confirm
+  bomId: string;
+  productId: string; // สินค้าสำเร็จรูป (snapshot จาก BOM)
+  qty: number; // scale QTY_SCALE — จำนวนที่จะผลิต
+  status: ManufacturingOrderStatus;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type PartnerType = "customer" | "vendor" | "both";
