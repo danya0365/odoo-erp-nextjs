@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users, ArrowRight } from "lucide-react";
+import { Users, Package, ArrowRight } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { Container } from "@/src/presentation/components/ui/Container";
@@ -8,6 +8,7 @@ import { Badge } from "@/src/presentation/components/ui/Badge";
 
 const MODULES = [
   { href: "/shop/contacts", label: "ผู้ติดต่อ", desc: "ลูกค้าและผู้ขาย", icon: Users },
+  { href: "/shop/products", label: "สินค้า", desc: "สินค้าและสต๊อก", icon: Package },
 ];
 
 export default async function ShopDashboard() {

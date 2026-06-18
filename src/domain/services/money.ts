@@ -36,6 +36,33 @@ export function sumDocument(
   return { untaxed, tax, total: untaxed + tax };
 }
 
+// ── แปลงทศนิยม ↔ integer สเกล (scale ต้องเป็นกำลังของ 10: 100=เงิน, 1000=qty) ──
+function scaleDigits(scale: number): number {
+  return String(scale).length - 1;
+}
+
+/** "100.50" → 10050 (scale 100); "1.5" → 1500 (scale 1000). โยน error ถ้ารูปแบบผิด */
+export function parseScaled(input: string, scale: number): number {
+  const t = input.trim();
+  if (!/^-?\d+(\.\d+)?$/.test(t)) throw new Error("ตัวเลขไม่ถูกต้อง");
+  const neg = t.startsWith("-");
+  const [intPart, fracPart = ""] = t.replace("-", "").split(".");
+  const digits = scaleDigits(scale);
+  const frac = (fracPart + "0".repeat(digits)).slice(0, digits);
+  const value = Number(intPart) * scale + Number(frac || "0");
+  return neg ? -value : value;
+}
+
+/** 10050 → "100.50" (scale 100) */
+export function formatScaled(value: number, scale: number): string {
+  const digits = scaleDigits(scale);
+  const neg = value < 0;
+  const v = Math.abs(value);
+  const int = Math.floor(v / scale);
+  const frac = v % scale;
+  return `${neg ? "-" : ""}${int}.${String(frac).padStart(digits, "0")}`;
+}
+
 /** คำนวณบรรทัดครบชุดจาก input ดิบ (qty scaled, ราคา minor, ภาษี bp) */
 export function computeLine(
   qtyScaled: number,

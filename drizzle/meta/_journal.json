@@ -22,6 +22,13 @@
       "when": 1781700818928,
       "tag": "0002_clever_shen",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1781747521611,
+      "tag": "0003_public_wendigo",
+      "breakpoints": true
     }
   ]
 }

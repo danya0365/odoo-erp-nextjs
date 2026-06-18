@@ -32,6 +32,48 @@ export interface Session {
   createdAt: string;
 }
 
+export type ProductType = "stockable" | "service" | "consumable";
+
+export interface Product {
+  id: string;
+  shopId: string;
+  sku: string;
+  name: string;
+  type: ProductType;
+  salePrice: number; // minor units
+  costPrice: number; // minor units
+  taxRateBp: number; // basis points (700 = 7%)
+  uom: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StockLocation {
+  id: string;
+  shopId: string;
+  name: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type StockMoveType = "in" | "out" | "adjust";
+export type StockSourceType = "adjustment" | "delivery" | "receipt";
+
+export interface StockMove {
+  id: string;
+  shopId: string;
+  productId: string;
+  locationId: string;
+  qtyDelta: number; // signed, scale QTY_SCALE
+  type: StockMoveType;
+  sourceType: StockSourceType;
+  sourceId: string | null;
+  note: string | null;
+  createdAt: string;
+}
+
 export type PartnerType = "customer" | "vendor" | "both";
 
 export interface Partner {
