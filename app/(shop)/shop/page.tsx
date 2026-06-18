@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users, Package, FileText, ShoppingCart, Calculator, Target, BarChart3, ArrowRight } from "lucide-react";
+import { Users, Package, FileText, ShoppingCart, Calculator, Target, BarChart3, Warehouse, ArrowRight } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { Container } from "@/src/presentation/components/ui/Container";
@@ -10,6 +10,7 @@ const MODULES = [
   { href: "/shop/crm", label: "CRM", desc: "ไปป์ไลน์โอกาสการขาย", icon: Target },
   { href: "/shop/contacts", label: "ผู้ติดต่อ", desc: "ลูกค้าและผู้ขาย", icon: Users },
   { href: "/shop/products", label: "สินค้า", desc: "สินค้าและสต๊อก", icon: Package },
+  { href: "/shop/inventory", label: "คลังสินค้า", desc: "หลายคลัง→โอนย้าย→จุดสั่งซื้อ", icon: Warehouse },
   { href: "/shop/sales", label: "การขาย", desc: "ใบเสนอราคา→ส่ง→วางบิล→ชำระ", icon: FileText },
   { href: "/shop/purchase", label: "การจัดซื้อ", desc: "ขอราคา→รับของ→ตั้งหนี้→จ่าย", icon: ShoppingCart },
   { href: "/shop/accounting", label: "บัญชี", desc: "สมุดรายวัน→ผังบัญชี→งบทดลอง", icon: Calculator },

@@ -59,7 +59,17 @@ export interface StockLocation {
 }
 
 export type StockMoveType = "in" | "out" | "adjust";
-export type StockSourceType = "adjustment" | "delivery" | "receipt";
+export type StockSourceType = "adjustment" | "delivery" | "receipt" | "transfer";
+
+export interface ReorderRule {
+  id: string;
+  shopId: string;
+  productId: string;
+  minQty: number; // scale QTY_SCALE — ถึงจุดนี้ให้เติม
+  maxQty: number; // scale QTY_SCALE — เติมจนถึงระดับนี้
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface StockMove {
   id: string;

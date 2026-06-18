@@ -19,6 +19,7 @@ import { DrizzleJournalEntryRepository } from "@/src/infrastructure/repositories
 import { DrizzleCrmStageRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleCrmStageRepository";
 import { DrizzleOpportunityRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleOpportunityRepository";
 import { DrizzleReportingRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleReportingRepository";
+import { DrizzleReorderRuleRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleReorderRuleRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -40,6 +41,7 @@ import type { IJournalEntryRepository } from "@/src/application/repositories/IJo
 import type { ICrmStageRepository } from "@/src/application/repositories/ICrmStageRepository";
 import type { IOpportunityRepository } from "@/src/application/repositories/IOpportunityRepository";
 import type { IReportingRepository } from "@/src/application/repositories/IReportingRepository";
+import type { IReorderRuleRepository } from "@/src/application/repositories/IReorderRuleRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -70,6 +72,7 @@ class Container {
   readonly opportunityRepository: IOpportunityRepository =
     new DrizzleOpportunityRepository();
   readonly reportingRepository: IReportingRepository = new DrizzleReportingRepository();
+  readonly reorderRuleRepository: IReorderRuleRepository = new DrizzleReorderRuleRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 

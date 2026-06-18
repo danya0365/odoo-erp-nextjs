@@ -14,9 +14,14 @@ import type {
   IStockMoveRepository,
 } from "@/src/application/repositories/IStockMoveRepository";
 import type { Page, PageQuery } from "@/src/application/repositories/pagination";
+import type { ReorderRule } from "@/src/domain/entities";
+import type { IReorderRuleRepository } from "@/src/application/repositories/IReorderRuleRepository";
 import { CreateProductUseCase } from "./CreateProductUseCase";
 import { UpdateProductUseCase } from "./UpdateProductUseCase";
 import { AdjustStockUseCase } from "./AdjustStockUseCase";
+import { TransferStockUseCase } from "./TransferStockUseCase";
+import { SetReorderRuleUseCase } from "./SetReorderRuleUseCase";
+import { GetReplenishmentUseCase } from "./GetReplenishmentUseCase";
 
 class FakeProductRepo implements IProductRepository {
   rows: Product[] = [];
@@ -73,6 +78,15 @@ class FakeLocationRepo implements IStockLocationRepository {
     }
     return this.loc;
   }
+  async list() {
+    return this.loc ? [this.loc] : [];
+  }
+  async findById(_shopId: string, id: string) {
+    return this.loc && this.loc.id === id ? this.loc : null;
+  }
+  async create(shopId: string, name: string): Promise<StockLocation> {
+    return { id: "loc_x", shopId, name, isDefault: false, createdAt: "", updatedAt: "" };
+  }
 }
 
 class FakeStockMoveRepo implements IStockMoveRepository {
@@ -94,10 +108,23 @@ class FakeStockMoveRepo implements IStockMoveRepository {
       .filter((m) => m.shopId === shopId && m.productId === productId)
       .reduce((s, m) => s + m.qtyDelta, 0);
   }
+  async onHandByProductAndLocation(shopId: string, productId: string, locationId: string) {
+    return this.moves
+      .filter(
+        (m) => m.shopId === shopId && m.productId === productId && m.locationId === locationId,
+      )
+      .reduce((s, m) => s + m.qtyDelta, 0);
+  }
   async onHandList(): Promise<OnHandRow[]> {
     return [];
   }
+  async onHandByLocationList() {
+    return [];
+  }
   async listByProduct() {
+    return [];
+  }
+  async listBySourceType() {
     return [];
   }
 }
@@ -198,4 +225,112 @@ test("AdjustStockUseCase: เพิ่ม/ลด on-hand + กันติดล
     () => uc.execute({ shopId: "s1", productId: svc.id, qtyDelta: 1000 }),
     /นับสต๊อก/,
   );
+});
+
+// ── Inventory ขั้นสูง: โอนย้าย + จุดสั่งซื้อซ้ำ ──
+class MultiLocationRepo implements IStockLocationRepository {
+  constructor(private readonly store: StockLocation[]) {}
+  async findDefault() { return this.store[0] ?? null; }
+  async ensureDefault() { return this.store[0]; }
+  async list() { return [...this.store]; }
+  async findById(_s: string, id: string) { return this.store.find((l) => l.id === id) ?? null; }
+  async create(shopId: string, name: string): Promise<StockLocation> {
+    const l: StockLocation = { id: `loc_${this.store.length + 1}`, shopId, name, isDefault: false, createdAt: "", updatedAt: "" };
+    this.store.push(l);
+    return l;
+  }
+}
+
+function makeLoc(id: string, name: string): StockLocation {
+  return { id, shopId: "s1", name, isDefault: false, createdAt: "", updatedAt: "" };
+}
+
+test("TransferStock: เขียน 2 move คู่ (out ต้นทาง −, in ปลายทาง +)", async () => {
+  const locations = new MultiLocationRepo([makeLoc("L1", "A"), makeLoc("L2", "B")]);
+  const moves = new FakeStockMoveRepo();
+  await moves.appendMany([
+    { shopId: "s1", productId: "p1", locationId: "L1", qtyDelta: 10000, type: "in", sourceType: "adjustment" },
+  ]);
+  await new TransferStockUseCase(locations, moves).execute({
+    shopId: "s1", productId: "p1", fromLocationId: "L1", toLocationId: "L2", qty: 4000,
+  });
+  assert.equal(await moves.onHandByProductAndLocation("s1", "p1", "L1"), 6000);
+  assert.equal(await moves.onHandByProductAndLocation("s1", "p1", "L2"), 4000);
+  assert.equal(await moves.onHandByProduct("s1", "p1"), 10000); // รวมไม่เปลี่ยน
+});
+
+test("TransferStock: โอนเกินยอดต้นทาง → error (ไม่เขียน move)", async () => {
+  const locations = new MultiLocationRepo([makeLoc("L1", "A"), makeLoc("L2", "B")]);
+  const moves = new FakeStockMoveRepo();
+  await moves.appendMany([
+    { shopId: "s1", productId: "p1", locationId: "L1", qtyDelta: 3000, type: "in", sourceType: "adjustment" },
+  ]);
+  await assert.rejects(
+    () => new TransferStockUseCase(locations, moves).execute({
+      shopId: "s1", productId: "p1", fromLocationId: "L1", toLocationId: "L2", qty: 4000,
+    }),
+    /เกินยอดคงเหลือ/,
+  );
+  assert.equal(moves.moves.length, 1); // มีแค่ตัวตั้งต้น
+});
+
+test("TransferStock: คลังต้นทาง=ปลายทาง → error", async () => {
+  const locations = new MultiLocationRepo([makeLoc("L1", "A")]);
+  const moves = new FakeStockMoveRepo();
+  await assert.rejects(
+    () => new TransferStockUseCase(locations, moves).execute({
+      shopId: "s1", productId: "p1", fromLocationId: "L1", toLocationId: "L1", qty: 1000,
+    }),
+    /ต้องต่างกัน/,
+  );
+});
+
+class FakeReorderRepo implements IReorderRuleRepository {
+  store: ReorderRule[] = [];
+  async upsert(shopId: string, productId: string, minQty: number, maxQty: number): Promise<ReorderRule> {
+    const ex = this.store.find((r) => r.productId === productId);
+    if (ex) { ex.minQty = minQty; ex.maxQty = maxQty; return ex; }
+    const r: ReorderRule = { id: `rr${this.store.length + 1}`, shopId, productId, minQty, maxQty, createdAt: "", updatedAt: "" };
+    this.store.push(r);
+    return r;
+  }
+  async list() { return [...this.store]; }
+  async findByProduct(_s: string, productId: string) { return this.store.find((r) => r.productId === productId) ?? null; }
+}
+
+test("SetReorderRule: max < min → error", async () => {
+  const products = new FakeProductRepo();
+  const p = await stockableProduct(products);
+  await assert.rejects(
+    () => new SetReorderRuleUseCase(new FakeReorderRepo(), products).execute("s1", p.id, 5000, 2000),
+    /ไม่น้อยกว่าขั้นต่ำ/,
+  );
+});
+
+test("GetReplenishment: suggestion + นับที่ต้องเติม + กรอง stockable", async () => {
+  const products = new FakeProductRepo();
+  const low = await products.create({ shopId: "s1", sku: "LOW", name: "ต่ำ", type: "stockable", salePrice: 0, costPrice: 0, taxRateBp: 0, uom: "ชิ้น" });
+  const ok = await products.create({ shopId: "s1", sku: "OK", name: "พอ", type: "stockable", salePrice: 0, costPrice: 0, taxRateBp: 0, uom: "ชิ้น" });
+  await products.create({ shopId: "s1", sku: "SVC", name: "บริการ", type: "service", salePrice: 0, costPrice: 0, taxRateBp: 0, uom: "ครั้ง" });
+
+  const rules = new FakeReorderRepo();
+  await rules.upsert("s1", low.id, 5000, 20000);
+  await rules.upsert("s1", ok.id, 1000, 10000);
+
+  const moves = new FakeStockMoveRepo();
+  await moves.appendMany([
+    { shopId: "s1", productId: low.id, locationId: "L1", qtyDelta: 2000, type: "in", sourceType: "adjustment" },
+    { shopId: "s1", productId: ok.id, locationId: "L1", qtyDelta: 8000, type: "in", sourceType: "adjustment" },
+  ]);
+  // ปรับ onHandList ให้คืนค่าจริงสำหรับเทสนี้
+  moves.onHandList = async () => [
+    { productId: low.id, onHand: 2000 },
+    { productId: ok.id, onHand: 8000 },
+  ];
+
+  const res = await new GetReplenishmentUseCase(rules, moves, products).execute("s1");
+  assert.equal(res.rows.length, 2); // service ถูกกรอง
+  assert.equal(res.rows.find((r) => r.productId === low.id)!.suggestion, 18000);
+  assert.equal(res.rows.find((r) => r.productId === ok.id)!.suggestion, 0);
+  assert.equal(res.toReorder, 1);
 });
