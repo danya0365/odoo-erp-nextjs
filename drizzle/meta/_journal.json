@@ -29,6 +29,13 @@
       "when": 1781747521611,
       "tag": "0003_public_wendigo",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1781749192787,
+      "tag": "0004_nappy_omega_sentinel",
+      "breakpoints": true
     }
   ]
 }

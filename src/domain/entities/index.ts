@@ -74,6 +74,101 @@ export interface StockMove {
   createdAt: string;
 }
 
+export type SalesOrderStatus =
+  | "draft"
+  | "confirmed"
+  | "partially_delivered"
+  | "delivered"
+  | "invoiced"
+  | "done"
+  | "cancelled";
+
+export interface SalesOrder {
+  id: string;
+  shopId: string;
+  docNumber: string | null; // ออกตอน confirm
+  customerId: string;
+  status: SalesOrderStatus;
+  currency: string;
+  untaxedAmount: number; // minor
+  taxAmount: number;
+  totalAmount: number;
+  orderDate: string;
+  confirmedAt: string | null;
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SalesOrderLine {
+  id: string;
+  shopId: string;
+  salesOrderId: string;
+  productId: string;
+  description: string;
+  qtyOrdered: number; // scale QTY_SCALE
+  qtyDelivered: number;
+  qtyInvoiced: number;
+  unitPrice: number; // minor snapshot
+  taxRateBp: number; // snapshot
+  lineSubtotal: number;
+  lineTax: number;
+  lineTotal: number;
+}
+
+export interface SalesOrderWithLines extends SalesOrder {
+  lines: SalesOrderLine[];
+}
+
+export type InvoiceStatus = "draft" | "posted" | "paid" | "cancelled";
+
+export interface Invoice {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  salesOrderId: string | null;
+  customerId: string;
+  status: InvoiceStatus;
+  currency: string;
+  untaxedAmount: number;
+  taxAmount: number;
+  totalAmount: number;
+  amountPaid: number;
+  dueDate: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InvoiceLine {
+  id: string;
+  shopId: string;
+  invoiceId: string;
+  productId: string;
+  description: string;
+  qty: number;
+  unitPrice: number;
+  taxRateBp: number;
+  lineSubtotal: number;
+  lineTax: number;
+  lineTotal: number;
+}
+
+export type PaymentDirection = "inbound" | "outbound";
+
+export interface Payment {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  partnerId: string;
+  direction: PaymentDirection;
+  invoiceId: string | null;
+  vendorBillId: string | null;
+  amount: number;
+  method: string;
+  paidAt: string;
+  createdAt: string;
+}
+
 export type PartnerType = "customer" | "vendor" | "both";
 
 export interface Partner {

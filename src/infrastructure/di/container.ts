@@ -8,6 +8,9 @@ import { DrizzlePartnerRepository } from "@/src/infrastructure/repositories/driz
 import { DrizzleProductRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleProductRepository";
 import { DrizzleStockLocationRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleStockLocationRepository";
 import { DrizzleStockMoveRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleStockMoveRepository";
+import { DrizzleSalesOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleSalesOrderRepository";
+import { DrizzleInvoiceRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleInvoiceRepository";
+import { DrizzlePaymentRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePaymentRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -18,6 +21,9 @@ import type { IPartnerRepository } from "@/src/application/repositories/IPartner
 import type { IProductRepository } from "@/src/application/repositories/IProductRepository";
 import type { IStockLocationRepository } from "@/src/application/repositories/IStockLocationRepository";
 import type { IStockMoveRepository } from "@/src/application/repositories/IStockMoveRepository";
+import type { ISalesOrderRepository } from "@/src/application/repositories/ISalesOrderRepository";
+import type { IInvoiceRepository } from "@/src/application/repositories/IInvoiceRepository";
+import type { IPaymentRepository } from "@/src/application/repositories/IPaymentRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -34,6 +40,9 @@ class Container {
   readonly stockLocationRepository: IStockLocationRepository =
     new DrizzleStockLocationRepository();
   readonly stockMoveRepository: IStockMoveRepository = new DrizzleStockMoveRepository();
+  readonly salesOrderRepository: ISalesOrderRepository = new DrizzleSalesOrderRepository();
+  readonly invoiceRepository: IInvoiceRepository = new DrizzleInvoiceRepository();
+  readonly paymentRepository: IPaymentRepository = new DrizzlePaymentRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 
