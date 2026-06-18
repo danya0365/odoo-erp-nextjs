@@ -4,12 +4,14 @@ import { DrizzleUserRepository } from "@/src/infrastructure/repositories/drizzle
 import { DrizzleShopRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleShopRepository";
 import { DrizzleSessionRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleSessionRepository";
 import { DrizzleSequenceRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleSequenceRepository";
+import { DrizzlePartnerRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePartnerRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
 import type { IShopRepository } from "@/src/application/repositories/IShopRepository";
 import type { ISessionRepository } from "@/src/application/repositories/ISessionRepository";
 import type { ISequenceRepository } from "@/src/application/repositories/ISequenceRepository";
+import type { IPartnerRepository } from "@/src/application/repositories/IPartnerRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -21,6 +23,7 @@ class Container {
   readonly shopRepository: IShopRepository = new DrizzleShopRepository();
   readonly sessionRepository: ISessionRepository = new DrizzleSessionRepository();
   readonly sequenceRepository: ISequenceRepository = new DrizzleSequenceRepository();
+  readonly partnerRepository: IPartnerRepository = new DrizzlePartnerRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 

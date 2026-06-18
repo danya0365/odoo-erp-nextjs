@@ -31,3 +31,23 @@ export interface Session {
   expiresAt: string; // ISO-8601
   createdAt: string;
 }
+
+export type PartnerType = "customer" | "vendor" | "both";
+
+export interface Partner {
+  id: string;
+  shopId: string;
+  name: string;
+  type: PartnerType;
+  email: string | null;
+  phone: string | null;
+  taxId: string | null;
+  street: string | null;
+  city: string | null;
+  country: string | null;
+  isCompany: boolean;
+  parentId: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

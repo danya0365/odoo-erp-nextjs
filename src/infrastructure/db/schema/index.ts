@@ -3,3 +3,4 @@ export * from "./shops";
 export * from "./users";
 export * from "./sessions";
 export * from "./sequences";
+export * from "./partners";
