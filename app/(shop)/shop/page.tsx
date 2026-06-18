@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users, Package, FileText, ShoppingCart, Calculator, Target, ArrowRight } from "lucide-react";
+import { Users, Package, FileText, ShoppingCart, Calculator, Target, BarChart3, ArrowRight } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { Container } from "@/src/presentation/components/ui/Container";
@@ -13,6 +13,7 @@ const MODULES = [
   { href: "/shop/sales", label: "การขาย", desc: "ใบเสนอราคา→ส่ง→วางบิล→ชำระ", icon: FileText },
   { href: "/shop/purchase", label: "การจัดซื้อ", desc: "ขอราคา→รับของ→ตั้งหนี้→จ่าย", icon: ShoppingCart },
   { href: "/shop/accounting", label: "บัญชี", desc: "สมุดรายวัน→ผังบัญชี→งบทดลอง", icon: Calculator },
+  { href: "/shop/reports", label: "รายงาน", desc: "ภาพรวมกิจการ + วิเคราะห์", icon: BarChart3 },
 ];
 
 export default async function ShopDashboard() {
