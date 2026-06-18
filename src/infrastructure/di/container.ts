@@ -11,6 +11,8 @@ import { DrizzleStockMoveRepository } from "@/src/infrastructure/repositories/dr
 import { DrizzleSalesOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleSalesOrderRepository";
 import { DrizzleInvoiceRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleInvoiceRepository";
 import { DrizzlePaymentRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePaymentRepository";
+import { DrizzlePurchaseOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePurchaseOrderRepository";
+import { DrizzleVendorBillRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleVendorBillRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -24,6 +26,8 @@ import type { IStockMoveRepository } from "@/src/application/repositories/IStock
 import type { ISalesOrderRepository } from "@/src/application/repositories/ISalesOrderRepository";
 import type { IInvoiceRepository } from "@/src/application/repositories/IInvoiceRepository";
 import type { IPaymentRepository } from "@/src/application/repositories/IPaymentRepository";
+import type { IPurchaseOrderRepository } from "@/src/application/repositories/IPurchaseOrderRepository";
+import type { IVendorBillRepository } from "@/src/application/repositories/IVendorBillRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -43,6 +47,9 @@ class Container {
   readonly salesOrderRepository: ISalesOrderRepository = new DrizzleSalesOrderRepository();
   readonly invoiceRepository: IInvoiceRepository = new DrizzleInvoiceRepository();
   readonly paymentRepository: IPaymentRepository = new DrizzlePaymentRepository();
+  readonly purchaseOrderRepository: IPurchaseOrderRepository =
+    new DrizzlePurchaseOrderRepository();
+  readonly vendorBillRepository: IVendorBillRepository = new DrizzleVendorBillRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 

@@ -153,6 +153,85 @@ export interface InvoiceLine {
   lineTotal: number;
 }
 
+export type PurchaseOrderStatus =
+  | "rfq"
+  | "confirmed"
+  | "partially_received"
+  | "received"
+  | "billed"
+  | "done"
+  | "cancelled";
+
+export interface PurchaseOrder {
+  id: string;
+  shopId: string;
+  docNumber: string | null;
+  vendorId: string;
+  status: PurchaseOrderStatus;
+  currency: string;
+  untaxedAmount: number;
+  taxAmount: number;
+  totalAmount: number;
+  orderDate: string;
+  confirmedAt: string | null;
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PurchaseOrderLine {
+  id: string;
+  shopId: string;
+  purchaseOrderId: string;
+  productId: string;
+  description: string;
+  qtyOrdered: number;
+  qtyReceived: number;
+  qtyBilled: number;
+  unitPrice: number; // minor (cost) snapshot
+  taxRateBp: number;
+  lineSubtotal: number;
+  lineTax: number;
+  lineTotal: number;
+}
+
+export interface PurchaseOrderWithLines extends PurchaseOrder {
+  lines: PurchaseOrderLine[];
+}
+
+export type VendorBillStatus = "draft" | "posted" | "paid" | "cancelled";
+
+export interface VendorBill {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  purchaseOrderId: string | null;
+  vendorId: string;
+  status: VendorBillStatus;
+  currency: string;
+  untaxedAmount: number;
+  taxAmount: number;
+  totalAmount: number;
+  amountPaid: number;
+  dueDate: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface VendorBillLine {
+  id: string;
+  shopId: string;
+  vendorBillId: string;
+  productId: string;
+  description: string;
+  qty: number;
+  unitPrice: number;
+  taxRateBp: number;
+  lineSubtotal: number;
+  lineTax: number;
+  lineTotal: number;
+}
+
 export type PaymentDirection = "inbound" | "outbound";
 
 export interface Payment {

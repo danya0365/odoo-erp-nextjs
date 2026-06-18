@@ -15,4 +15,5 @@ export interface CreatePaymentInput {
 export interface IPaymentRepository {
   create(input: CreatePaymentInput): Promise<Payment>;
   listByInvoice(shopId: string, invoiceId: string): Promise<Payment[]>;
+  listByVendorBill(shopId: string, vendorBillId: string): Promise<Payment[]>;
 }

@@ -57,4 +57,18 @@ export class DrizzlePaymentRepository implements IPaymentRepository {
       .orderBy(desc(schema.payments.createdAt));
     return rows.map(toPayment);
   }
+
+  async listByVendorBill(shopId: string, vendorBillId: string): Promise<Payment[]> {
+    const rows = await this.db
+      .select()
+      .from(schema.payments)
+      .where(
+        and(
+          eq(schema.payments.shopId, shopId),
+          eq(schema.payments.vendorBillId, vendorBillId),
+        ),
+      )
+      .orderBy(desc(schema.payments.createdAt));
+    return rows.map(toPayment);
+  }
 }

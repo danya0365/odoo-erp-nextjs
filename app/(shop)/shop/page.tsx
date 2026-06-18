@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users, Package, FileText, ArrowRight } from "lucide-react";
+import { Users, Package, FileText, ShoppingCart, ArrowRight } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { Container } from "@/src/presentation/components/ui/Container";
@@ -10,6 +10,7 @@ const MODULES = [
   { href: "/shop/contacts", label: "ผู้ติดต่อ", desc: "ลูกค้าและผู้ขาย", icon: Users },
   { href: "/shop/products", label: "สินค้า", desc: "สินค้าและสต๊อก", icon: Package },
   { href: "/shop/sales", label: "การขาย", desc: "ใบเสนอราคา→ส่ง→วางบิล→ชำระ", icon: FileText },
+  { href: "/shop/purchase", label: "การจัดซื้อ", desc: "ขอราคา→รับของ→ตั้งหนี้→จ่าย", icon: ShoppingCart },
 ];
 
 export default async function ShopDashboard() {
