@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users, Package, FileText, ShoppingCart, Calculator, Target, BarChart3, Warehouse, Store, Factory, Users2, ArrowRight } from "lucide-react";
+import { Users, Package, FileText, ShoppingCart, Calculator, Target, BarChart3, Warehouse, Store, Factory, Users2, Globe, ArrowRight } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { Container } from "@/src/presentation/components/ui/Container";
@@ -13,6 +13,7 @@ const MODULES = [
   { href: "/shop/inventory", label: "คลังสินค้า", desc: "หลายคลัง→โอนย้าย→จุดสั่งซื้อ", icon: Warehouse },
   { href: "/shop/manufacturing", label: "การผลิต", desc: "สูตร BOM→สั่งผลิต→ตัดวัตถุดิบ", icon: Factory },
   { href: "/shop/pos", label: "ขายหน้าร้าน", desc: "เปิดกะ→ขายเร็ว→ปิดกะ", icon: Store },
+  { href: "/shop/storefront", label: "หน้าร้านออนไลน์", desc: "ออร์เดอร์จากเว็บ→ใบขาย", icon: Globe },
   { href: "/shop/sales", label: "การขาย", desc: "ใบเสนอราคา→ส่ง→วางบิล→ชำระ", icon: FileText },
   { href: "/shop/purchase", label: "การจัดซื้อ", desc: "ขอราคา→รับของ→ตั้งหนี้→จ่าย", icon: ShoppingCart },
   { href: "/shop/accounting", label: "บัญชี", desc: "สมุดรายวัน→ผังบัญชี→งบทดลอง", icon: Calculator },

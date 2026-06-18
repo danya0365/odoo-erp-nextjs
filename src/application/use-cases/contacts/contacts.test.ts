@@ -42,6 +42,9 @@ class FakePartnerRepository implements IPartnerRepository {
   async findById(shopId: string, id: string): Promise<Partner | null> {
     return this.rows.find((r) => r.shopId === shopId && r.id === id) ?? null;
   }
+  async findByEmail(shopId: string, email: string): Promise<Partner | null> {
+    return this.rows.find((r) => r.shopId === shopId && r.email === email) ?? null;
+  }
   async list(shopId: string, q: PageQuery): Promise<Page<Partner>> {
     const items = this.rows.filter((r) => r.shopId === shopId);
     return { items, total: items.length, page: q.page, pageSize: q.pageSize };
