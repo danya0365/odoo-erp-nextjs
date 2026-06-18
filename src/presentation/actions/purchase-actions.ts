@@ -13,6 +13,9 @@ import { ReceivePurchaseOrderUseCase } from "@/src/application/use-cases/purchas
 import { CreateVendorBillUseCase } from "@/src/application/use-cases/purchase/CreateVendorBillUseCase";
 import { RegisterBillPaymentUseCase } from "@/src/application/use-cases/purchase/RegisterBillPaymentUseCase";
 import { CancelPurchaseOrderUseCase } from "@/src/application/use-cases/purchase/CancelPurchaseOrderUseCase";
+import { PostVendorBillJournalEntryUseCase } from "@/src/application/use-cases/accounting/PostVendorBillJournalEntryUseCase";
+import { PostPaymentJournalEntryUseCase } from "@/src/application/use-cases/accounting/PostPaymentJournalEntryUseCase";
+import { postDeps } from "./postingDeps";
 
 export interface FormState {
   error?: string;
@@ -111,11 +114,13 @@ export async function receivePurchaseOrderAction(
 export async function createVendorBillAction(formData: FormData): Promise<void> {
   const user = await requireRole("shop_owner");
   const id = String(formData.get("id") ?? "");
-  await new CreateVendorBillUseCase(
+  const bill = await new CreateVendorBillUseCase(
     container.purchaseOrderRepository,
     container.vendorBillRepository,
     container.sequenceRepository,
   ).execute(user.shopId!, id);
+  // ลงบัญชีอัตโนมัติ: DR ค่าใช้จ่าย + ภาษีซื้อ / CR เจ้าหนี้
+  await new PostVendorBillJournalEntryUseCase(postDeps()).execute(bill);
   revalidatePath(`/shop/purchase/${id}`);
 }
 
@@ -129,12 +134,14 @@ export async function registerBillPaymentAction(
   const amountStr = String(formData.get("amount") ?? "");
   if (!/^\d+(\.\d+)?$/.test(amountStr)) return { error: "จำนวนเงินไม่ถูกต้อง" };
   try {
-    await new RegisterBillPaymentUseCase(
+    const payment = await new RegisterBillPaymentUseCase(
       container.vendorBillRepository,
       container.paymentRepository,
       container.purchaseOrderRepository,
       container.sequenceRepository,
     ).execute(user.shopId!, billId, parseScaled(amountStr, 100), "cash", new Date().toISOString());
+    // ลงบัญชีอัตโนมัติ: DR เจ้าหนี้ / CR เงินสด
+    await new PostPaymentJournalEntryUseCase(postDeps()).execute(payment);
   } catch (e) {
     return { error: (e as Error).message };
   }

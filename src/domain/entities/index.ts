@@ -248,6 +248,64 @@ export interface Payment {
   createdAt: string;
 }
 
+// ── Accounting (double-entry general ledger) ──
+export type AccountType = "asset" | "liability" | "equity" | "income" | "expense";
+
+export interface Account {
+  id: string;
+  shopId: string;
+  code: string;
+  name: string;
+  type: AccountType;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type JournalType = "sale" | "purchase" | "bank" | "general";
+
+export interface Journal {
+  id: string;
+  shopId: string;
+  code: string;
+  name: string;
+  type: JournalType;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type JournalEntrySourceType = "invoice" | "bill" | "payment" | "manual";
+export type JournalEntryStatus = "draft" | "posted";
+
+export interface JournalEntry {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  journalId: string;
+  date: string; // ISO-8601
+  ref: string | null; // เลขเอกสารต้นทาง เช่น INV00001
+  sourceType: JournalEntrySourceType;
+  sourceId: string | null;
+  status: JournalEntryStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface JournalEntryLine {
+  id: string;
+  shopId: string;
+  entryId: string;
+  accountId: string;
+  partnerId: string | null;
+  label: string;
+  debit: number; // minor units (≥ 0)
+  credit: number; // minor units (≥ 0)
+}
+
+export interface JournalEntryWithLines extends JournalEntry {
+  lines: JournalEntryLine[];
+}
+
 export type PartnerType = "customer" | "vendor" | "both";
 
 export interface Partner {

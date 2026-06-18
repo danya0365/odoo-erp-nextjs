@@ -13,6 +13,9 @@ import { DrizzleInvoiceRepository } from "@/src/infrastructure/repositories/driz
 import { DrizzlePaymentRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePaymentRepository";
 import { DrizzlePurchaseOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePurchaseOrderRepository";
 import { DrizzleVendorBillRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleVendorBillRepository";
+import { DrizzleAccountRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleAccountRepository";
+import { DrizzleJournalRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalRepository";
+import { DrizzleJournalEntryRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalEntryRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -28,6 +31,9 @@ import type { IInvoiceRepository } from "@/src/application/repositories/IInvoice
 import type { IPaymentRepository } from "@/src/application/repositories/IPaymentRepository";
 import type { IPurchaseOrderRepository } from "@/src/application/repositories/IPurchaseOrderRepository";
 import type { IVendorBillRepository } from "@/src/application/repositories/IVendorBillRepository";
+import type { IAccountRepository } from "@/src/application/repositories/IAccountRepository";
+import type { IJournalRepository } from "@/src/application/repositories/IJournalRepository";
+import type { IJournalEntryRepository } from "@/src/application/repositories/IJournalEntryRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -50,6 +56,10 @@ class Container {
   readonly purchaseOrderRepository: IPurchaseOrderRepository =
     new DrizzlePurchaseOrderRepository();
   readonly vendorBillRepository: IVendorBillRepository = new DrizzleVendorBillRepository();
+  readonly accountRepository: IAccountRepository = new DrizzleAccountRepository();
+  readonly journalRepository: IJournalRepository = new DrizzleJournalRepository();
+  readonly journalEntryRepository: IJournalEntryRepository =
+    new DrizzleJournalEntryRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 

@@ -13,6 +13,9 @@ import { DeliverSalesOrderUseCase } from "@/src/application/use-cases/sales/Deli
 import { InvoiceSalesOrderUseCase } from "@/src/application/use-cases/sales/InvoiceSalesOrderUseCase";
 import { RegisterInvoicePaymentUseCase } from "@/src/application/use-cases/sales/RegisterInvoicePaymentUseCase";
 import { CancelSalesOrderUseCase } from "@/src/application/use-cases/sales/CancelSalesOrderUseCase";
+import { PostInvoiceJournalEntryUseCase } from "@/src/application/use-cases/accounting/PostInvoiceJournalEntryUseCase";
+import { PostPaymentJournalEntryUseCase } from "@/src/application/use-cases/accounting/PostPaymentJournalEntryUseCase";
+import { postDeps } from "./postingDeps";
 
 export interface FormState {
   error?: string;
@@ -119,11 +122,13 @@ export async function deliverSalesOrderAction(
 export async function invoiceSalesOrderAction(formData: FormData): Promise<void> {
   const user = await requireRole("shop_owner");
   const id = String(formData.get("id") ?? "");
-  await new InvoiceSalesOrderUseCase(
+  const invoice = await new InvoiceSalesOrderUseCase(
     container.salesOrderRepository,
     container.invoiceRepository,
     container.sequenceRepository,
   ).execute(user.shopId!, id);
+  // ลงบัญชีอัตโนมัติ: DR ลูกหนี้ / CR รายได้ + ภาษีขาย
+  await new PostInvoiceJournalEntryUseCase(postDeps()).execute(invoice);
   revalidatePath(`/shop/sales/${id}`);
 }
 
@@ -137,12 +142,14 @@ export async function registerPaymentAction(
   const amountStr = String(formData.get("amount") ?? "");
   if (!/^\d+(\.\d+)?$/.test(amountStr)) return { error: "จำนวนเงินไม่ถูกต้อง" };
   try {
-    await new RegisterInvoicePaymentUseCase(
+    const payment = await new RegisterInvoicePaymentUseCase(
       container.invoiceRepository,
       container.paymentRepository,
       container.salesOrderRepository,
       container.sequenceRepository,
     ).execute(user.shopId!, invoiceId, parseScaled(amountStr, 100), "cash", new Date().toISOString());
+    // ลงบัญชีอัตโนมัติ: DR เงินสด / CR ลูกหนี้
+    await new PostPaymentJournalEntryUseCase(postDeps()).execute(payment);
   } catch (e) {
     return { error: (e as Error).message };
   }

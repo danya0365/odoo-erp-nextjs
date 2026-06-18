@@ -1,0 +1,71 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+import { container } from "@/src/infrastructure/di/container";
+import { requireRole } from "@/src/infrastructure/auth/session";
+import { parseScaled } from "@/src/domain/services/money";
+import { CreateManualJournalEntryUseCase } from "@/src/application/use-cases/accounting/CreateManualJournalEntryUseCase";
+
+export interface FormState {
+  error?: string;
+  success?: string;
+}
+
+const lineSchema = z.object({
+  accountId: z.string().min(1),
+  label: z.string().optional(),
+  debit: z.string().regex(/^\d+(\.\d+)?$/).optional().or(z.literal("")),
+  credit: z.string().regex(/^\d+(\.\d+)?$/).optional().or(z.literal("")),
+});
+const manualSchema = z.object({
+  ref: z.string().optional(),
+  lines: z.array(lineSchema).min(2, "ต้องมีอย่างน้อย 2 บรรทัด"),
+});
+
+export async function createManualEntryAction(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const user = await requireRole("shop_owner");
+  const shopId = user.shopId!;
+
+  let linesRaw: unknown;
+  try {
+    linesRaw = JSON.parse(String(formData.get("lines") ?? "[]"));
+  } catch {
+    return { error: "รายการบัญชีไม่ถูกต้อง" };
+  }
+  const parsed = manualSchema.safeParse({
+    ref: formData.get("ref") || undefined,
+    lines: linesRaw,
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "ข้อมูลไม่ถูกต้อง" };
+
+  let entryId: string;
+  try {
+    const lines = parsed.data.lines.map((l) => ({
+      accountId: l.accountId,
+      label: l.label ?? "",
+      debit: l.debit ? parseScaled(l.debit, 100) : 0,
+      credit: l.credit ? parseScaled(l.credit, 100) : 0,
+    }));
+    const entry = await new CreateManualJournalEntryUseCase(
+      container.journalRepository,
+      container.journalEntryRepository,
+      container.sequenceRepository,
+    ).execute({
+      shopId,
+      date: new Date().toISOString(),
+      ref: parsed.data.ref ?? null,
+      lines,
+    });
+    entryId = entry.id;
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+  revalidatePath("/shop/accounting/entries");
+  redirect(`/shop/accounting/entries/${entryId}`);
+}
