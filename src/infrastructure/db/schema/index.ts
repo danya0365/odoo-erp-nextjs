@@ -21,3 +21,4 @@ export * from "./pos";
 export * from "./manufacturing";
 export * from "./hr";
 export * from "./online-orders";
+export * from "./projects";

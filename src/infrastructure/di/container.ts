@@ -27,6 +27,9 @@ import { DrizzleManufacturingOrderRepository } from "@/src/infrastructure/reposi
 import { DrizzleEmployeeRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleEmployeeRepository";
 import { DrizzlePayrollRunRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePayrollRunRepository";
 import { DrizzleOnlineOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleOnlineOrderRepository";
+import { DrizzleProjectRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleProjectRepository";
+import { DrizzleProjectTaskRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleProjectTaskRepository";
+import { DrizzleTimesheetRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleTimesheetRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -56,6 +59,9 @@ import type { IManufacturingOrderRepository } from "@/src/application/repositori
 import type { IEmployeeRepository } from "@/src/application/repositories/IEmployeeRepository";
 import type { IPayrollRunRepository } from "@/src/application/repositories/IPayrollRunRepository";
 import type { IOnlineOrderRepository } from "@/src/application/repositories/IOnlineOrderRepository";
+import type { IProjectRepository } from "@/src/application/repositories/IProjectRepository";
+import type { IProjectTaskRepository } from "@/src/application/repositories/IProjectTaskRepository";
+import type { ITimesheetRepository } from "@/src/application/repositories/ITimesheetRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -95,6 +101,9 @@ class Container {
   readonly employeeRepository: IEmployeeRepository = new DrizzleEmployeeRepository();
   readonly payrollRunRepository: IPayrollRunRepository = new DrizzlePayrollRunRepository();
   readonly onlineOrderRepository: IOnlineOrderRepository = new DrizzleOnlineOrderRepository();
+  readonly projectRepository: IProjectRepository = new DrizzleProjectRepository();
+  readonly projectTaskRepository: IProjectTaskRepository = new DrizzleProjectTaskRepository();
+  readonly timesheetRepository: ITimesheetRepository = new DrizzleTimesheetRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 

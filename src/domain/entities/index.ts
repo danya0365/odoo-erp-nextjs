@@ -489,6 +489,42 @@ export interface OnlineOrder {
   createdAt: string;
 }
 
+// ── Project / Timesheet ──
+export type ProjectStatus = "active" | "closed";
+export type TaskStatus = "todo" | "in_progress" | "done";
+
+export interface Project {
+  id: string;
+  shopId: string;
+  name: string;
+  customerId: string | null;
+  status: ProjectStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectTask {
+  id: string;
+  shopId: string;
+  projectId: string;
+  name: string;
+  status: TaskStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Timesheet {
+  id: string;
+  shopId: string;
+  projectId: string;
+  taskId: string | null;
+  employeeId: string;
+  date: string; // ISO-8601 (วันที่ทำงาน)
+  minutes: number; // นาที (integer)
+  note: string | null;
+  createdAt: string;
+}
+
 export type PartnerType = "customer" | "vendor" | "both";
 
 export interface Partner {
