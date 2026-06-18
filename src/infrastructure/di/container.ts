@@ -16,6 +16,8 @@ import { DrizzleVendorBillRepository } from "@/src/infrastructure/repositories/d
 import { DrizzleAccountRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleAccountRepository";
 import { DrizzleJournalRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalRepository";
 import { DrizzleJournalEntryRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalEntryRepository";
+import { DrizzleCrmStageRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleCrmStageRepository";
+import { DrizzleOpportunityRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleOpportunityRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -34,6 +36,8 @@ import type { IVendorBillRepository } from "@/src/application/repositories/IVend
 import type { IAccountRepository } from "@/src/application/repositories/IAccountRepository";
 import type { IJournalRepository } from "@/src/application/repositories/IJournalRepository";
 import type { IJournalEntryRepository } from "@/src/application/repositories/IJournalEntryRepository";
+import type { ICrmStageRepository } from "@/src/application/repositories/ICrmStageRepository";
+import type { IOpportunityRepository } from "@/src/application/repositories/IOpportunityRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -60,6 +64,9 @@ class Container {
   readonly journalRepository: IJournalRepository = new DrizzleJournalRepository();
   readonly journalEntryRepository: IJournalEntryRepository =
     new DrizzleJournalEntryRepository();
+  readonly crmStageRepository: ICrmStageRepository = new DrizzleCrmStageRepository();
+  readonly opportunityRepository: IOpportunityRepository =
+    new DrizzleOpportunityRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 

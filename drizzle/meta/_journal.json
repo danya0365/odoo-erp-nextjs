@@ -50,6 +50,13 @@
       "when": 1781755833347,
       "tag": "0006_spicy_mongoose",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1781757436039,
+      "tag": "0007_sturdy_the_phantom",
+      "breakpoints": true
     }
   ]
 }

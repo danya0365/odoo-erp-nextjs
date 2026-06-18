@@ -15,3 +15,4 @@ export * from "./vendor-bills";
 export * from "./accounts";
 export * from "./journals";
 export * from "./journal-entries";
+export * from "./crm";

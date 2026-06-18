@@ -306,6 +306,37 @@ export interface JournalEntryWithLines extends JournalEntry {
   lines: JournalEntryLine[];
 }
 
+// ── CRM (sales pipeline) ──
+export interface CrmStage {
+  id: string;
+  shopId: string;
+  name: string;
+  sequence: number; // ลำดับคอลัมน์ใน pipeline
+  isWon: boolean; // ย้ายเข้าสเตจนี้ = ชนะ
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type OpportunityStatus = "active" | "won" | "lost";
+
+export interface Opportunity {
+  id: string;
+  shopId: string;
+  name: string;
+  partnerId: string | null; // ผูกผู้ติดต่อ (ถ้ามี)
+  contactName: string | null;
+  email: string | null;
+  phone: string | null;
+  expectedRevenue: number; // minor units
+  probability: number; // 0–100
+  stageId: string;
+  status: OpportunityStatus;
+  lostReason: string | null;
+  salesOrderId: string | null; // ตั้งเมื่อแปลงเป็นใบเสนอราคา
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type PartnerType = "customer" | "vendor" | "both";
 
 export interface Partner {
