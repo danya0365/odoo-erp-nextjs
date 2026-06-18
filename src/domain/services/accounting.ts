@@ -14,9 +14,11 @@ export const ACCOUNT_CODES = {
   inputVat: "1300", // ภาษีซื้อ
   ap: "2100", // เจ้าหนี้การค้า
   outputVat: "2200", // ภาษีขาย
+  whtPayable: "2300", // ภาษีหัก ณ ที่จ่ายค้างจ่าย
   equity: "3000", // ส่วนของเจ้าของ
   sales: "4000", // รายได้จากการขาย
   expense: "5000", // ต้นทุนและค่าใช้จ่าย
+  salaryExpense: "5100", // เงินเดือนและค่าแรง
 } as const;
 
 export interface AccountDef {
@@ -31,9 +33,11 @@ export const DEFAULT_ACCOUNTS: readonly AccountDef[] = [
   { code: ACCOUNT_CODES.inputVat, name: "ภาษีซื้อ", type: "asset" },
   { code: ACCOUNT_CODES.ap, name: "เจ้าหนี้การค้า", type: "liability" },
   { code: ACCOUNT_CODES.outputVat, name: "ภาษีขาย", type: "liability" },
+  { code: ACCOUNT_CODES.whtPayable, name: "ภาษีหัก ณ ที่จ่ายค้างจ่าย", type: "liability" },
   { code: ACCOUNT_CODES.equity, name: "ส่วนของเจ้าของ", type: "equity" },
   { code: ACCOUNT_CODES.sales, name: "รายได้จากการขาย", type: "income" },
   { code: ACCOUNT_CODES.expense, name: "ต้นทุนและค่าใช้จ่าย", type: "expense" },
+  { code: ACCOUNT_CODES.salaryExpense, name: "เงินเดือนและค่าแรง", type: "expense" },
 ];
 
 export interface JournalDef {
@@ -130,6 +134,15 @@ export function cashSaleEntryLines(a: DocAmounts): DraftLine[] {
   ].filter(nonZero);
 }
 
+/** เงินเดือน: DR เงินเดือนและค่าแรง (gross) / CR เงินสด (สุทธิ) + CR ภาษีหัก ณ ที่จ่าย */
+export function payrollEntryLines(amounts: { gross: number; tax: number; net: number }): DraftLine[] {
+  return [
+    { accountCode: ACCOUNT_CODES.salaryExpense, label: "เงินเดือนและค่าแรง", debit: amounts.gross, credit: 0 },
+    { accountCode: ACCOUNT_CODES.cash, label: "จ่ายเงินเดือนสุทธิ", debit: 0, credit: amounts.net },
+    { accountCode: ACCOUNT_CODES.whtPayable, label: "ภาษีหัก ณ ที่จ่าย", debit: 0, credit: amounts.tax },
+  ].filter(nonZero);
+}
+
 /** การรับ-จ่ายเงิน: inbound = DR เงินสด / CR ลูกหนี้; outbound = DR เจ้าหนี้ / CR เงินสด */
 export function paymentEntryLines(direction: PaymentDirection, amount: number): DraftLine[] {
   if (direction === "inbound") {
@@ -170,4 +183,5 @@ export const journalTypeForSource: Record<
   bill: "purchase",
   payment: "bank",
   pos: "sale",
+  payroll: "general",
 };

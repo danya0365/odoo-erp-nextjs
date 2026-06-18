@@ -28,8 +28,7 @@ export class DrizzleAccountRepository implements IAccountRepository {
   constructor(private readonly db: Database = defaultDb) {}
 
   async ensureDefaults(shopId: string): Promise<Account[]> {
-    const existing = await this.list(shopId);
-    if (existing.length > 0) return existing;
+    // additive + idempotent: เติมเฉพาะบัญชีมาตรฐานที่ยังขาด (รองรับการเพิ่มบัญชีใหม่ภายหลัง)
     await this.db
       .insert(schema.accounts)
       .values(DEFAULT_ACCOUNTS.map((a) => ({ shopId, code: a.code, name: a.name, type: a.type })))

@@ -19,3 +19,4 @@ export * from "./crm";
 export * from "./reorder-rules";
 export * from "./pos";
 export * from "./manufacturing";
+export * from "./hr";

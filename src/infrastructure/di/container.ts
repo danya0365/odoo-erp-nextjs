@@ -24,6 +24,8 @@ import { DrizzlePosSessionRepository } from "@/src/infrastructure/repositories/d
 import { DrizzlePosOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePosOrderRepository";
 import { DrizzleBomRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleBomRepository";
 import { DrizzleManufacturingOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleManufacturingOrderRepository";
+import { DrizzleEmployeeRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleEmployeeRepository";
+import { DrizzlePayrollRunRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePayrollRunRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -50,6 +52,8 @@ import type { IPosSessionRepository } from "@/src/application/repositories/IPosS
 import type { IPosOrderRepository } from "@/src/application/repositories/IPosOrderRepository";
 import type { IBomRepository } from "@/src/application/repositories/IBomRepository";
 import type { IManufacturingOrderRepository } from "@/src/application/repositories/IManufacturingOrderRepository";
+import type { IEmployeeRepository } from "@/src/application/repositories/IEmployeeRepository";
+import type { IPayrollRunRepository } from "@/src/application/repositories/IPayrollRunRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -86,6 +90,8 @@ class Container {
   readonly bomRepository: IBomRepository = new DrizzleBomRepository();
   readonly manufacturingOrderRepository: IManufacturingOrderRepository =
     new DrizzleManufacturingOrderRepository();
+  readonly employeeRepository: IEmployeeRepository = new DrizzleEmployeeRepository();
+  readonly payrollRunRepository: IPayrollRunRepository = new DrizzlePayrollRunRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 

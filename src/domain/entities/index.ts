@@ -289,7 +289,7 @@ export interface Journal {
   updatedAt: string;
 }
 
-export type JournalEntrySourceType = "invoice" | "bill" | "payment" | "manual" | "pos";
+export type JournalEntrySourceType = "invoice" | "bill" | "payment" | "manual" | "pos" | "payroll";
 export type JournalEntryStatus = "draft" | "posted";
 
 export interface JournalEntry {
@@ -435,6 +435,45 @@ export interface ManufacturingOrder {
   status: ManufacturingOrderStatus;
   createdAt: string;
   updatedAt: string;
+}
+
+// ── HR / Payroll ──
+export interface Employee {
+  id: string;
+  shopId: string;
+  name: string;
+  position: string | null;
+  baseSalary: number; // minor units (ต่อเดือน)
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PayrollRunStatus = "draft" | "posted";
+
+export interface PayrollRun {
+  id: string;
+  shopId: string;
+  docNumber: string | null; // ออกตอน post
+  period: string; // 'YYYY-MM'
+  whtRateBp: number; // ภาษีหัก ณ ที่จ่าย (basis points)
+  status: PayrollRunStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Payslip {
+  id: string;
+  shopId: string;
+  runId: string;
+  employeeId: string;
+  gross: number; // minor
+  tax: number; // minor (หัก ณ ที่จ่าย)
+  net: number; // minor
+}
+
+export interface PayrollRunWithSlips extends PayrollRun {
+  slips: Payslip[];
 }
 
 export type PartnerType = "customer" | "vendor" | "both";

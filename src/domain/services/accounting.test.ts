@@ -11,6 +11,7 @@ import {
   billEntryLines,
   paymentEntryLines,
   cashSaleEntryLines,
+  payrollEntryLines,
   netProfit,
   DEFAULT_ACCOUNTS,
   ACCOUNT_CODES,
@@ -102,8 +103,16 @@ test("netProfit = รายได้ − ค่าใช้จ่าย", () => 
   assert.equal(profit, 4000);
 });
 
-test("DEFAULT_ACCOUNTS: code ไม่ซ้ำ + ครบ 8 บัญชี", () => {
+test("DEFAULT_ACCOUNTS: code ไม่ซ้ำ + ครบ 10 บัญชี", () => {
   const codes = DEFAULT_ACCOUNTS.map((a) => a.code);
   assert.equal(new Set(codes).size, codes.length);
-  assert.equal(DEFAULT_ACCOUNTS.length, 8);
+  assert.equal(DEFAULT_ACCOUNTS.length, 10);
+});
+
+test("payrollEntryLines: DR เงินเดือน(gross) / CR เงินสด(net)+ภาษีหัก (สมดุล)", () => {
+  const lines = payrollEntryLines({ gross: 30000, tax: 900, net: 29100 });
+  assertBalanced(lines);
+  assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.salaryExpense)!.debit, 30000);
+  assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.cash)!.credit, 29100);
+  assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.whtPayable)!.credit, 900);
 });
