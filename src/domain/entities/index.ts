@@ -284,7 +284,7 @@ export interface Journal {
   updatedAt: string;
 }
 
-export type JournalEntrySourceType = "invoice" | "bill" | "payment" | "manual";
+export type JournalEntrySourceType = "invoice" | "bill" | "payment" | "manual" | "pos";
 export type JournalEntryStatus = "draft" | "posted";
 
 export interface JournalEntry {
@@ -345,6 +345,54 @@ export interface Opportunity {
   salesOrderId: string | null; // ตั้งเมื่อแปลงเป็นใบเสนอราคา
   createdAt: string;
   updatedAt: string;
+}
+
+// ── POS (point of sale) ──
+export type PosSessionStatus = "open" | "closed";
+
+export interface PosSession {
+  id: string;
+  shopId: string;
+  userId: string;
+  status: PosSessionStatus;
+  openingCash: number; // minor units — เงินทอนตั้งต้น
+  closingCash: number | null; // minor — ยอดนับจริงตอนปิด
+  expectedCash: number | null; // minor — ที่ควรมี (ตั้งต้น + ขายเงินสด)
+  difference: number | null; // minor — นับจริง − ที่ควรมี
+  openedAt: string;
+  closedAt: string | null;
+}
+
+export type PosPaymentMethod = "cash" | "transfer";
+
+export interface PosOrder {
+  id: string;
+  shopId: string;
+  sessionId: string;
+  docNumber: string;
+  untaxedAmount: number;
+  taxAmount: number;
+  totalAmount: number;
+  paymentMethod: PosPaymentMethod;
+  createdAt: string;
+}
+
+export interface PosOrderLine {
+  id: string;
+  shopId: string;
+  posOrderId: string;
+  productId: string;
+  description: string;
+  qty: number; // scale QTY_SCALE
+  unitPrice: number; // minor snapshot
+  taxRateBp: number;
+  lineSubtotal: number;
+  lineTax: number;
+  lineTotal: number;
+}
+
+export interface PosOrderWithLines extends PosOrder {
+  lines: PosOrderLine[];
 }
 
 export type PartnerType = "customer" | "vendor" | "both";

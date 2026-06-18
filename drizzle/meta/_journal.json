@@ -64,6 +64,13 @@
       "when": 1781762822649,
       "tag": "0008_grey_lord_tyger",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1781764118116,
+      "tag": "0009_rich_aaron_stack",
+      "breakpoints": true
     }
   ]
 }

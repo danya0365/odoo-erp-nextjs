@@ -121,6 +121,15 @@ export function billEntryLines(a: DocAmounts): DraftLine[] {
   ].filter(nonZero);
 }
 
+/** ขายสด (POS): DR เงินสด (รวม) / CR รายได้ (ก่อนภาษี) + CR ภาษีขาย — จ่ายทันที ไม่ผ่านลูกหนี้ */
+export function cashSaleEntryLines(a: DocAmounts): DraftLine[] {
+  return [
+    { accountCode: ACCOUNT_CODES.cash, label: "รับเงินสดขายหน้าร้าน", debit: a.total, credit: 0 },
+    { accountCode: ACCOUNT_CODES.sales, label: "รายได้จากการขาย", debit: 0, credit: a.untaxed },
+    { accountCode: ACCOUNT_CODES.outputVat, label: "ภาษีขาย", debit: 0, credit: a.tax },
+  ].filter(nonZero);
+}
+
 /** การรับ-จ่ายเงิน: inbound = DR เงินสด / CR ลูกหนี้; outbound = DR เจ้าหนี้ / CR เงินสด */
 export function paymentEntryLines(direction: PaymentDirection, amount: number): DraftLine[] {
   if (direction === "inbound") {
@@ -160,4 +169,5 @@ export const journalTypeForSource: Record<
   invoice: "sale",
   bill: "purchase",
   payment: "bank",
+  pos: "sale",
 };

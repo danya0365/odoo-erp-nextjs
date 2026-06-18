@@ -20,6 +20,8 @@ import { DrizzleCrmStageRepository } from "@/src/infrastructure/repositories/dri
 import { DrizzleOpportunityRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleOpportunityRepository";
 import { DrizzleReportingRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleReportingRepository";
 import { DrizzleReorderRuleRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleReorderRuleRepository";
+import { DrizzlePosSessionRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePosSessionRepository";
+import { DrizzlePosOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePosOrderRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -42,6 +44,8 @@ import type { ICrmStageRepository } from "@/src/application/repositories/ICrmSta
 import type { IOpportunityRepository } from "@/src/application/repositories/IOpportunityRepository";
 import type { IReportingRepository } from "@/src/application/repositories/IReportingRepository";
 import type { IReorderRuleRepository } from "@/src/application/repositories/IReorderRuleRepository";
+import type { IPosSessionRepository } from "@/src/application/repositories/IPosSessionRepository";
+import type { IPosOrderRepository } from "@/src/application/repositories/IPosOrderRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -73,6 +77,8 @@ class Container {
     new DrizzleOpportunityRepository();
   readonly reportingRepository: IReportingRepository = new DrizzleReportingRepository();
   readonly reorderRuleRepository: IReorderRuleRepository = new DrizzleReorderRuleRepository();
+  readonly posSessionRepository: IPosSessionRepository = new DrizzlePosSessionRepository();
+  readonly posOrderRepository: IPosOrderRepository = new DrizzlePosOrderRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 
