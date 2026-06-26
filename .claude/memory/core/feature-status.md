@@ -48,3 +48,14 @@ metadata:
   Marketing, Helpdesk, Website/CMS, ฯลฯ) · ยังไม่มีเส้นชัยตายตัว ใช้ roadmap เป็นตัววัด
 
 > วิธีเช็คความสดของตารางนี้: `/memory-status` (เทียบจำนวน migration/เทสต์จริงกับที่จดไว้)
+
+## หน้าเว็บ Roadmap (ในแอป)
+มีหน้า `/shop/roadmap` (back-office, shop_owner) ที่แสดงสถานะนี้แบบ visual ·
+**ข้อมูลขับเคลื่อนจาก `src/domain/services/roadmap-status.ts`** (`ROADMAP_ITEMS`) — **อัปเดตคู่กับไฟล์นี้และ [[roadmap]]**
+เมื่อ build module ใหม่/เปลี่ยนสถานะ (page: `app/(shop)/shop/roadmap/page.tsx`, unit test: `roadmap-status.test.ts`, e2e: `roadmap.spec.ts`)
+
+## หน้าเว็บ User Journey + Coverage (ในแอป)
+มีหน้า `/shop/journey` (เดินดู flow จริงครบวงจร, ลิงก์ step ไปหน้าจริง) + `/shop/journey/coverage`
+(map แต่ละ step → URL จริง + สถานะ มีแล้ว/บางส่วน/ยังไม่มี) · **ข้อมูลที่ `src/domain/services/journeys.ts`** (`JOURNEYS`)
+— อัปเดต `status` ของ step เมื่อเทส journey นั้นจริง · seed เริ่ม 4 journeys (order-to-cash, procure-to-pay,
+online-store, pos-shift) เพิ่มได้เรื่อยๆ · unit: `journeys.test.ts`, e2e: `journey.spec.ts`
