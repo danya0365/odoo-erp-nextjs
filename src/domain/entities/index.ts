@@ -303,6 +303,19 @@ export interface Payment {
   createdAt: string;
 }
 
+/** บันทึกการยื่นภาษีมูลค่าเพิ่ม (ภพ.30) ต่องวดเดือน */
+export interface VatFiling {
+  id: string;
+  shopId: string;
+  periodStart: string; // "YYYY-MM"
+  periodEnd: string; // "YYYY-MM-DD"
+  outputVat: number;
+  inputVat: number;
+  netPayable: number;
+  filedAt: string;
+  createdAt: string;
+}
+
 // ── Accounting (double-entry general ledger) ──
 export type AccountType = "asset" | "liability" | "equity" | "income" | "expense";
 

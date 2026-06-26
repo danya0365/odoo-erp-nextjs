@@ -252,14 +252,14 @@ export const JOURNEYS: readonly Journey[] = [
   {
     id: "vat-filing",
     title: "สรุปภาษีมูลค่าเพิ่ม ภพ.30",
-    description: "รวมภาษีขาย/ภาษีซื้อ ออกรายงานภาษี และคุมยอดเพื่อยื่น ภพ.30",
+    description: "รวมภาษีขาย/ภาษีซื้อ ออกรายงานภาษี และบันทึกการยื่น ภพ.30",
     icon: "FileSpreadsheet",
-    estimatedTime: "—",
+    estimatedTime: "2-3 นาที",
     kind: "real-world",
     steps: [
-      { title: "รวบรวมภาษีขาย/ภาษีซื้อ", description: "จากใบกำกับขาย/ซื้อในงวด", status: "partial", note: "มีบัญชี output/input VAT แต่ยังไม่มีรายงานสรุป" },
-      { title: "รายงานภาษีซื้อ-ขาย + ภพ.30", description: "ยอดสุทธิที่ต้องชำระ/ขอคืน", status: "missing", note: "ต้องมี: VAT report (ภพ.30)" },
-      { title: "บันทึก/ยื่นและปิดงวดภาษี", description: "ล็อกงวด + บันทึกการยื่น", status: "missing", note: "ต้องมี: tax period lock" },
+      { title: "รวบรวมภาษีขาย/ภาษีซื้อ", description: "จากสมุดรายวันในงวด (auto)", route: "/shop/accounting/vat", status: "done", note: "ดึงจากบัญชี output/input VAT ตามช่วงเดือน" },
+      { title: "รายงานภาษีซื้อ-ขาย + ภพ.30", description: "ยอดสุทธิที่ต้องชำระ/ขอคืน", route: "/shop/accounting/vat", status: "done", note: "GetVatReport — netPayable = ภาษีขาย − ภาษีซื้อ" },
+      { title: "บันทึกการยื่น ภพ.30", description: "snapshot งวด + กันยื่นซ้ำ", route: "/shop/accounting/vat", status: "done", note: "FileVatReturn (vat_filings)" },
     ],
   },
   {

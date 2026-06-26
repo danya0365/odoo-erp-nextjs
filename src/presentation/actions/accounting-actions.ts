@@ -7,7 +7,10 @@ import { z } from "zod";
 import { container } from "@/src/infrastructure/di/container";
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { parseScaled } from "@/src/domain/services/money";
+import { monthRange } from "@/src/domain/services/tax";
 import { CreateManualJournalEntryUseCase } from "@/src/application/use-cases/accounting/CreateManualJournalEntryUseCase";
+import { GetVatReportUseCase } from "@/src/application/use-cases/accounting/GetVatReportUseCase";
+import { FileVatReturnUseCase } from "@/src/application/use-cases/accounting/FileVatReturnUseCase";
 
 export interface FormState {
   error?: string;
@@ -68,4 +71,23 @@ export async function createManualEntryAction(
   }
   revalidatePath("/shop/accounting/entries");
   redirect(`/shop/accounting/entries/${entryId}`);
+}
+
+/** ยื่น ภพ.30 ของงวด: คำนวณยอดจากสมุดรายวันฝั่ง server (ไม่เชื่อ client) แล้วบันทึก */
+export async function fileVatReturnAction(formData: FormData): Promise<void> {
+  const user = await requireRole("shop_owner");
+  const shopId = user.shopId!;
+  const month = String(formData.get("month") ?? "");
+  if (!/^\d{4}-\d{2}$/.test(month)) return;
+
+  const { from, to, periodEnd } = monthRange(month);
+  const summary = await new GetVatReportUseCase(container.journalEntryRepository).execute(shopId, { from, to });
+  await new FileVatReturnUseCase(container.vatFilingRepository).execute(
+    shopId,
+    month,
+    periodEnd,
+    summary,
+    new Date().toISOString(),
+  );
+  revalidatePath("/shop/accounting/vat");
 }

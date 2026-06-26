@@ -18,7 +18,10 @@ metadata:
   CreateSalesReturn → ConfirmSalesReturn (stock IN `sales_return`) → PostCreditNote (DR รายได้+ภาษีขาย/CR ลูกหนี้) →
   RefundSalesReturn (payment outbound) → PostRefund (DR ลูกหนี้/CR เงินสด) · `creditNoteEntryLines`+`customerRefundEntryLines`
   ใน accounting.ts · หน้า `/shop/sales/returns` · journey `sales-return` = 100% done · เทสครบ 3 ชั้น
-- เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`)
+- ✅ **#2 vat-filing (ภพ.30)** — รายงานภาษีขาย-ซื้อต่องวด + บันทึกการยื่น (migration 0016 `vat_filings`):
+  `tax.ts` (vatSummary/monthRange), GetVatReport (จาก trialBalance ตามช่วงเดือน), FileVatReturn (กันยื่นซ้ำ) ·
+  หน้า `/shop/accounting/vat` · journey `vat-filing` = done · เทสครบ 3 ชั้น
+- เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend
 ✅ เสร็จ+เทสต์ครบ 3 ชั้น · 🟡 ใช้ได้แต่มี gap/รอตัดสินใจ · ⬜ ยังไม่เริ่ม (อยู่ใน roadmap)
