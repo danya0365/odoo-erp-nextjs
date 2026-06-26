@@ -57,5 +57,7 @@ metadata:
 ## หน้าเว็บ User Journey + Coverage (ในแอป)
 มีหน้า `/shop/journey` (เดินดู flow จริงครบวงจร, ลิงก์ step ไปหน้าจริง) + `/shop/journey/coverage`
 (map แต่ละ step → URL จริง + สถานะ มีแล้ว/บางส่วน/ยังไม่มี) · **ข้อมูลที่ `src/domain/services/journeys.ts`** (`JOURNEYS`)
-— อัปเดต `status` ของ step เมื่อเทส journey นั้นจริง · seed เริ่ม 4 journeys (order-to-cash, procure-to-pay,
-online-store, pos-shift) เพิ่มได้เรื่อยๆ · unit: `journeys.test.ts`, e2e: `journey.spec.ts`
+— อัปเดต `status` ของ step เมื่อเทส journey นั้นจริง · มี **12 journeys** ครอบทุก module (order-to-cash,
+procure-to-pay, online-store, pos-shift, lead-to-order, make-to-stock, auto-replenish, stock-transfer,
+hire-to-payroll, project-delivery, record-to-report, business-overview) · เพิ่มได้เรื่อยๆ ·
+unit: `journeys.test.ts` (มี invariant ≥11 journeys), e2e: `journey.spec.ts`

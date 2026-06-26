@@ -83,6 +83,102 @@ export const JOURNEYS: readonly Journey[] = [
       { title: "ปิดกะ", description: "สรุปยอดขาย/เงินสดในกะ", route: "/shop/pos/sessions", status: "done", note: "ปิดกะบนหน้ารายละเอียดเซสชัน" },
     ],
   },
+  {
+    id: "lead-to-order",
+    title: "CRM: โอกาสการขาย → ปิดดีล → ใบขาย",
+    description: "ติดตามโอกาสการขายในไปป์ไลน์ ปิดดีลที่ชนะ แล้วแปลงเป็นใบเสนอราคา",
+    icon: "Target",
+    estimatedTime: "3-4 นาที",
+    steps: [
+      { title: "สร้างโอกาสการขาย", description: "บันทึกลูกค้าเป้าหมาย + มูลค่าคาดหวัง + ความน่าจะเป็น", route: "/shop/crm/new", status: "done", note: "CreateOpportunity" },
+      { title: "เลื่อนสเตจ → ปิดดีล (ชนะ)", description: "ลากผ่านไปป์ไลน์จนสถานะ won", route: "/shop/crm", status: "done", note: "ทำบนหน้ารายละเอียดโอกาส /shop/crm/[id] (MarkWon)" },
+      { title: "แปลงเป็นใบเสนอราคา", description: "เปิดใบขายให้ลูกค้าที่ปิดดีลได้", route: "/shop/sales/new", status: "partial", note: "ออกใบขายได้ แต่ยังไม่มีปุ่ม convert ตรงจากดีล (สร้างใบขายเองโดยเลือกลูกค้าเดียวกัน)" },
+    ],
+  },
+  {
+    id: "make-to-stock",
+    title: "การผลิต: สูตร BOM → สั่งผลิต → เข้าสต๊อก",
+    description: "ตั้งสูตรการผลิต สั่งผลิต ตัดวัตถุดิบ และรับสินค้าสำเร็จรูปเข้าคลัง",
+    icon: "Factory",
+    estimatedTime: "4-5 นาที",
+    steps: [
+      { title: "สร้างสูตรการผลิต (BOM)", description: "กำหนดสินค้าสำเร็จรูป + วัตถุดิบต่อหน่วย", route: "/shop/manufacturing/boms/new", status: "done", note: "CreateBom" },
+      { title: "สั่งผลิต", description: "เลือก BOM + จำนวน → สร้างใบสั่งผลิต", route: "/shop/manufacturing/new", status: "done", note: "CreateManufacturingOrder" },
+      { title: "ผลิตเสร็จ", description: "ยืนยันผลิต → ตัดวัตถุดิบ (OUT) + รับสินค้าสำเร็จรูป (IN)", route: "/shop/manufacturing", status: "done", note: "ทำบนหน้ารายละเอียด /shop/manufacturing/[id]; stock moves ครบ" },
+    ],
+  },
+  {
+    id: "auto-replenish",
+    title: "เติมสต๊อกอัตโนมัติ (จุดสั่งซื้อ → PO)",
+    description: "ตั้งจุดสั่งซื้อ ดูสินค้าที่ต่ำกว่าเกณฑ์ แล้วออกใบสั่งซื้อเติม",
+    icon: "Warehouse",
+    estimatedTime: "3-4 นาที",
+    steps: [
+      { title: "ตั้งจุดสั่งซื้อ", description: "กำหนด min/max ต่อสินค้า", route: "/shop/inventory/reorder", status: "done", note: "ReorderRule" },
+      { title: "ดูสินค้าที่ต่ำกว่าจุดสั่ง", description: "ระบบไฮไลต์สินค้าที่ต้องเติม", route: "/shop/inventory/reorder", status: "done", note: "คำนวณจาก on-hand เทียบ min" },
+      { title: "ออก PO เติมสต๊อก", description: "สร้างใบสั่งซื้อจากสินค้าที่ขาด", route: "/shop/purchase/new", status: "partial", note: "ออก PO ได้ แต่ยังไม่มีปุ่มสร้าง PO อัตโนมัติจากหน้า reorder (ทำเอง)" },
+    ],
+  },
+  {
+    id: "stock-transfer",
+    title: "โอนย้ายสินค้าระหว่างคลัง",
+    description: "จัดการหลายคลัง โอนย้ายสินค้า และตรวจยอดคงเหลือ",
+    icon: "ArrowLeftRight",
+    estimatedTime: "2-3 นาที",
+    steps: [
+      { title: "ดู/สร้างคลังสินค้า", description: "จัดการคลัง (location) ของร้าน", route: "/shop/inventory/locations", status: "done", note: "StockLocation" },
+      { title: "โอนย้ายระหว่างคลัง", description: "ย้ายสินค้าจากคลังหนึ่งไปอีกคลัง (OUT+IN)", route: "/shop/inventory/transfer", status: "done", note: "TransferStock — สมดุล qtyDelta" },
+      { title: "ตรวจยอดคงเหลือ", description: "ดู on-hand รวมหลังโอน", route: "/shop/inventory", status: "done", note: "on-hand = SUM(stock_moves)" },
+    ],
+  },
+  {
+    id: "hire-to-payroll",
+    title: "บุคลากร: เพิ่มพนักงาน → จ่ายเงินเดือน",
+    description: "เพิ่มพนักงาน สร้างรอบเงินเดือน รัน และลงบัญชีค่าใช้จ่าย",
+    icon: "Users2",
+    estimatedTime: "3-4 นาที",
+    steps: [
+      { title: "เพิ่มพนักงาน", description: "บันทึกพนักงาน + ฐานเงินเดือน", route: "/shop/hr/employees", status: "done", note: "CreateEmployee" },
+      { title: "สร้างรอบเงินเดือน", description: "เลือกงวด + พนักงานที่จ่าย", route: "/shop/hr/payroll/new", status: "done", note: "CreatePayrollRun" },
+      { title: "รัน + ลงบัญชี", description: "ยืนยันรอบ → auto-post รายการเงินเดือน", route: "/shop/hr/payroll", status: "done", note: "ทำบนหน้ารายละเอียด /shop/hr/payroll/[id]; payrollEntryLines" },
+    ],
+  },
+  {
+    id: "project-delivery",
+    title: "โครงการ + ลงเวลาทำงาน",
+    description: "สร้างโครงการ เพิ่มงาน ลงเวลา และสรุปชั่วโมงทำงาน",
+    icon: "FolderKanban",
+    estimatedTime: "3-4 นาที",
+    steps: [
+      { title: "สร้างโครงการ", description: "ตั้งโครงการ + ลูกค้า", route: "/shop/projects/new", status: "done", note: "CreateProject" },
+      { title: "เพิ่มงาน + ลงเวลา", description: "สร้าง task แล้วบันทึกชั่วโมงทำงาน", route: "/shop/projects", status: "done", note: "ทำบนหน้ารายละเอียด /shop/projects/[id]; LogTimesheet" },
+      { title: "สรุปชั่วโมง", description: "ดูชั่วโมงรวมต่อโครงการ/งาน", route: "/shop/projects", status: "done", note: "sumMinutes/formatHours" },
+    ],
+  },
+  {
+    id: "record-to-report",
+    title: "บัญชี: สมุดรายวัน → งบทดลอง",
+    description: "ดูรายการที่ลงบัญชีอัตโนมัติ บันทึกปรับปรุงเอง และดูงบทดลองที่สมดุล",
+    icon: "Calculator",
+    estimatedTime: "3-4 นาที",
+    steps: [
+      { title: "ดูสมุดรายวัน (auto-posted)", description: "รายการบัญชีที่ระบบลงจากเอกสารต่างๆ", route: "/shop/accounting/entries", status: "done", note: "post จาก invoice/bill/payment/pos/payroll" },
+      { title: "บันทึกรายการปรับปรุงเอง", description: "ลง journal entry เอง (เดบิต=เครดิต)", route: "/shop/accounting/entries/new", status: "done", note: "assertBalanced บังคับสมดุล" },
+      { title: "ดูงบทดลอง", description: "Trial balance รวมทุกบัญชี", route: "/shop/accounting/trial-balance", status: "done", note: "เดบิตรวม = เครดิตรวม" },
+    ],
+  },
+  {
+    id: "business-overview",
+    title: "ภาพรวมกิจการ + รายงาน",
+    description: "ดูแดชบอร์ดสรุป รายงานการขาย และมูลค่าสินค้าคงคลัง",
+    icon: "BarChart3",
+    estimatedTime: "2-3 นาที",
+    steps: [
+      { title: "แดชบอร์ดภาพรวม", description: "กำไร เงินสด ลูกหนี้/เจ้าหนี้ ไปป์ไลน์", route: "/shop/reports", status: "done", note: "GetDashboardUseCase" },
+      { title: "รายงานการขาย", description: "ยอดต่อเดือน + สินค้าขายดี", route: "/shop/reports/sales", status: "done" },
+      { title: "มูลค่าสินค้าคงคลัง", description: "ตีมูลค่าสต๊อก + สินค้าหมด", route: "/shop/reports/inventory", status: "done" },
+    ],
+  },
 ];
 
 export interface CoverageSummary {
