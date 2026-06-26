@@ -99,6 +99,13 @@
       "when": 1781771891267,
       "tag": "0013_past_microbe",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1782101916113,
+      "tag": "0014_serious_wendigo",
+      "breakpoints": true
     }
   ]
 }

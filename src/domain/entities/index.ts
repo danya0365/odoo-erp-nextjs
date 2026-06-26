@@ -525,6 +525,16 @@ export interface Timesheet {
   createdAt: string;
 }
 
+// ── Store reviews (รีวิวร้านบนหน้า public) ──
+export interface StoreReview {
+  id: string;
+  shopId: string;
+  customerName: string;
+  rating: number; // 1–5
+  comment: string | null;
+  createdAt: string;
+}
+
 export type PartnerType = "customer" | "vendor" | "both";
 
 export interface Partner {

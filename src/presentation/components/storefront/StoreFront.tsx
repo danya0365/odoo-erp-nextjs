@@ -95,7 +95,7 @@ export function StoreFront({ slug, products }: { slug: string; products: StorePr
             {state.error && <Alert variant="error">{state.error}</Alert>}
             <input type="hidden" name="slug" value={slug} />
             <input type="hidden" name="lines" value={linesJson} />
-            <FormField label="ชื่อ" required>
+            <FormField label="ชื่อผู้สั่งซื้อ" required>
               <Input name="name" />
             </FormField>
             <FormField label="อีเมล" required>

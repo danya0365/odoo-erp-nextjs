@@ -6,6 +6,7 @@ import { z } from "zod";
 import { container } from "@/src/infrastructure/di/container";
 import { parseScaled, QTY_SCALE } from "@/src/domain/services/money";
 import { PlaceOnlineOrderUseCase } from "@/src/application/use-cases/storefront/PlaceOnlineOrderUseCase";
+import { SubmitReviewUseCase } from "@/src/application/use-cases/storefront/SubmitReviewUseCase";
 
 export interface FormState {
   error?: string;
@@ -59,4 +60,40 @@ export async function placeOrderAction(_prev: FormState, formData: FormData): Pr
     return { error: (e as Error).message };
   }
   redirect(`/store/${slug}/order/${orderId}`);
+}
+
+const reviewSchema = z.object({
+  slug: z.string().min(1),
+  name: z.string().min(1, "กรุณาระบุชื่อ"),
+  rating: z.string().regex(/^[1-5]$/, "กรุณาให้คะแนน 1–5 ดาว"),
+  comment: z.string().optional(),
+});
+
+/** public — ส่งรีวิวร้าน แล้ว redirect กลับหน้าร้าน (PRG: ไม่ค้าง + เห็นรีวิวใหม่ทันที) */
+export async function submitReviewAction(_prev: FormState, formData: FormData): Promise<FormState> {
+  const parsed = reviewSchema.safeParse({
+    slug: formData.get("slug"),
+    name: formData.get("name"),
+    rating: formData.get("rating"),
+    comment: formData.get("comment") || undefined,
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "ข้อมูลไม่ถูกต้อง" };
+
+  let slug: string;
+  try {
+    await new SubmitReviewUseCase(
+      container.shopRepository,
+      container.storeReviewRepository,
+    ).execute({
+      slug: parsed.data.slug,
+      customerName: parsed.data.name,
+      rating: Number(parsed.data.rating),
+      comment: parsed.data.comment ?? null,
+    });
+    slug = parsed.data.slug;
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+  // PRG: กลับหน้าร้าน (GET) เพื่อโชว์รีวิวใหม่ — ไม่ค้างเพราะไม่ revalidate ค้างใน action
+  redirect(`/store/${slug}?reviewed=1#reviews`);
 }

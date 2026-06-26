@@ -30,6 +30,7 @@ import { DrizzleOnlineOrderRepository } from "@/src/infrastructure/repositories/
 import { DrizzleProjectRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleProjectRepository";
 import { DrizzleProjectTaskRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleProjectTaskRepository";
 import { DrizzleTimesheetRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleTimesheetRepository";
+import { DrizzleStoreReviewRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleStoreReviewRepository";
 import { BcryptPasswordHasher } from "@/src/infrastructure/services/BcryptPasswordHasher";
 
 import type { IUserRepository } from "@/src/application/repositories/IUserRepository";
@@ -62,6 +63,7 @@ import type { IOnlineOrderRepository } from "@/src/application/repositories/IOnl
 import type { IProjectRepository } from "@/src/application/repositories/IProjectRepository";
 import type { IProjectTaskRepository } from "@/src/application/repositories/IProjectTaskRepository";
 import type { ITimesheetRepository } from "@/src/application/repositories/ITimesheetRepository";
+import type { IStoreReviewRepository } from "@/src/application/repositories/IStoreReviewRepository";
 import type { IPasswordHasher } from "@/src/application/services/IPasswordHasher";
 
 /**
@@ -104,6 +106,7 @@ class Container {
   readonly projectRepository: IProjectRepository = new DrizzleProjectRepository();
   readonly projectTaskRepository: IProjectTaskRepository = new DrizzleProjectTaskRepository();
   readonly timesheetRepository: ITimesheetRepository = new DrizzleTimesheetRepository();
+  readonly storeReviewRepository: IStoreReviewRepository = new DrizzleStoreReviewRepository();
   readonly passwordHasher: IPasswordHasher = new BcryptPasswordHasher();
 }
 
