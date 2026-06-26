@@ -25,6 +25,9 @@ const STATUS: Record<string, StatusMeta> = {
   // invoice / bill
   posted: { label: "ลงบัญชีแล้ว", variant: "brand" },
   paid: { label: "ชำระแล้ว", variant: "success" },
+  // sales return / credit note
+  credited: { label: "ออกใบลดหนี้แล้ว", variant: "brand" },
+  refunded: { label: "คืนเงินแล้ว", variant: "success" },
 };
 
 export function DocumentStatusBadge({ status }: { status: string }) {

@@ -64,7 +64,8 @@ export type StockSourceType =
   | "delivery"
   | "receipt"
   | "transfer"
-  | "manufacturing";
+  | "manufacturing"
+  | "sales_return";
 
 export interface ReorderRule {
   id: string;
@@ -166,6 +167,45 @@ export interface InvoiceLine {
   lineSubtotal: number;
   lineTax: number;
   lineTotal: number;
+}
+
+export type SalesReturnStatus = "draft" | "credited" | "refunded" | "cancelled";
+
+/** ใบคืนสินค้า/ใบลดหนี้ (credit note) — กลับด้านของใบแจ้งหนี้ */
+export interface SalesReturn {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  invoiceId: string | null;
+  salesOrderId: string | null;
+  customerId: string;
+  status: SalesReturnStatus;
+  currency: string;
+  untaxedAmount: number;
+  taxAmount: number;
+  totalAmount: number;
+  refundedAmount: number;
+  reason: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SalesReturnLine {
+  id: string;
+  shopId: string;
+  salesReturnId: string;
+  productId: string;
+  description: string;
+  qty: number; // scale QTY_SCALE
+  unitPrice: number; // minor snapshot
+  taxRateBp: number;
+  lineSubtotal: number;
+  lineTax: number;
+  lineTotal: number;
+}
+
+export interface SalesReturnWithLines extends SalesReturn {
+  lines: SalesReturnLine[];
 }
 
 export type PurchaseOrderStatus =
@@ -289,7 +329,15 @@ export interface Journal {
   updatedAt: string;
 }
 
-export type JournalEntrySourceType = "invoice" | "bill" | "payment" | "manual" | "pos" | "payroll";
+export type JournalEntrySourceType =
+  | "invoice"
+  | "bill"
+  | "payment"
+  | "manual"
+  | "pos"
+  | "payroll"
+  | "credit_note"
+  | "refund";
 export type JournalEntryStatus = "draft" | "posted";
 
 export interface JournalEntry {

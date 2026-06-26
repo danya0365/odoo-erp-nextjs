@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, FileText } from "lucide-react";
+import { Plus, FileText, Undo2 } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { container } from "@/src/infrastructure/di/container";
@@ -41,12 +41,20 @@ export default async function SalesPage({
       <Breadcrumb items={[{ label: "ร้านค้า", href: "/shop" }, { label: "การขาย" }]} />
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">การขาย</h1>
-        <Link href="/shop/sales/new">
-          <Button>
-            <Plus className="size-4" />
-            สร้างใบเสนอราคา
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/shop/sales/returns">
+            <Button variant="secondary">
+              <Undo2 className="size-4" />
+              คืนสินค้า/ใบลดหนี้
+            </Button>
+          </Link>
+          <Link href="/shop/sales/new">
+            <Button>
+              <Plus className="size-4" />
+              สร้างใบเสนอราคา
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <form className="flex flex-wrap gap-3">

@@ -12,6 +12,8 @@ import {
   paymentEntryLines,
   cashSaleEntryLines,
   payrollEntryLines,
+  creditNoteEntryLines,
+  customerRefundEntryLines,
   netProfit,
   DEFAULT_ACCOUNTS,
   ACCOUNT_CODES,
@@ -115,4 +117,24 @@ test("payrollEntryLines: DR เงินเดือน(gross) / CR เงิน
   assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.salaryExpense)!.debit, 30000);
   assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.cash)!.credit, 29100);
   assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.whtPayable)!.credit, 900);
+});
+
+test("creditNoteEntryLines: กลับด้านใบแจ้งหนี้ (DR รายได้+ภาษีขาย / CR ลูกหนี้) + สมดุล", () => {
+  const a = { untaxed: 200, tax: 14, total: 214 };
+  const inv = invoiceEntryLines(a);
+  const cn = creditNoteEntryLines(a);
+  assertBalanced(cn);
+  // ลูกหนี้: ใบแจ้งหนี้เดบิต ↔ ใบลดหนี้เครดิต (กลับด้าน)
+  const invAr = inv.find((l) => l.accountCode === ACCOUNT_CODES.ar)!;
+  const cnAr = cn.find((l) => l.accountCode === ACCOUNT_CODES.ar)!;
+  assert.equal(invAr.debit, cnAr.credit);
+  assert.equal(cn.find((l) => l.accountCode === ACCOUNT_CODES.sales)!.debit, 200);
+  assert.equal(cn.find((l) => l.accountCode === ACCOUNT_CODES.outputVat)!.debit, 14);
+});
+
+test("customerRefundEntryLines: DR ลูกหนี้ / CR เงินสด + สมดุล", () => {
+  const lines = customerRefundEntryLines(214);
+  assertBalanced(lines);
+  assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.ar)!.debit, 214);
+  assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.cash)!.credit, 214);
 });

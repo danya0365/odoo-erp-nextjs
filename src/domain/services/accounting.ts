@@ -125,6 +125,23 @@ export function billEntryLines(a: DocAmounts): DraftLine[] {
   ].filter(nonZero);
 }
 
+/** ใบลดหนี้ (credit note) = กลับด้านใบแจ้งหนี้: DR รายได้ (ก่อนภาษี) + DR ภาษีขาย / CR ลูกหนี้ (รวม) */
+export function creditNoteEntryLines(a: DocAmounts): DraftLine[] {
+  return [
+    { accountCode: ACCOUNT_CODES.sales, label: "กลับรายการรายได้ (คืนสินค้า)", debit: a.untaxed, credit: 0 },
+    { accountCode: ACCOUNT_CODES.outputVat, label: "กลับภาษีขาย (คืนสินค้า)", debit: a.tax, credit: 0 },
+    { accountCode: ACCOUNT_CODES.ar, label: "ลดลูกหนี้การค้า", debit: 0, credit: a.total },
+  ].filter(nonZero);
+}
+
+/** คืนเงินลูกค้า: DR ลูกหนี้การค้า (ล้างยอดที่ค้างคืน) / CR เงินสด */
+export function customerRefundEntryLines(amount: number): DraftLine[] {
+  return [
+    { accountCode: ACCOUNT_CODES.ar, label: "ล้างยอดคืนลูกค้า", debit: amount, credit: 0 },
+    { accountCode: ACCOUNT_CODES.cash, label: "คืนเงินลูกค้า", debit: 0, credit: amount },
+  ];
+}
+
 /** ขายสด (POS): DR เงินสด (รวม) / CR รายได้ (ก่อนภาษี) + CR ภาษีขาย — จ่ายทันที ไม่ผ่านลูกหนี้ */
 export function cashSaleEntryLines(a: DocAmounts): DraftLine[] {
   return [
@@ -184,4 +201,6 @@ export const journalTypeForSource: Record<
   payment: "bank",
   pos: "sale",
   payroll: "general",
+  credit_note: "sale",
+  refund: "bank",
 };

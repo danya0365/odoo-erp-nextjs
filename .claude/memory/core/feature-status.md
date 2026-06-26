@@ -10,9 +10,15 @@ metadata:
 
 # Feature Status — odoo-erp
 
-> ภาพรวม ณ 2026-06-26 · นับจริงจากโค้ด: **15 migrations** (`drizzle/0000`–`0014`),
-> **29 unit + 15 integration + 15 e2e** test files · build + lint เขียว
-> เส้นชัยที่ยังเหลือ (module ที่ Odoo มีแต่เรายังไม่ทำ) → [[roadmap]]
+> ภาพรวม ณ 2026-06-26 · นับจริงจากโค้ด: **16 migrations** (`drizzle/0000`–`0015`) ·
+> build + lint เขียว · เส้นชัยที่ยังเหลือ (module ที่ Odoo มีแต่เรายังไม่ทำ) → [[roadmap]]
+
+## ไล่เก็บ journey (สร้างฟีเจอร์ที่ขาดทีละอัน)
+- ✅ **#1 sales-return (RMA)** — คืนสินค้า/ใบลดหนี้/คืนเงิน ครบวงจร (migration 0015 `sales_returns`):
+  CreateSalesReturn → ConfirmSalesReturn (stock IN `sales_return`) → PostCreditNote (DR รายได้+ภาษีขาย/CR ลูกหนี้) →
+  RefundSalesReturn (payment outbound) → PostRefund (DR ลูกหนี้/CR เงินสด) · `creditNoteEntryLines`+`customerRefundEntryLines`
+  ใน accounting.ts · หน้า `/shop/sales/returns` · journey `sales-return` = 100% done · เทสครบ 3 ชั้น
+- เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`)
 
 ## Legend
 ✅ เสร็จ+เทสต์ครบ 3 ชั้น · 🟡 ใช้ได้แต่มี gap/รอตัดสินใจ · ⬜ ยังไม่เริ่ม (อยู่ใน roadmap)

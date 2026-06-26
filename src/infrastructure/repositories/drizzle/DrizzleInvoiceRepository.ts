@@ -2,7 +2,7 @@ import "server-only";
 import { and, eq, desc, count } from "drizzle-orm";
 
 import { db as defaultDb, schema, type Database } from "@/src/infrastructure/db/client";
-import type { Invoice } from "@/src/domain/entities";
+import type { Invoice, InvoiceLine } from "@/src/domain/entities";
 import type {
   CreateInvoiceInput,
   IInvoiceRepository,
@@ -75,6 +75,31 @@ export class DrizzleInvoiceRepository implements IInvoiceRepository {
       where: and(eq(schema.invoices.shopId, shopId), eq(schema.invoices.id, id)),
     });
     return row ? toInvoice(row) : null;
+  }
+
+  async listLines(shopId: string, invoiceId: string): Promise<InvoiceLine[]> {
+    const rows = await this.db
+      .select()
+      .from(schema.invoiceLines)
+      .where(
+        and(
+          eq(schema.invoiceLines.shopId, shopId),
+          eq(schema.invoiceLines.invoiceId, invoiceId),
+        ),
+      );
+    return rows.map((r) => ({
+      id: r.id,
+      shopId: r.shopId,
+      invoiceId: r.invoiceId,
+      productId: r.productId,
+      description: r.description,
+      qty: r.qty,
+      unitPrice: r.unitPrice,
+      taxRateBp: r.taxRateBp,
+      lineSubtotal: r.lineSubtotal,
+      lineTax: r.lineTax,
+      lineTotal: r.lineTotal,
+    }));
   }
 
   async listBySalesOrder(shopId: string, salesOrderId: string): Promise<Invoice[]> {

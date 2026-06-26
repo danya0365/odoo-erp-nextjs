@@ -1,4 +1,4 @@
-import type { Invoice, InvoiceStatus } from "@/src/domain/entities";
+import type { Invoice, InvoiceLine, InvoiceStatus } from "@/src/domain/entities";
 import type { Page, PageQuery } from "@/src/application/repositories/pagination";
 
 export interface CreateInvoiceLineInput {
@@ -28,6 +28,7 @@ export interface CreateInvoiceInput {
 export interface IInvoiceRepository {
   createWithLines(input: CreateInvoiceInput): Promise<Invoice>;
   findById(shopId: string, id: string): Promise<Invoice | null>;
+  listLines(shopId: string, invoiceId: string): Promise<InvoiceLine[]>;
   listBySalesOrder(shopId: string, salesOrderId: string): Promise<Invoice[]>;
   list(shopId: string, query: PageQuery): Promise<Page<Invoice>>;
   update(

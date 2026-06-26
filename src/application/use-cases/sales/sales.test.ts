@@ -156,6 +156,9 @@ class FakeInvoiceRepo implements IInvoiceRepository {
     const i = this.invoices.get(id);
     return i && i.shopId === shopId ? i : null;
   }
+  async listLines() {
+    return [];
+  }
   async listBySalesOrder() {
     return [];
   }

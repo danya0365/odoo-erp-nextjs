@@ -9,6 +9,7 @@ export * from "./stock-locations";
 export * from "./stock-moves";
 export * from "./sales-orders";
 export * from "./invoices";
+export * from "./sales-returns";
 export * from "./payments";
 export * from "./purchase-orders";
 export * from "./vendor-bills";

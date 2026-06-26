@@ -5,7 +5,7 @@ import { products } from "./products";
 import { stockLocations } from "./stock-locations";
 
 export const STOCK_MOVE_TYPES = ["in", "out", "adjust"] as const;
-export const STOCK_SOURCE_TYPES = ["adjustment", "delivery", "receipt", "transfer", "manufacturing"] as const;
+export const STOCK_SOURCE_TYPES = ["adjustment", "delivery", "receipt", "transfer", "manufacturing", "sales_return"] as const;
 
 // ledger เพิ่มอย่างเดียว — on-hand = SUM(qtyDelta) ต่อ product (ไม่มีคอลัมน์ on-hand)
 export const stockMoves = sqliteTable(
