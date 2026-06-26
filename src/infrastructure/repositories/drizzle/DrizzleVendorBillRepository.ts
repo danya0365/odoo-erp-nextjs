@@ -2,7 +2,7 @@ import "server-only";
 import { and, eq, desc, count } from "drizzle-orm";
 
 import { db as defaultDb, schema, type Database } from "@/src/infrastructure/db/client";
-import type { VendorBill } from "@/src/domain/entities";
+import type { VendorBill, VendorBillLine } from "@/src/domain/entities";
 import type {
   CreateVendorBillInput,
   IVendorBillRepository,
@@ -75,6 +75,31 @@ export class DrizzleVendorBillRepository implements IVendorBillRepository {
       where: and(eq(schema.vendorBills.shopId, shopId), eq(schema.vendorBills.id, id)),
     });
     return row ? toBill(row) : null;
+  }
+
+  async listLines(shopId: string, vendorBillId: string): Promise<VendorBillLine[]> {
+    const rows = await this.db
+      .select()
+      .from(schema.vendorBillLines)
+      .where(
+        and(
+          eq(schema.vendorBillLines.shopId, shopId),
+          eq(schema.vendorBillLines.vendorBillId, vendorBillId),
+        ),
+      );
+    return rows.map((r) => ({
+      id: r.id,
+      shopId: r.shopId,
+      vendorBillId: r.vendorBillId,
+      productId: r.productId,
+      description: r.description,
+      qty: r.qty,
+      unitPrice: r.unitPrice,
+      taxRateBp: r.taxRateBp,
+      lineSubtotal: r.lineSubtotal,
+      lineTax: r.lineTax,
+      lineTotal: r.lineTotal,
+    }));
   }
 
   async listByPurchaseOrder(

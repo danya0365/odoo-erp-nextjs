@@ -14,6 +14,7 @@ export * from "./sales-returns";
 export * from "./payments";
 export * from "./purchase-orders";
 export * from "./vendor-bills";
+export * from "./purchase-returns";
 export * from "./accounts";
 export * from "./journals";
 export * from "./journal-entries";

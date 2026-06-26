@@ -311,13 +311,13 @@ export const JOURNEYS: readonly Journey[] = [
     title: "รับของ → ตรวจ QC → คืนของเสียผู้ขาย",
     description: "รับของเข้า ตรวจคุณภาพ ของเสียคืนผู้ขาย และรับใบลดหนี้ผู้ขาย",
     icon: "PackageX",
-    estimatedTime: "—",
+    estimatedTime: "3-4 นาที",
     kind: "real-world",
     steps: [
       { title: "รับของเข้าจาก PO", description: "receive เข้าสต๊อก", route: "/shop/purchase", status: "done" },
-      { title: "ตรวจคุณภาพ (QC)", description: "ผ่าน/ไม่ผ่าน + บันทึกผล", status: "missing", note: "ต้องมี: QC check point" },
-      { title: "คืนของเสียให้ผู้ขาย", description: "stock OUT + เอกสารคืน", status: "missing", note: "ต้องมี: purchase return" },
-      { title: "รับใบลดหนี้ผู้ขาย", description: "ลดยอดเจ้าหนี้ (vendor credit)", status: "missing", note: "ต้องมี: vendor credit note" },
+      { title: "ตรวจคุณภาพ (QC)", description: "บันทึกผล QC ตอนสร้างใบคืน", route: "/shop/purchase/returns/new", status: "done", note: "เก็บผล QC/เหตุผลในใบคืน" },
+      { title: "คืนของเสียให้ผู้ขาย", description: "ยืนยัน → stock OUT", route: "/shop/purchase/returns", status: "done", note: "ConfirmPurchaseReturn (sourceType purchase_return)" },
+      { title: "รับใบลดหนี้ผู้ขาย", description: "ลดยอดเจ้าหนี้ อัตโนมัติ", route: "/shop/purchase/returns", status: "done", note: "PostVendorCredit — DR เจ้าหนี้ / CR ค่าใช้จ่าย+ภาษีซื้อ" },
     ],
   },
 

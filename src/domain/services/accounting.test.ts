@@ -14,6 +14,7 @@ import {
   payrollEntryLines,
   creditNoteEntryLines,
   customerRefundEntryLines,
+  vendorCreditNoteEntryLines,
   netProfit,
   DEFAULT_ACCOUNTS,
   ACCOUNT_CODES,
@@ -137,4 +138,17 @@ test("customerRefundEntryLines: DR ลูกหนี้ / CR เงินสด
   assertBalanced(lines);
   assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.ar)!.debit, 214);
   assert.equal(lines.find((l) => l.accountCode === ACCOUNT_CODES.cash)!.credit, 214);
+});
+
+test("vendorCreditNoteEntryLines: กลับด้านใบตั้งหนี้ (DR เจ้าหนี้ / CR ค่าใช้จ่าย+ภาษีซื้อ) + สมดุล", () => {
+  const a = { untaxed: 4000, tax: 280, total: 4280 };
+  const bill = billEntryLines(a);
+  const vcn = vendorCreditNoteEntryLines(a);
+  assertBalanced(vcn);
+  // เจ้าหนี้: ใบตั้งหนี้เครดิต ↔ ใบลดหนี้ผู้ขายเดบิต (กลับด้าน)
+  const billAp = bill.find((l) => l.accountCode === ACCOUNT_CODES.ap)!;
+  const vcnAp = vcn.find((l) => l.accountCode === ACCOUNT_CODES.ap)!;
+  assert.equal(billAp.credit, vcnAp.debit);
+  assert.equal(vcn.find((l) => l.accountCode === ACCOUNT_CODES.expense)!.credit, 4000);
+  assert.equal(vcn.find((l) => l.accountCode === ACCOUNT_CODES.inputVat)!.credit, 280);
 });

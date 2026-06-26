@@ -66,7 +66,8 @@ export type StockSourceType =
   | "transfer"
   | "manufacturing"
   | "sales_return"
-  | "stocktake";
+  | "stocktake"
+  | "purchase_return";
 
 export interface ReorderRule {
   id: string;
@@ -314,6 +315,44 @@ export interface VendorBillLine {
   lineTotal: number;
 }
 
+export type PurchaseReturnStatus = "draft" | "credited" | "cancelled";
+
+/** ใบคืนของให้ผู้ขาย / ใบลดหนี้ผู้ขาย (vendor credit note) — กลับด้านใบตั้งหนี้ */
+export interface PurchaseReturn {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  vendorBillId: string | null;
+  purchaseOrderId: string | null;
+  vendorId: string;
+  status: PurchaseReturnStatus;
+  currency: string;
+  untaxedAmount: number;
+  taxAmount: number;
+  totalAmount: number;
+  reason: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PurchaseReturnLine {
+  id: string;
+  shopId: string;
+  purchaseReturnId: string;
+  productId: string;
+  description: string;
+  qty: number;
+  unitPrice: number;
+  taxRateBp: number;
+  lineSubtotal: number;
+  lineTax: number;
+  lineTotal: number;
+}
+
+export interface PurchaseReturnWithLines extends PurchaseReturn {
+  lines: PurchaseReturnLine[];
+}
+
 export type PaymentDirection = "inbound" | "outbound";
 
 export interface Payment {
@@ -377,7 +416,8 @@ export type JournalEntrySourceType =
   | "pos"
   | "payroll"
   | "credit_note"
-  | "refund";
+  | "refund"
+  | "vendor_credit";
 export type JournalEntryStatus = "draft" | "posted";
 
 export interface JournalEntry {

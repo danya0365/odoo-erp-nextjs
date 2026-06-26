@@ -1,4 +1,4 @@
-import type { VendorBill, VendorBillStatus } from "@/src/domain/entities";
+import type { VendorBill, VendorBillLine, VendorBillStatus } from "@/src/domain/entities";
 import type { Page, PageQuery } from "@/src/application/repositories/pagination";
 
 export interface CreateVendorBillLineInput {
@@ -28,6 +28,7 @@ export interface CreateVendorBillInput {
 export interface IVendorBillRepository {
   createWithLines(input: CreateVendorBillInput): Promise<VendorBill>;
   findById(shopId: string, id: string): Promise<VendorBill | null>;
+  listLines(shopId: string, vendorBillId: string): Promise<VendorBillLine[]>;
   listByPurchaseOrder(shopId: string, purchaseOrderId: string): Promise<VendorBill[]>;
   list(shopId: string, query: PageQuery): Promise<Page<VendorBill>>;
   update(

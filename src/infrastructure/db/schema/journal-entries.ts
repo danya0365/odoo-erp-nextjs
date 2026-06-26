@@ -5,7 +5,7 @@ import { partners } from "./partners";
 import { accounts } from "./accounts";
 import { journals } from "./journals";
 
-export const JOURNAL_ENTRY_SOURCE_TYPES = ["invoice", "bill", "payment", "manual", "pos", "payroll", "credit_note", "refund"] as const;
+export const JOURNAL_ENTRY_SOURCE_TYPES = ["invoice", "bill", "payment", "manual", "pos", "payroll", "credit_note", "refund", "vendor_credit"] as const;
 export const JOURNAL_ENTRY_STATUSES = ["draft", "posted"] as const;
 
 export const journalEntries = sqliteTable(

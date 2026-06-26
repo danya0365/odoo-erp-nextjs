@@ -23,6 +23,9 @@ metadata:
   หน้า `/shop/accounting/vat` · journey `vat-filing` = done · เทสครบ 3 ชั้น
 - ✅ **#3 stocktake (ตรวจนับสต๊อก)** — เปิดรอบนับ (snapshot on-hand) → กรอกยอดนับ → ปรับตามส่วนต่าง
   (migration 0017 `stock_counts`): CreateStockCount/ApplyStockCount (sourceType `stocktake`) · หน้า `/shop/inventory/stocktake` · done
+- ✅ **#4 purchase-return-qc (คืนของผู้ขาย)** — คืนของจากใบตั้งหนี้ + QC → stock OUT + ใบลดหนี้ผู้ขาย
+  (migration 0018 `purchase_returns`): CreatePurchaseReturn/ConfirmPurchaseReturn + PostVendorCredit
+  (`vendorCreditNoteEntryLines` DR เจ้าหนี้/CR ค่าใช้จ่าย+ภาษีซื้อ) · หน้า `/shop/purchase/returns` · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend

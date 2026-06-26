@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, ShoppingCart } from "lucide-react";
+import { Plus, ShoppingCart, PackageX } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { container } from "@/src/infrastructure/di/container";
@@ -41,12 +41,14 @@ export default async function PurchasePage({
       <Breadcrumb items={[{ label: "ร้านค้า", href: "/shop" }, { label: "การจัดซื้อ" }]} />
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">การจัดซื้อ</h1>
-        <Link href="/shop/purchase/new">
-          <Button>
-            <Plus className="size-4" />
-            สร้างใบขอราคา
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/shop/purchase/returns">
+            <Button variant="secondary"><PackageX className="size-4" />คืนของผู้ขาย</Button>
+          </Link>
+          <Link href="/shop/purchase/new">
+            <Button><Plus className="size-4" />สร้างใบขอราคา</Button>
+          </Link>
+        </div>
       </div>
 
       <form className="flex flex-wrap gap-3">

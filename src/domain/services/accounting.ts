@@ -134,6 +134,15 @@ export function creditNoteEntryLines(a: DocAmounts): DraftLine[] {
   ].filter(nonZero);
 }
 
+/** ใบลดหนี้ผู้ขาย (vendor credit) = กลับด้านใบตั้งหนี้: DR เจ้าหนี้ (รวม) / CR ค่าใช้จ่าย + CR ภาษีซื้อ */
+export function vendorCreditNoteEntryLines(a: DocAmounts): DraftLine[] {
+  return [
+    { accountCode: ACCOUNT_CODES.ap, label: "ลดเจ้าหนี้การค้า (คืนของ)", debit: a.total, credit: 0 },
+    { accountCode: ACCOUNT_CODES.expense, label: "กลับต้นทุน/ค่าใช้จ่าย (คืนของ)", debit: 0, credit: a.untaxed },
+    { accountCode: ACCOUNT_CODES.inputVat, label: "กลับภาษีซื้อ (คืนของ)", debit: 0, credit: a.tax },
+  ].filter(nonZero);
+}
+
 /** คืนเงินลูกค้า: DR ลูกหนี้การค้า (ล้างยอดที่ค้างคืน) / CR เงินสด */
 export function customerRefundEntryLines(amount: number): DraftLine[] {
   return [
@@ -203,4 +212,5 @@ export const journalTypeForSource: Record<
   payroll: "general",
   credit_note: "sale",
   refund: "bank",
+  vendor_credit: "purchase",
 };

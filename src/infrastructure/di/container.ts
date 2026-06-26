@@ -15,6 +15,7 @@ import { DrizzleSalesReturnRepository } from "@/src/infrastructure/repositories/
 import { DrizzlePaymentRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePaymentRepository";
 import { DrizzlePurchaseOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePurchaseOrderRepository";
 import { DrizzleVendorBillRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleVendorBillRepository";
+import { DrizzlePurchaseReturnRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePurchaseReturnRepository";
 import { DrizzleAccountRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleAccountRepository";
 import { DrizzleJournalRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalRepository";
 import { DrizzleJournalEntryRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalEntryRepository";
@@ -51,6 +52,7 @@ import type { ISalesReturnRepository } from "@/src/application/repositories/ISal
 import type { IPaymentRepository } from "@/src/application/repositories/IPaymentRepository";
 import type { IPurchaseOrderRepository } from "@/src/application/repositories/IPurchaseOrderRepository";
 import type { IVendorBillRepository } from "@/src/application/repositories/IVendorBillRepository";
+import type { IPurchaseReturnRepository } from "@/src/application/repositories/IPurchaseReturnRepository";
 import type { IAccountRepository } from "@/src/application/repositories/IAccountRepository";
 import type { IJournalRepository } from "@/src/application/repositories/IJournalRepository";
 import type { IJournalEntryRepository } from "@/src/application/repositories/IJournalEntryRepository";
@@ -94,6 +96,7 @@ class Container {
   readonly purchaseOrderRepository: IPurchaseOrderRepository =
     new DrizzlePurchaseOrderRepository();
   readonly vendorBillRepository: IVendorBillRepository = new DrizzleVendorBillRepository();
+  readonly purchaseReturnRepository: IPurchaseReturnRepository = new DrizzlePurchaseReturnRepository();
   readonly accountRepository: IAccountRepository = new DrizzleAccountRepository();
   readonly journalRepository: IJournalRepository = new DrizzleJournalRepository();
   readonly journalEntryRepository: IJournalEntryRepository =
