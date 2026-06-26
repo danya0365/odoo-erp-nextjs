@@ -28,6 +28,8 @@ const STATUS: Record<string, StatusMeta> = {
   // sales return / credit note
   credited: { label: "ออกใบลดหนี้แล้ว", variant: "brand" },
   refunded: { label: "คืนเงินแล้ว", variant: "success" },
+  // stocktake
+  applied: { label: "ปรับสต๊อกแล้ว", variant: "success" },
 };
 
 export function DocumentStatusBadge({ status }: { status: string }) {

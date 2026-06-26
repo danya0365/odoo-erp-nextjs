@@ -284,13 +284,13 @@ export const JOURNEYS: readonly Journey[] = [
     title: "ตรวจนับสต๊อกประจำปี (stocktake)",
     description: "เปิดรอบนับ นับจริง เทียบส่วนต่างกับระบบ แล้วปรับปรุงยอด",
     icon: "ClipboardCheck",
-    estimatedTime: "—",
+    estimatedTime: "3-5 นาที",
     kind: "real-world",
     steps: [
-      { title: "เปิดรอบตรวจนับ", description: "freeze รายการที่จะนับ", status: "missing", note: "ต้องมี: stocktake session" },
-      { title: "บันทึกยอดนับจริง", description: "กรอกจำนวนที่นับได้", status: "missing", note: "ต้องมี: count entry (ทีละรายการ/สแกน)" },
-      { title: "เทียบส่วนต่างกับระบบ", description: "ดู variance นับ vs on-hand", status: "partial", note: "คำนวณ on-hand ได้ แต่ยังไม่มีหน้าจับคู่ variance" },
-      { title: "ปรับปรุงสต๊อกตามผลนับ", description: "ออก stock adjust", route: "/shop/inventory", status: "done", note: "ปรับสต๊อกได้ทีละรายการ" },
+      { title: "เปิดรอบตรวจนับ", description: "snapshot ยอดระบบของสินค้า stockable ทุกตัว", route: "/shop/inventory/stocktake", status: "done", note: "CreateStockCount (docNumber SC)" },
+      { title: "บันทึกยอดนับจริง", description: "กรอกจำนวนที่นับได้ต่อรายการ", route: "/shop/inventory/stocktake", status: "done", note: "ในหน้ารายละเอียดรอบนับ" },
+      { title: "เทียบส่วนต่างกับระบบ", description: "variance = นับ − on-hand", route: "/shop/inventory/stocktake", status: "done", note: "แสดงส่วนต่าง + ปรับเฉพาะที่ต่าง" },
+      { title: "ปรับปรุงสต๊อกตามผลนับ", description: "ออก stock adjust อัตโนมัติ", route: "/shop/inventory/stocktake", status: "done", note: "ApplyStockCount (sourceType stocktake) → on-hand = ยอดนับ" },
     ],
   },
   {

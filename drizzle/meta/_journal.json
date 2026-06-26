@@ -120,6 +120,13 @@
       "when": 1782481368689,
       "tag": "0016_glorious_tomorrow_man",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1782481774755,
+      "tag": "0017_sturdy_iron_fist",
+      "breakpoints": true
     }
   ]
 }

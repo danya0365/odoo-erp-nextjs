@@ -65,7 +65,8 @@ export type StockSourceType =
   | "receipt"
   | "transfer"
   | "manufacturing"
-  | "sales_return";
+  | "sales_return"
+  | "stocktake";
 
 export interface ReorderRule {
   id: string;
@@ -75,6 +76,32 @@ export interface ReorderRule {
   maxQty: number; // scale QTY_SCALE — เติมจนถึงระดับนี้
   createdAt: string;
   updatedAt: string;
+}
+
+export type StockCountStatus = "draft" | "applied" | "cancelled";
+
+/** รอบตรวจนับสต๊อก (physical inventory) — นับจริงแล้วปรับยอดตามส่วนต่าง */
+export interface StockCount {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  status: StockCountStatus;
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StockCountLine {
+  id: string;
+  shopId: string;
+  stockCountId: string;
+  productId: string;
+  systemQty: number; // on-hand ณ เวลาที่เปิดรอบ (scale QTY_SCALE)
+  countedQty: number; // นับได้จริง
+}
+
+export interface StockCountWithLines extends StockCount {
+  lines: StockCountLine[];
 }
 
 export interface StockMove {

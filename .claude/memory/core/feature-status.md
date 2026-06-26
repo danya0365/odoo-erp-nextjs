@@ -21,6 +21,8 @@ metadata:
 - ✅ **#2 vat-filing (ภพ.30)** — รายงานภาษีขาย-ซื้อต่องวด + บันทึกการยื่น (migration 0016 `vat_filings`):
   `tax.ts` (vatSummary/monthRange), GetVatReport (จาก trialBalance ตามช่วงเดือน), FileVatReturn (กันยื่นซ้ำ) ·
   หน้า `/shop/accounting/vat` · journey `vat-filing` = done · เทสครบ 3 ชั้น
+- ✅ **#3 stocktake (ตรวจนับสต๊อก)** — เปิดรอบนับ (snapshot on-hand) → กรอกยอดนับ → ปรับตามส่วนต่าง
+  (migration 0017 `stock_counts`): CreateStockCount/ApplyStockCount (sourceType `stocktake`) · หน้า `/shop/inventory/stocktake` · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend
