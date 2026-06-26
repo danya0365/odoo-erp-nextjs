@@ -5,13 +5,16 @@
 
 export type StepStatus = "done" | "partial" | "missing";
 
+/** supported = flow ที่ระบบรองรับแล้ว · real-world = สถานการณ์จริงที่ยังขาดฟีเจอร์ (gap-driven) */
+export type JourneyKind = "supported" | "real-world";
+
 export interface JourneyStep {
   title: string;
   description: string;
-  /** URL จริงในแอปที่ step นี้ทำงาน (ต้องกดเปิดได้จริง — เลี่ยง bare [id]) */
-  route: string;
+  /** URL จริงในแอปที่ step นี้ทำงาน (ต้องกดเปิดได้จริง — เลี่ยง bare [id]); ไม่มี = ยังไม่มีหน้า */
+  route?: string;
   status: StepStatus;
-  /** โน้ตสั้น: ทำอะไรได้/ติดอะไร */
+  /** โน้ตสั้น: ทำอะไรได้/ติดอะไร/ต้องสร้างอะไร */
   note?: string;
 }
 
@@ -22,6 +25,8 @@ export interface Journey {
   /** key สำหรับ map ไป icon ในหน้า (domain คง pure) */
   icon: string;
   estimatedTime: string;
+  /** ไม่ระบุ = supported (flow ที่ทำแล้ว) */
+  kind?: JourneyKind;
   steps: readonly JourneyStep[];
 }
 
@@ -179,6 +184,186 @@ export const JOURNEYS: readonly Journey[] = [
       { title: "มูลค่าสินค้าคงคลัง", description: "ตีมูลค่าสต๊อก + สินค้าหมด", route: "/shop/reports/inventory", status: "done" },
     ],
   },
+
+  // ========== สถานการณ์จริง (gap-driven) — step "ยังไม่มี" = ฟีเจอร์ที่ต้องทำต่อ ==========
+
+  // --- ฝั่งขาย/ลูกค้า ---
+  {
+    id: "sales-return",
+    title: "ลูกค้าคืนสินค้า / คืนเงิน (RMA)",
+    description: "ลูกค้าขอคืนสินค้าหลังซื้อ → อนุมัติ → รับของกลับ → ออกใบลดหนี้ → คืนเงิน",
+    icon: "Undo2",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "เปิดออเดอร์เดิมของลูกค้า", description: "ค้นหาใบขายที่จะคืน", route: "/shop/sales", status: "done", note: "ดูใบขายเดิมได้" },
+      { title: "อนุมัติคำขอคืนสินค้า", description: "บันทึกเหตุผล + จำนวนที่คืน (RMA)", status: "missing", note: "ต้องมี: เอกสาร return + สถานะ" },
+      { title: "รับของกลับเข้าสต๊อก", description: "stock move IN จากการคืน", status: "partial", note: "มีกลไก stock move แต่ยังไม่มี flow คืนเฉพาะ" },
+      { title: "ออกใบลดหนี้ (credit note)", description: "ลดยอดลูกหนี้/กลับรายการบัญชี", status: "missing", note: "ต้องมี: credit note + กลับ journal" },
+      { title: "คืนเงินลูกค้า", description: "จ่ายคืนตามช่องทาง", status: "partial", note: "มี payment แต่ยังไม่มี refund/จ่ายออกเชิงคืน" },
+    ],
+  },
+  {
+    id: "deposit-installment",
+    title: "รับมัดจำ + ผ่อนชำระหลายงวด",
+    description: "ลูกค้าวางมัดจำก่อน แล้วผ่อนเป็นงวดจนปิดยอด",
+    icon: "CalendarClock",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "สร้างใบเสนอราคา/ใบขาย", description: "ตั้งยอดรวม", route: "/shop/sales/new", status: "done" },
+      { title: "รับเงินมัดจำ", description: "บันทึกมัดจำบางส่วน", status: "partial", note: "รับชำระบางส่วนได้ แต่ยังไม่มีแนวคิด 'มัดจำ' เฉพาะ" },
+      { title: "ตั้งแผนผ่อนชำระเป็นงวด", description: "กำหนดงวด/กำหนดวันครบ", status: "missing", note: "ต้องมี: payment schedule" },
+      { title: "เก็บเงินแต่ละงวด + แจ้งเตือน", description: "ติดตามงวดที่ถึงกำหนด", status: "missing", note: "ต้องมี: ตารางงวด + เตือนครบกำหนด" },
+      { title: "ปิดยอดเมื่อครบ", description: "สถานะชำระครบ", status: "partial" },
+    ],
+  },
+  {
+    id: "promotion-loyalty",
+    title: "โปรโมชั่น / ส่วนลด / สะสมแต้ม",
+    description: "ตั้งโปรโมชั่น ลูกค้าซื้อเข้าเงื่อนไขได้ส่วนลดอัตโนมัติ และสะสม/ใช้แต้ม",
+    icon: "Tag",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "ตั้งโปรโมชั่น/คูปอง", description: "เงื่อนไข เช่น ซื้อครบ X ลด Y / โค้ดส่วนลด", status: "missing", note: "ต้องมี: pricing/promotion rules" },
+      { title: "ลูกค้าซื้อเข้าเงื่อนไข", description: "ระบบตรวจเงื่อนไขตอนขาย/POS", status: "missing" },
+      { title: "ส่วนลดคำนวณอัตโนมัติ", description: "ใส่ลงบรรทัด/ท้ายบิล", status: "missing", note: "ต้องมี: discount line ในเอกสาร" },
+      { title: "สะสม/แลกแต้มสมาชิก", description: "แต้มจากยอดซื้อ + ใช้แลก", status: "missing", note: "ต้องมี: loyalty/membership" },
+    ],
+  },
+
+  // --- การเงิน/บัญชี/ภาษี ---
+  {
+    id: "credit-collection",
+    title: "ขายเชื่อ → วางบิลรอบเดือน → ทวงหนี้",
+    description: "ขายเครดิตเทอม วางบิลรวมรอบเดือน ดูอายุหนี้ ส่งใบทวง และรับชำระ",
+    icon: "Receipt",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "ตั้งเครดิตเทอมลูกค้า", description: "เช่น เครดิต 30 วัน + วงเงิน", status: "missing", note: "ต้องมี: credit term/limit ที่ partner" },
+      { title: "วางบิลรอบเดือน (statement)", description: "รวมหลายใบเป็นใบวางบิล", status: "missing", note: "ต้องมี: billing statement" },
+      { title: "ดูรายงานอายุหนี้ (AR aging)", description: "ค้าง 0-30/31-60/60+ วัน", status: "missing", note: "ต้องมี: AR aging report" },
+      { title: "ส่งใบทวงหนี้ (dunning)", description: "เตือนลูกค้าค้างชำระ", status: "missing", note: "ต้องมี: dunning + เทมเพลต" },
+      { title: "รับชำระ", description: "ตัดยอดลูกหนี้", route: "/shop/sales", status: "partial", note: "รับชำระต่อใบได้ แต่ไม่ใช่ตามรอบบิล" },
+    ],
+  },
+  {
+    id: "vat-filing",
+    title: "สรุปภาษีมูลค่าเพิ่ม ภพ.30",
+    description: "รวมภาษีขาย/ภาษีซื้อ ออกรายงานภาษี และคุมยอดเพื่อยื่น ภพ.30",
+    icon: "FileSpreadsheet",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "รวบรวมภาษีขาย/ภาษีซื้อ", description: "จากใบกำกับขาย/ซื้อในงวด", status: "partial", note: "มีบัญชี output/input VAT แต่ยังไม่มีรายงานสรุป" },
+      { title: "รายงานภาษีซื้อ-ขาย + ภพ.30", description: "ยอดสุทธิที่ต้องชำระ/ขอคืน", status: "missing", note: "ต้องมี: VAT report (ภพ.30)" },
+      { title: "บันทึก/ยื่นและปิดงวดภาษี", description: "ล็อกงวด + บันทึกการยื่น", status: "missing", note: "ต้องมี: tax period lock" },
+    ],
+  },
+  {
+    id: "bank-recon-close",
+    title: "กระทบยอดธนาคาร + ปิดงวดบัญชี",
+    description: "นำเข้ารายการเดินบัญชี กระทบยอด ปรับปรุง แล้วปิดงวด ออกงบการเงิน",
+    icon: "Landmark",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "นำเข้ารายการเดินบัญชีธนาคาร", description: "import statement (CSV/ไฟล์ธนาคาร)", status: "missing", note: "ต้องมี: statement import" },
+      { title: "กระทบยอดกับสมุดบัญชี", description: "จับคู่รายการธนาคาร ↔ บัญชี", status: "missing", note: "ต้องมี: reconciliation" },
+      { title: "บันทึกรายการปรับปรุง", description: "ค่าธรรมเนียม/ดอกเบี้ย ฯลฯ", route: "/shop/accounting/entries/new", status: "done" },
+      { title: "ปิดงวดบัญชี", description: "ล็อกไม่ให้แก้ย้อนหลัง", status: "missing", note: "ต้องมี: period close/lock" },
+      { title: "ออกงบการเงิน", description: "งบดุล/งบกำไรขาดทุน", route: "/shop/accounting/trial-balance", status: "partial", note: "มีงบทดลอง ยังไม่มีงบดุล/กำไรขาดทุนเต็มรูป" },
+    ],
+  },
+
+  // --- คลัง/จัดซื้อ/ผลิต ---
+  {
+    id: "stocktake",
+    title: "ตรวจนับสต๊อกประจำปี (stocktake)",
+    description: "เปิดรอบนับ นับจริง เทียบส่วนต่างกับระบบ แล้วปรับปรุงยอด",
+    icon: "ClipboardCheck",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "เปิดรอบตรวจนับ", description: "freeze รายการที่จะนับ", status: "missing", note: "ต้องมี: stocktake session" },
+      { title: "บันทึกยอดนับจริง", description: "กรอกจำนวนที่นับได้", status: "missing", note: "ต้องมี: count entry (ทีละรายการ/สแกน)" },
+      { title: "เทียบส่วนต่างกับระบบ", description: "ดู variance นับ vs on-hand", status: "partial", note: "คำนวณ on-hand ได้ แต่ยังไม่มีหน้าจับคู่ variance" },
+      { title: "ปรับปรุงสต๊อกตามผลนับ", description: "ออก stock adjust", route: "/shop/inventory", status: "done", note: "ปรับสต๊อกได้ทีละรายการ" },
+    ],
+  },
+  {
+    id: "lot-expiry",
+    title: "ติดตามล็อต / วันหมดอายุ (FEFO)",
+    description: "รับเข้าระบุล็อต+วันหมดอายุ ขายตัดแบบหมดอายุก่อน และเตือนใกล้หมดอายุ",
+    icon: "PackageCheck",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "รับเข้าระบุล็อต/วันหมดอายุ", description: "ผูกล็อตกับการรับของ", status: "missing", note: "ต้องมี: lot/serial + expiry tracking" },
+      { title: "ขายตัดสต๊อกแบบ FEFO", description: "หมดอายุก่อน-ออกก่อน", status: "missing", note: "ต้องมี: FEFO allocation" },
+      { title: "แจ้งเตือนสินค้าใกล้หมดอายุ", description: "รายการล็อตที่ใกล้หมดอายุ", status: "missing", note: "ต้องมี: expiry alert report" },
+    ],
+  },
+  {
+    id: "purchase-return-qc",
+    title: "รับของ → ตรวจ QC → คืนของเสียผู้ขาย",
+    description: "รับของเข้า ตรวจคุณภาพ ของเสียคืนผู้ขาย และรับใบลดหนี้ผู้ขาย",
+    icon: "PackageX",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "รับของเข้าจาก PO", description: "receive เข้าสต๊อก", route: "/shop/purchase", status: "done" },
+      { title: "ตรวจคุณภาพ (QC)", description: "ผ่าน/ไม่ผ่าน + บันทึกผล", status: "missing", note: "ต้องมี: QC check point" },
+      { title: "คืนของเสียให้ผู้ขาย", description: "stock OUT + เอกสารคืน", status: "missing", note: "ต้องมี: purchase return" },
+      { title: "รับใบลดหนี้ผู้ขาย", description: "ลดยอดเจ้าหนี้ (vendor credit)", status: "missing", note: "ต้องมี: vendor credit note" },
+    ],
+  },
+
+  // --- คน/เวิร์กโฟลว์/บริการ ---
+  {
+    id: "leave-attendance",
+    title: "ลงเวลา / ลางาน / OT",
+    description: "พนักงานลงเวลาเข้า-ออก ขอลา อนุมัติ และนำเข้าการคำนวณเงินเดือน",
+    icon: "CalendarDays",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "ลงเวลาเข้า-ออก/OT", description: "บันทึกเวลาทำงานรายวัน", status: "missing", note: "ต้องมี: attendance/time clock" },
+      { title: "ยื่นขอลา", description: "ลาป่วย/ลากิจ/พักร้อน + โควตา", status: "missing", note: "ต้องมี: leave request + balance" },
+      { title: "ผู้จัดการอนุมัติ", description: "อนุมัติ/ปฏิเสธคำขอ", status: "missing", note: "ต้องมี: approval workflow" },
+      { title: "นำเข้าการคำนวณเงินเดือน", description: "หักลา/บวก OT", route: "/shop/hr/payroll", status: "partial", note: "มี payroll run แต่ยังไม่ดึงเวลา/ลา" },
+    ],
+  },
+  {
+    id: "expense-claim",
+    title: "เบิกค่าใช้จ่ายพนักงาน",
+    description: "พนักงานยื่นเบิก แนบใบเสร็จ ผู้จัดการอนุมัติ จ่ายคืน และลงบัญชี",
+    icon: "ReceiptText",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "พนักงานยื่นเบิก + แนบใบเสร็จ", description: "กรอกรายการ + แนบรูป", status: "missing", note: "ต้องมี: expense claim + แนบไฟล์" },
+      { title: "ผู้จัดการอนุมัติ", description: "อนุมัติ/ตีกลับ", status: "missing", note: "ต้องมี: approval workflow" },
+      { title: "จ่ายคืนพนักงาน", description: "บันทึกการจ่าย", status: "partial", note: "มี payment ทั่วไป แต่ยังไม่ผูกกับ claim" },
+      { title: "ลงบัญชีค่าใช้จ่าย", description: "auto-post เข้าบัญชีค่าใช้จ่าย", status: "partial", note: "มีกลไก post แต่ยังไม่มี source 'expense'" },
+    ],
+  },
+  {
+    id: "service-ticket",
+    title: "งานบริการ / ซ่อม / นัดหมาย",
+    description: "ลูกค้าแจ้งซ่อม เปิด ticket นัดหมาย มอบหมายช่าง ปิดงานและเก็บเงิน",
+    icon: "Wrench",
+    estimatedTime: "—",
+    kind: "real-world",
+    steps: [
+      { title: "ลูกค้าแจ้งปัญหา/ขอบริการ", description: "รับเรื่อง + รายละเอียด", status: "missing", note: "ต้องมี: helpdesk/service ticket" },
+      { title: "เปิด ticket + นัดหมาย", description: "ตั้งวันนัด + SLA", status: "missing", note: "ต้องมี: ticket + scheduling" },
+      { title: "มอบหมายช่าง/ทีม", description: "assign + ติดตามสถานะ", status: "missing", note: "ต้องมี: assignment + สถานะงาน" },
+      { title: "ปิดงาน + เก็บเงิน", description: "สรุปงาน → ออกใบขาย/เก็บเงิน", route: "/shop/sales/new", status: "partial", note: "ออกใบขายได้ แต่ยังไม่เชื่อมจาก ticket" },
+    ],
+  },
 ];
 
 export interface CoverageSummary {
@@ -215,4 +400,67 @@ export function overallCoverage(journeys: readonly Journey[]): OverallCoverage {
     doneSteps: c.done,
     donePercent: c.donePercent,
   };
+}
+
+export function journeyKind(j: Journey): JourneyKind {
+  return j.kind ?? "supported";
+}
+
+export function supportedJourneys(): Journey[] {
+  return JOURNEYS.filter((j) => journeyKind(j) === "supported");
+}
+
+export function realWorldJourneys(): Journey[] {
+  return JOURNEYS.filter((j) => journeyKind(j) === "real-world");
+}
+
+export interface GapItem {
+  /** ชื่อฟีเจอร์/ความสามารถที่ยังขาด (= ชื่อ step) */
+  feature: string;
+  /** missing = ยังไม่มีเลย, partial = มีบางส่วน */
+  status: Exclude<StepStatus, "done">;
+  note?: string;
+  /** journey ที่ต้องใช้ฟีเจอร์นี้ */
+  inJourneys: string[];
+}
+
+/**
+ * รวม step ที่ยังไม่ done ทุก journey → รายการฟีเจอร์ที่ต้องทำ (dedup ตามชื่อ feature)
+ * เรียง missing ก่อน partial เพื่อให้เห็นของที่ขาดทั้งดุ้นก่อน
+ */
+export function gapBacklog(journeys: readonly Journey[]): GapItem[] {
+  const byFeature = new Map<string, GapItem>();
+  for (const j of journeys) {
+    for (const s of j.steps) {
+      if (s.status === "done") continue;
+      const existing = byFeature.get(s.title);
+      if (existing) {
+        if (!existing.inJourneys.includes(j.title)) existing.inJourneys.push(j.title);
+        // ยกระดับเป็น missing ถ้าเจอที่ไหนสักที่ยังไม่มีเลย
+        if (s.status === "missing") existing.status = "missing";
+      } else {
+        byFeature.set(s.title, {
+          feature: s.title,
+          status: s.status,
+          note: s.note,
+          inJourneys: [j.title],
+        });
+      }
+    }
+  }
+  const order: Record<Exclude<StepStatus, "done">, number> = { missing: 0, partial: 1 };
+  return [...byFeature.values()].sort((a, b) => order[a.status] - order[b.status]);
+}
+
+export interface GapSummary {
+  missing: number;
+  partial: number;
+  total: number;
+}
+
+export function gapSummary(journeys: readonly Journey[]): GapSummary {
+  const items = gapBacklog(journeys);
+  const missing = items.filter((i) => i.status === "missing").length;
+  const partial = items.filter((i) => i.status === "partial").length;
+  return { missing, partial, total: items.length };
 }

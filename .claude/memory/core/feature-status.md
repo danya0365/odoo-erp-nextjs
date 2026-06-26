@@ -57,7 +57,14 @@ metadata:
 ## หน้าเว็บ User Journey + Coverage (ในแอป)
 มีหน้า `/shop/journey` (เดินดู flow จริงครบวงจร, ลิงก์ step ไปหน้าจริง) + `/shop/journey/coverage`
 (map แต่ละ step → URL จริง + สถานะ มีแล้ว/บางส่วน/ยังไม่มี) · **ข้อมูลที่ `src/domain/services/journeys.ts`** (`JOURNEYS`)
-— อัปเดต `status` ของ step เมื่อเทส journey นั้นจริง · มี **12 journeys** ครอบทุก module (order-to-cash,
-procure-to-pay, online-store, pos-shift, lead-to-order, make-to-stock, auto-replenish, stock-transfer,
-hire-to-payroll, project-delivery, record-to-report, business-overview) · เพิ่มได้เรื่อยๆ ·
-unit: `journeys.test.ts` (มี invariant ≥11 journeys), e2e: `journey.spec.ts`
+— อัปเดต `status` ของ step เมื่อเทส journey นั้นจริง · มี 2 ประเภท (`kind`):
+- **supported (12)** — flow ที่ระบบรองรับแล้ว (order-to-cash, procure-to-pay, online-store, pos-shift,
+  lead-to-order, make-to-stock, auto-replenish, stock-transfer, hire-to-payroll, project-delivery,
+  record-to-report, business-overview)
+- **real-world (12)** — สถานการณ์จริงที่ยัง **ขาดฟีเจอร์** (gap-driven): sales-return(RMA/ใบลดหนี้),
+  deposit-installment, promotion-loyalty, credit-collection(AR aging/dunning), vat-filing(ภพ.30),
+  bank-recon-close, stocktake, lot-expiry(FEFO), purchase-return-qc, leave-attendance, expense-claim,
+  service-ticket · step `missing`/`partial` = **ไอเดียฟีเจอร์ที่ต้องทำ**
+
+หน้า `/shop/journey/coverage` มี **Gap backlog** (จาก `gapBacklog()`) รวมฟีเจอร์ที่ขาดทั้งหมด → ใช้เป็น roadmap
+ลงมือทำทีละอัน (โยงกับ [[roadmap]]) · unit: `journeys.test.ts`, e2e: `journey.spec.ts`

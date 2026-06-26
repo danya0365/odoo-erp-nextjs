@@ -22,13 +22,21 @@ test("User Journey: เข้าจากแดชบอร์ด → กาง 
   await page.getByText("ขายครบวงจร (ใบเสนอราคา → รับเงิน)").click();
   await expect(page.getByRole("link", { name: "เพิ่มลูกค้า" })).toBeVisible();
 
+  // มี section "สถานการณ์จริง" (real-world gap journeys)
+  await expect(page.getByRole("heading", { name: /สถานการณ์จริง/ })).toBeVisible();
+
   // ไปหน้า Coverage
   await page.getByRole("link", { name: "ดู Coverage" }).click();
   await expect(page).toHaveURL(/\/shop\/journey\/coverage$/);
   await expect(page.getByRole("heading", { name: "Journey Coverage" })).toBeVisible();
 
+  // Gap backlog — ฟีเจอร์ที่ขาดจากสถานการณ์จริง
+  await expect(page.getByRole("heading", { name: /Gap backlog — ฟีเจอร์/ })).toBeVisible();
+  await expect(page.getByText("ออกใบลดหนี้ (credit note)").first()).toBeVisible();
+  await expect(page.getByText("ยังไม่มี").first()).toBeVisible();
+
   // เห็น URL จริง (ลิงก์เปิดหน้าจริง) + สถานะ
-  await expect(page.getByRole("link", { name: "/shop/sales", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "/shop/sales", exact: true }).first()).toBeVisible();
   await expect(page.getByText("URL จริง").first()).toBeVisible();
   await expect(page.getByText("มีแล้ว").first()).toBeVisible();
 });

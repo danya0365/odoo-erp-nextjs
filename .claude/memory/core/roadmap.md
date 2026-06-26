@@ -13,6 +13,10 @@ metadata:
 > สิ่งที่ build แล้ว → [[feature-status]] · ไฟล์นี้ลิสต์เฉพาะ **ที่ยังไม่ทำ** เป็นเส้นชัย
 > เมื่อ build module ไหนเสร็จ → ย้ายออกจากที่นี่ ไปขึ้นตารางใน feature-status
 > Priority: **P1** ต่อยอดจากของที่มี/คุ้มสุด · **P2** ขยายขอบเขต · **P3** เฉพาะทาง/หลังสุด
+> 🔎 **Gap backlog เชิง flow:** หน้า `/shop/journey/coverage` รวมฟีเจอร์ที่ขาดจาก **real-world journeys**
+> (ขับเคลื่อนจาก `src/domain/services/journeys.ts`) — เป็นมุม "สถานการณ์จริงต้องมีอะไร" เสริมกับ Odoo-parity ด้านล่าง
+> เช่น RMA/ใบลดหนี้, มัดจำ/ผ่อน, โปร/แต้ม, AR aging/dunning, ภพ.30, กระทบยอดธนาคาร, stocktake, lot/expiry,
+> purchase return/QC, ลา/OT, เบิกค่าใช้จ่าย, service ticket
 
 ## P1 — ต่อยอดจาก module ปัจจุบันโดยตรง
 | Module (Odoo) | ทำอะไร | พึ่งพา/ต่อยอดจาก |
