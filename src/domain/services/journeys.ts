@@ -325,15 +325,15 @@ export const JOURNEYS: readonly Journey[] = [
   {
     id: "leave-attendance",
     title: "ลงเวลา / ลางาน / OT",
-    description: "พนักงานลงเวลาเข้า-ออก ขอลา อนุมัติ และนำเข้าการคำนวณเงินเดือน",
+    description: "พนักงานลงเวลาเข้า-ออก ขอลา อนุมัติ และสรุปชั่วโมงเข้าเงินเดือน",
     icon: "CalendarDays",
-    estimatedTime: "—",
+    estimatedTime: "2-3 นาที",
     kind: "real-world",
     steps: [
-      { title: "ลงเวลาเข้า-ออก/OT", description: "บันทึกเวลาทำงานรายวัน", status: "missing", note: "ต้องมี: attendance/time clock" },
-      { title: "ยื่นขอลา", description: "ลาป่วย/ลากิจ/พักร้อน + โควตา", status: "missing", note: "ต้องมี: leave request + balance" },
-      { title: "ผู้จัดการอนุมัติ", description: "อนุมัติ/ปฏิเสธคำขอ", status: "missing", note: "ต้องมี: approval workflow" },
-      { title: "นำเข้าการคำนวณเงินเดือน", description: "หักลา/บวก OT", route: "/shop/hr/payroll", status: "partial", note: "มี payroll run แต่ยังไม่ดึงเวลา/ลา" },
+      { title: "ลงเวลาทำงาน/OT", description: "บันทึกชั่วโมง + OT รายวัน", route: "/shop/hr/timeoff", status: "done", note: "LogAttendance" },
+      { title: "ยื่นขอลา", description: "ลาป่วย/ลากิจ/พักร้อน + จำนวนวัน", route: "/shop/hr/timeoff", status: "done", note: "CreateLeaveRequest" },
+      { title: "ผู้จัดการอนุมัติ", description: "อนุมัติ/ปฏิเสธคำขอลา", route: "/shop/hr/timeoff", status: "done", note: "DecideLeaveRequest (state machine)" },
+      { title: "สรุปชั่วโมงเข้าเงินเดือน", description: "สรุปชั่วโมง/OT ต่อพนักงานเพื่ออ้างอิง", route: "/shop/hr/timeoff", status: "done", note: "ตารางสรุป → ใช้กับ payroll" },
     ],
   },
   {

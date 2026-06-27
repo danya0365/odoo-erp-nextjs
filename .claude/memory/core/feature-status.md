@@ -38,6 +38,9 @@ metadata:
 - ✅ **#8 bank-recon-close (กระทบยอด/ปิดงวด/งบการเงิน)** — นำเข้า statement + กระทบยอด + งบ P&L/งบดุล + ปิดงวด
   (migration 0022 `bank_statement_lines` + `period_closes`): Import/Reconcile/ClosePeriod/GetFinancials,
   `financialStatement()` ใน accounting.ts · หน้า `/shop/accounting/bank-reconciliation` + `/financials` · done
+- ✅ **#9 leave-attendance (ลงเวลา/การลา/OT)** — ลงเวลา+OT, ยื่นลา→อนุมัติ/ปฏิเสธ, สรุปชั่วโมงต่อพนักงาน
+  (migration 0023 `attendance_records` + `leave_requests`): LogAttendance/CreateLeave/DecideLeave ·
+  หน้า `/shop/hr/timeoff` · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend

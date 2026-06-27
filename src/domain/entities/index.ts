@@ -736,6 +736,32 @@ export interface Partner {
   updatedAt: string;
 }
 
+/** บันทึกลงเวลาทำงาน/OT ต่อวัน (ชั่วโมงเป็น integer scale 100 = centihour) */
+export interface AttendanceRecord {
+  id: string;
+  shopId: string;
+  employeeId: string;
+  workDate: string;
+  hoursWorked: number; // scale 100
+  otHours: number; // scale 100
+  createdAt: string;
+}
+
+export type LeaveType = "sick" | "personal" | "vacation";
+export type LeaveStatus = "submitted" | "approved" | "rejected";
+
+export interface LeaveRequest {
+  id: string;
+  shopId: string;
+  employeeId: string;
+  leaveType: LeaveType;
+  days: number; // scale 100
+  reason: string | null;
+  status: LeaveStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type ExpenseClaimStatus = "submitted" | "approved" | "paid" | "rejected";
 
 /** ใบเบิกค่าใช้จ่ายพนักงาน */

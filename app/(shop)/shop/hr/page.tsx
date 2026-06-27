@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users2, Wallet, ReceiptText, ArrowRight } from "lucide-react";
+import { Users2, Wallet, ReceiptText, CalendarDays, ArrowRight } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { container } from "@/src/infrastructure/di/container";
@@ -13,6 +13,7 @@ const LINKS = [
   { href: "/shop/hr/employees", label: "พนักงาน", desc: "ข้อมูลพนักงานและเงินเดือน", icon: Users2 },
   { href: "/shop/hr/payroll", label: "เงินเดือน", desc: "งวดจ่าย → ลงบัญชี", icon: Wallet },
   { href: "/shop/hr/expenses", label: "เบิกค่าใช้จ่าย", desc: "ยื่นเบิก → อนุมัติ → จ่ายคืน", icon: ReceiptText },
+  { href: "/shop/hr/timeoff", label: "ลงเวลา/การลา", desc: "ลงเวลา/OT + ขอลา → อนุมัติ", icon: CalendarDays },
 ];
 
 export default async function HrHubPage() {
