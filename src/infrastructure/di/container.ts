@@ -22,6 +22,7 @@ import { DrizzleJournalRepository } from "@/src/infrastructure/repositories/driz
 import { DrizzleJournalEntryRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalEntryRepository";
 import { DrizzleVatFilingRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleVatFilingRepository";
 import { DrizzleDunningLogRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleDunningLogRepository";
+import { DrizzleBankStatementRepository, DrizzlePeriodCloseRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleBankReconciliationRepository";
 import { DrizzleCrmStageRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleCrmStageRepository";
 import { DrizzleOpportunityRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleOpportunityRepository";
 import { DrizzleReportingRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleReportingRepository";
@@ -62,6 +63,7 @@ import type { IJournalRepository } from "@/src/application/repositories/IJournal
 import type { IJournalEntryRepository } from "@/src/application/repositories/IJournalEntryRepository";
 import type { IVatFilingRepository } from "@/src/application/repositories/IVatFilingRepository";
 import type { IDunningLogRepository } from "@/src/application/repositories/IDunningLogRepository";
+import type { IBankStatementRepository, IPeriodCloseRepository } from "@/src/application/repositories/IBankReconciliationRepository";
 import type { ICrmStageRepository } from "@/src/application/repositories/ICrmStageRepository";
 import type { IOpportunityRepository } from "@/src/application/repositories/IOpportunityRepository";
 import type { IReportingRepository } from "@/src/application/repositories/IReportingRepository";
@@ -110,6 +112,8 @@ class Container {
     new DrizzleJournalEntryRepository();
   readonly vatFilingRepository: IVatFilingRepository = new DrizzleVatFilingRepository();
   readonly dunningLogRepository: IDunningLogRepository = new DrizzleDunningLogRepository();
+  readonly bankStatementRepository: IBankStatementRepository = new DrizzleBankStatementRepository();
+  readonly periodCloseRepository: IPeriodCloseRepository = new DrizzlePeriodCloseRepository();
   readonly crmStageRepository: ICrmStageRepository = new DrizzleCrmStageRepository();
   readonly opportunityRepository: IOpportunityRepository =
     new DrizzleOpportunityRepository();

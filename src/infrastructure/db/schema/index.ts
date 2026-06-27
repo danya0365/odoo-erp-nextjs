@@ -21,6 +21,7 @@ export * from "./accounts";
 export * from "./journals";
 export * from "./journal-entries";
 export * from "./vat-filings";
+export * from "./bank-reconciliation";
 export * from "./crm";
 export * from "./reorder-rules";
 export * from "./pos";

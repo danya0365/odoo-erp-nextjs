@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, ListTree, Scale, FileSpreadsheet, Banknote, ArrowRight, Plus } from "lucide-react";
+import { BookOpen, ListTree, Scale, FileSpreadsheet, Banknote, Landmark, FileBarChart, ArrowRight, Plus } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { container } from "@/src/infrastructure/di/container";
@@ -18,6 +18,8 @@ const LINKS = [
   { href: "/shop/accounting/trial-balance", label: "งบทดลอง", desc: "เดบิต/เครดิต + กำไรสุทธิ", icon: Scale },
   { href: "/shop/accounting/vat", label: "ภาษีมูลค่าเพิ่ม (ภพ.30)", desc: "สรุปภาษีขาย-ซื้อ + ยื่น", icon: FileSpreadsheet },
   { href: "/shop/accounting/receivables", label: "ลูกหนี้/อายุหนี้", desc: "AR aging + ส่งใบทวง", icon: Banknote },
+  { href: "/shop/accounting/bank-reconciliation", label: "กระทบยอดธนาคาร", desc: "นำเข้า statement + กระทบยอด", icon: Landmark },
+  { href: "/shop/accounting/financials", label: "งบการเงิน", desc: "P&L + งบดุล + ปิดงวด", icon: FileBarChart },
 ];
 
 export default async function AccountingPage() {

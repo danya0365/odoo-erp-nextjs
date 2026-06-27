@@ -35,6 +35,9 @@ metadata:
 - ✅ **#7 deposit-installment (มัดจำ/ผ่อนชำระ)** — ตั้งแผนผ่อนจากใบแจ้งหนี้ → เก็บแต่ละงวด → ปิดยอด
   (migration 0021 `installment_plans`): `installment.ts` buildSchedule + CreateInstallmentPlan/PayInstallment
   (reuse RegisterPayment+PostPayment) · หน้า `/shop/sales/installments` · done
+- ✅ **#8 bank-recon-close (กระทบยอด/ปิดงวด/งบการเงิน)** — นำเข้า statement + กระทบยอด + งบ P&L/งบดุล + ปิดงวด
+  (migration 0022 `bank_statement_lines` + `period_closes`): Import/Reconcile/ClosePeriod/GetFinancials,
+  `financialStatement()` ใน accounting.ts · หน้า `/shop/accounting/bank-reconciliation` + `/financials` · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend

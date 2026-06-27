@@ -209,6 +209,35 @@ export function netProfit(rows: ReadonlyArray<AccountSum>): number {
   return income - expense;
 }
 
+export interface FinancialStatement {
+  income: number;
+  expense: number;
+  netProfit: number;
+  assets: number;
+  liabilities: number;
+  equity: number;
+  /** assets = liabilities + equity + กำไรสะสมงวด */
+  balanced: boolean;
+}
+
+/** งบการเงินอย่างย่อ (P&L + งบดุล) จากยอดด้านปกติของแต่ละบัญชี */
+export function financialStatement(rows: ReadonlyArray<AccountSum>): FinancialStatement {
+  let income = 0, expense = 0, assets = 0, liabilities = 0, equity = 0;
+  for (const r of rows) {
+    const bal = signedBalance(r.type, r.debit, r.credit);
+    if (r.type === "income") income += bal;
+    else if (r.type === "expense") expense += bal;
+    else if (r.type === "asset") assets += bal;
+    else if (r.type === "liability") liabilities += bal;
+    else if (r.type === "equity") equity += bal;
+  }
+  const profit = income - expense;
+  return {
+    income, expense, netProfit: profit, assets, liabilities, equity,
+    balanced: assets === liabilities + equity + profit,
+  };
+}
+
 export const journalTypeForSource: Record<
   Exclude<import("@/src/domain/entities").JournalEntrySourceType, "manual">,
   JournalType

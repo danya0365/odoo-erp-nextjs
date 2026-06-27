@@ -412,6 +412,27 @@ export interface VatFiling {
   createdAt: string;
 }
 
+/** รายการเดินบัญชีธนาคาร (statement line) สำหรับกระทบยอด */
+export interface BankStatementLine {
+  id: string;
+  shopId: string;
+  statementDate: string;
+  description: string;
+  amount: number; // signed: + เงินเข้า, − เงินออก
+  reconciled: boolean;
+  createdAt: string;
+}
+
+/** บันทึกการปิดงวดบัญชี (ล็อกงวด) */
+export interface PeriodClose {
+  id: string;
+  shopId: string;
+  period: string; // "YYYY-MM"
+  note: string | null;
+  closedAt: string;
+  createdAt: string;
+}
+
 // ── Accounting (double-entry general ledger) ──
 export type AccountType = "asset" | "liability" | "equity" | "income" | "expense";
 
