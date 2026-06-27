@@ -43,6 +43,9 @@ metadata:
   หน้า `/shop/hr/timeoff` · done
 - ✅ **#10 service-ticket (งานบริการ/ซ่อม)** — แจ้งซ่อม → มอบหมายช่าง+นัดหมาย → ปิดงาน + ลิงก์ออกใบขาย
   (migration 0024 `service_tickets`): Create/Assign/Close + state machine · หน้า `/shop/service` + tile แดชบอร์ด · done
+- ✅ **#11 promotion-loyalty (โปรโมชั่น/แต้ม)** — สร้างโปร/คูปอง + คิดส่วนลดตามเงื่อนไข + สะสม/แลกแต้ม
+  (migration 0025 `promotions` + `loyalty_accounts`): `promotion.ts` discountAmount/pointsFromSpend +
+  CreatePromotion/ApplyPromotion/Earn/Redeem · หน้า `/shop/marketing` + tile · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend

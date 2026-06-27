@@ -221,15 +221,15 @@ export const JOURNEYS: readonly Journey[] = [
   {
     id: "promotion-loyalty",
     title: "โปรโมชั่น / ส่วนลด / สะสมแต้ม",
-    description: "ตั้งโปรโมชั่น ลูกค้าซื้อเข้าเงื่อนไขได้ส่วนลดอัตโนมัติ และสะสม/ใช้แต้ม",
+    description: "ตั้งโปรโมชั่น ลูกค้าซื้อเข้าเงื่อนไขได้ส่วนลด และสะสม/ใช้แต้ม",
     icon: "Tag",
-    estimatedTime: "—",
+    estimatedTime: "2-3 นาที",
     kind: "real-world",
     steps: [
-      { title: "ตั้งโปรโมชั่น/คูปอง", description: "เงื่อนไข เช่น ซื้อครบ X ลด Y / โค้ดส่วนลด", status: "missing", note: "ต้องมี: pricing/promotion rules" },
-      { title: "ลูกค้าซื้อเข้าเงื่อนไข", description: "ระบบตรวจเงื่อนไขตอนขาย/POS", status: "missing" },
-      { title: "ส่วนลดคำนวณอัตโนมัติ", description: "ใส่ลงบรรทัด/ท้ายบิล", status: "missing", note: "ต้องมี: discount line ในเอกสาร" },
-      { title: "สะสม/แลกแต้มสมาชิก", description: "แต้มจากยอดซื้อ + ใช้แลก", status: "missing", note: "ต้องมี: loyalty/membership" },
+      { title: "ตั้งโปรโมชั่น/คูปอง", description: "โค้ด + %/จำนวน + ยอดขั้นต่ำ", route: "/shop/marketing", status: "done", note: "CreatePromotion" },
+      { title: "ตรวจเงื่อนไขขั้นต่ำ", description: "เช็คยอดซื้อเข้าเกณฑ์โปร", route: "/shop/marketing", status: "done", note: "ApplyPromotion (eligible)" },
+      { title: "คิดส่วนลดอัตโนมัติ", description: "คำนวณส่วนลด + ยอดหลังลด", route: "/shop/marketing", status: "done", note: "discountAmount (เครื่องคิดส่วนลด)" },
+      { title: "สะสม/แลกแต้มสมาชิก", description: "100฿ = 1 แต้ม + แลกแต้ม", route: "/shop/marketing", status: "done", note: "Earn/Redeem points" },
     ],
   },
 

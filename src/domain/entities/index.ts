@@ -315,6 +315,30 @@ export interface VendorBillLine {
   lineTotal: number;
 }
 
+export type DiscountType = "percent" | "fixed";
+
+/** โปรโมชั่น/คูปองส่วนลด */
+export interface Promotion {
+  id: string;
+  shopId: string;
+  code: string;
+  description: string;
+  discountType: DiscountType;
+  value: number; // percent 0-100 หรือ fixed (minor units)
+  minSpend: number; // minor units
+  isActive: boolean;
+  createdAt: string;
+}
+
+/** บัญชีแต้มสะสมต่อลูกค้า */
+export interface LoyaltyAccount {
+  id: string;
+  shopId: string;
+  customerId: string;
+  points: number;
+  updatedAt: string;
+}
+
 export type ServiceTicketStatus = "open" | "assigned" | "done" | "cancelled";
 
 /** ใบงานบริการ/ซ่อม (helpdesk/field service) */
