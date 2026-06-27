@@ -25,6 +25,7 @@ export * from "./reorder-rules";
 export * from "./pos";
 export * from "./manufacturing";
 export * from "./hr";
+export * from "./expense-claims";
 export * from "./online-orders";
 export * from "./projects";
 export * from "./store-reviews";

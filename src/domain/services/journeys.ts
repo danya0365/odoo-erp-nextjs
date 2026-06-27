@@ -339,15 +339,15 @@ export const JOURNEYS: readonly Journey[] = [
   {
     id: "expense-claim",
     title: "เบิกค่าใช้จ่ายพนักงาน",
-    description: "พนักงานยื่นเบิก แนบใบเสร็จ ผู้จัดการอนุมัติ จ่ายคืน และลงบัญชี",
+    description: "พนักงานยื่นเบิก ผู้จัดการอนุมัติ จ่ายคืน และลงบัญชี",
     icon: "ReceiptText",
-    estimatedTime: "—",
+    estimatedTime: "2-3 นาที",
     kind: "real-world",
     steps: [
-      { title: "พนักงานยื่นเบิก + แนบใบเสร็จ", description: "กรอกรายการ + แนบรูป", status: "missing", note: "ต้องมี: expense claim + แนบไฟล์" },
-      { title: "ผู้จัดการอนุมัติ", description: "อนุมัติ/ตีกลับ", status: "missing", note: "ต้องมี: approval workflow" },
-      { title: "จ่ายคืนพนักงาน", description: "บันทึกการจ่าย", status: "partial", note: "มี payment ทั่วไป แต่ยังไม่ผูกกับ claim" },
-      { title: "ลงบัญชีค่าใช้จ่าย", description: "auto-post เข้าบัญชีค่าใช้จ่าย", status: "partial", note: "มีกลไก post แต่ยังไม่มี source 'expense'" },
+      { title: "พนักงานยื่นเบิก", description: "เลือกพนักงาน + หมวด + จำนวน", route: "/shop/hr/expenses/new", status: "done", note: "CreateExpenseClaim (status submitted)" },
+      { title: "ผู้จัดการอนุมัติ", description: "อนุมัติ/ปฏิเสธ", route: "/shop/hr/expenses", status: "done", note: "Approve/Reject (state machine)" },
+      { title: "จ่ายคืนพนักงาน", description: "ปุ่มจ่ายคืนในใบเบิก", route: "/shop/hr/expenses", status: "done", note: "PayExpenseClaim (paidAt)" },
+      { title: "ลงบัญชีค่าใช้จ่าย", description: "auto-post DR ค่าใช้จ่าย / CR เงินสด", route: "/shop/hr/expenses", status: "done", note: "PostExpense (sourceType expense)" },
     ],
   },
   {

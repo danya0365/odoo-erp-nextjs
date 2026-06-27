@@ -30,6 +30,7 @@ import { DrizzlePosOrderRepository } from "@/src/infrastructure/repositories/dri
 import { DrizzleBomRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleBomRepository";
 import { DrizzleManufacturingOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleManufacturingOrderRepository";
 import { DrizzleEmployeeRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleEmployeeRepository";
+import { DrizzleExpenseClaimRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleExpenseClaimRepository";
 import { DrizzlePayrollRunRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePayrollRunRepository";
 import { DrizzleOnlineOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleOnlineOrderRepository";
 import { DrizzleProjectRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleProjectRepository";
@@ -68,6 +69,7 @@ import type { IPosOrderRepository } from "@/src/application/repositories/IPosOrd
 import type { IBomRepository } from "@/src/application/repositories/IBomRepository";
 import type { IManufacturingOrderRepository } from "@/src/application/repositories/IManufacturingOrderRepository";
 import type { IEmployeeRepository } from "@/src/application/repositories/IEmployeeRepository";
+import type { IExpenseClaimRepository } from "@/src/application/repositories/IExpenseClaimRepository";
 import type { IPayrollRunRepository } from "@/src/application/repositories/IPayrollRunRepository";
 import type { IOnlineOrderRepository } from "@/src/application/repositories/IOnlineOrderRepository";
 import type { IProjectRepository } from "@/src/application/repositories/IProjectRepository";
@@ -116,6 +118,7 @@ class Container {
   readonly manufacturingOrderRepository: IManufacturingOrderRepository =
     new DrizzleManufacturingOrderRepository();
   readonly employeeRepository: IEmployeeRepository = new DrizzleEmployeeRepository();
+  readonly expenseClaimRepository: IExpenseClaimRepository = new DrizzleExpenseClaimRepository();
   readonly payrollRunRepository: IPayrollRunRepository = new DrizzlePayrollRunRepository();
   readonly onlineOrderRepository: IOnlineOrderRepository = new DrizzleOnlineOrderRepository();
   readonly projectRepository: IProjectRepository = new DrizzleProjectRepository();

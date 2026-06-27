@@ -151,6 +151,14 @@ export function customerRefundEntryLines(amount: number): DraftLine[] {
   ];
 }
 
+/** เบิกค่าใช้จ่ายพนักงาน (จ่ายคืน): DR ค่าใช้จ่าย / CR เงินสด */
+export function expenseClaimEntryLines(amount: number): DraftLine[] {
+  return [
+    { accountCode: ACCOUNT_CODES.expense, label: "ค่าใช้จ่ายเบิกพนักงาน", debit: amount, credit: 0 },
+    { accountCode: ACCOUNT_CODES.cash, label: "จ่ายคืนค่าใช้จ่าย", debit: 0, credit: amount },
+  ];
+}
+
 /** ขายสด (POS): DR เงินสด (รวม) / CR รายได้ (ก่อนภาษี) + CR ภาษีขาย — จ่ายทันที ไม่ผ่านลูกหนี้ */
 export function cashSaleEntryLines(a: DocAmounts): DraftLine[] {
   return [
@@ -213,4 +221,5 @@ export const journalTypeForSource: Record<
   credit_note: "sale",
   refund: "bank",
   vendor_credit: "purchase",
+  expense: "general",
 };

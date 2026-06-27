@@ -417,7 +417,8 @@ export type JournalEntrySourceType =
   | "payroll"
   | "credit_note"
   | "refund"
-  | "vendor_credit";
+  | "vendor_credit"
+  | "expense";
 export type JournalEntryStatus = "draft" | "posted";
 
 export interface JournalEntry {
@@ -680,6 +681,23 @@ export interface Partner {
   creditTermDays: number | null;
   parentId: string | null;
   isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ExpenseClaimStatus = "submitted" | "approved" | "paid" | "rejected";
+
+/** ใบเบิกค่าใช้จ่ายพนักงาน */
+export interface ExpenseClaim {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  employeeId: string;
+  category: string;
+  description: string;
+  amount: number; // minor units
+  status: ExpenseClaimStatus;
+  paidAt: string | null;
   createdAt: string;
   updatedAt: string;
 }

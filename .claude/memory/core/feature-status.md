@@ -29,6 +29,9 @@ metadata:
 - ✅ **#5 credit-collection (อายุลูกหนี้/ทวงหนี้)** — เครดิตเทอม (partner.creditTermDays) + AR aging report
   (`ar-aging.ts` summarizeAging) + บันทึกการทวง (migration 0019: partners.credit_term_days + `dunning_logs`):
   GetArAging/RecordDunning · หน้า `/shop/accounting/receivables` · done
+- ✅ **#6 expense-claim (เบิกค่าใช้จ่าย)** — ยื่น → อนุมัติ/ปฏิเสธ → จ่ายคืน + ลงบัญชี
+  (migration 0020 `expense_claims`): Create/Approve/Reject/Pay + PostExpense (`expenseClaimEntryLines`
+  DR ค่าใช้จ่าย/CR เงินสด, source `expense`) · หน้า `/shop/hr/expenses` · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend

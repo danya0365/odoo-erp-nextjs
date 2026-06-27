@@ -30,6 +30,10 @@ const STATUS: Record<string, StatusMeta> = {
   refunded: { label: "คืนเงินแล้ว", variant: "success" },
   // stocktake
   applied: { label: "ปรับสต๊อกแล้ว", variant: "success" },
+  // expense claim
+  submitted: { label: "รออนุมัติ", variant: "warning" },
+  approved: { label: "อนุมัติแล้ว", variant: "brand" },
+  rejected: { label: "ปฏิเสธ", variant: "error" },
 };
 
 export function DocumentStatusBadge({ status }: { status: string }) {
