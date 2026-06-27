@@ -97,7 +97,7 @@ export const JOURNEYS: readonly Journey[] = [
     steps: [
       { title: "สร้างโอกาสการขาย", description: "บันทึกลูกค้าเป้าหมาย + มูลค่าคาดหวัง + ความน่าจะเป็น", route: "/shop/crm/new", status: "done", note: "CreateOpportunity" },
       { title: "เลื่อนสเตจ → ปิดดีล (ชนะ)", description: "ลากผ่านไปป์ไลน์จนสถานะ won", route: "/shop/crm", status: "done", note: "ทำบนหน้ารายละเอียดโอกาส /shop/crm/[id] (MarkWon)" },
-      { title: "แปลงเป็นใบเสนอราคา", description: "เปิดใบขายให้ลูกค้าที่ปิดดีลได้", route: "/shop/sales/new", status: "partial", note: "ออกใบขายได้ แต่ยังไม่มีปุ่ม convert ตรงจากดีล (สร้างใบขายเองโดยเลือกลูกค้าเดียวกัน)" },
+      { title: "แปลงเป็นใบเสนอราคา", description: "ปุ่มแปลงดีลที่ชนะ → ใบเสนอราคา", route: "/shop/crm", status: "done", note: "convertToQuotationAction (ปุ่มในหน้าโอกาส /shop/crm/[id])" },
     ],
   },
   {
@@ -121,7 +121,7 @@ export const JOURNEYS: readonly Journey[] = [
     steps: [
       { title: "ตั้งจุดสั่งซื้อ", description: "กำหนด min/max ต่อสินค้า", route: "/shop/inventory/reorder", status: "done", note: "ReorderRule" },
       { title: "ดูสินค้าที่ต่ำกว่าจุดสั่ง", description: "ระบบไฮไลต์สินค้าที่ต้องเติม", route: "/shop/inventory/reorder", status: "done", note: "คำนวณจาก on-hand เทียบ min" },
-      { title: "ออก PO เติมสต๊อก", description: "สร้างใบสั่งซื้อจากสินค้าที่ขาด", route: "/shop/purchase/new", status: "partial", note: "ออก PO ได้ แต่ยังไม่มีปุ่มสร้าง PO อัตโนมัติจากหน้า reorder (ทำเอง)" },
+      { title: "ออก PO เติมสต๊อก", description: "ปุ่มสร้างใบสั่งซื้อจากรายการที่ต้องเติม", route: "/shop/inventory/reorder", status: "done", note: "ลิงก์ 'สร้างใบสั่งซื้อ' → /shop/purchase/new?product= (preselect สินค้า)" },
     ],
   },
   {

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { container } from "@/src/infrastructure/di/container";
 import { GetReplenishmentUseCase } from "@/src/application/use-cases/inventory/GetReplenishmentUseCase";
@@ -50,6 +52,7 @@ export default async function ReorderPage() {
                 <Th>คงเหลือ</Th>
                 <Th>ขั้นต่ำ / สูงสุด</Th>
                 <Th>ควรเติม</Th>
+                <Th></Th>
               </Tr>
             </THead>
             <TBody>
@@ -86,6 +89,13 @@ export default async function ReorderPage() {
                       <Badge variant="warning">{qty(r.suggestion)}</Badge>
                     ) : (
                       <span className="text-muted">—</span>
+                    )}
+                  </Td>
+                  <Td>
+                    {r.suggestion > 0 && (
+                      <Link href={`/shop/purchase/new?product=${r.productId}`}>
+                        <Button variant="secondary" size="sm">สร้างใบสั่งซื้อ</Button>
+                      </Link>
                     )}
                   </Td>
                 </Tr>

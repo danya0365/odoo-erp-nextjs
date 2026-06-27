@@ -9,9 +9,14 @@ import { EmptyState } from "@/src/presentation/components/ui/EmptyState";
 import { Button } from "@/src/presentation/components/ui/Button";
 import { RfqForm } from "@/src/presentation/components/purchase/RfqForm";
 
-export default async function NewPurchasePage() {
+export default async function NewPurchasePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ product?: string }>;
+}) {
   const user = await requireRole("shop_owner");
   const shopId = user.shopId!;
+  const { product: defaultProductId } = await searchParams;
 
   const [partners, products] = await Promise.all([
     container.partnerRepository.list(shopId, { page: 1, pageSize: 100, status: "vendor" }),
@@ -46,7 +51,7 @@ export default async function NewPurchasePage() {
       ) : (
         <Card>
           <CardBody>
-            <RfqForm vendors={vendors} products={productOptions} />
+            <RfqForm vendors={vendors} products={productOptions} defaultProductId={defaultProductId} />
           </CardBody>
         </Card>
       )}

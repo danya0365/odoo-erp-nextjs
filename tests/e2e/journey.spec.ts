@@ -30,10 +30,10 @@ test("User Journey: เข้าจากแดชบอร์ด → กาง 
   await expect(page).toHaveURL(/\/shop\/journey\/coverage$/);
   await expect(page.getByRole("heading", { name: "Journey Coverage" })).toBeVisible();
 
-  // Gap backlog — ฟีเจอร์ที่ขาดจากสถานการณ์จริง
-  await expect(page.getByRole("heading", { name: /Gap backlog — ฟีเจอร์/ })).toBeVisible();
-  await expect(page.getByText("ออกใบลดหนี้ (credit note)").first()).toBeVisible();
-  await expect(page.getByText("ยังไม่มี").first()).toBeVisible();
+  // Gap backlog — ตอนนี้ไล่เก็บครบแล้ว → backlog ว่าง (0 รายการ)
+  await expect(page.getByRole("heading", { name: /Gap backlog — ฟีเจอร์ที่ต้องทำ \(0\)/ })).toBeVisible();
+  await expect(page.getByText("ออกใบลดหนี้ (credit note)").first()).toBeVisible(); // step ในตาราง coverage
+  await expect(page.getByText("มีแล้ว").first()).toBeVisible();
 
   // เห็น URL จริง (ลิงก์เปิดหน้าจริง) + สถานะ
   await expect(page.getByRole("link", { name: "/shop/sales", exact: true }).first()).toBeVisible();

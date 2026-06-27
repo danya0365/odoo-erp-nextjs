@@ -32,12 +32,14 @@ interface Row {
 export function RfqForm({
   vendors,
   products,
+  defaultProductId,
 }: {
   vendors: VendorOption[];
   products: ProductOption[];
+  defaultProductId?: string;
 }) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(createRfqAction, {});
-  const [rows, setRows] = useState<Row[]>([{ key: 1, productId: "", qty: "1" }]);
+  const [rows, setRows] = useState<Row[]>([{ key: 1, productId: defaultProductId ?? "", qty: "1" }]);
   const productMap = useMemo(() => new Map(products.map((p) => [p.id, p])), [products]);
 
   const addRow = () =>
