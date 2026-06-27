@@ -32,6 +32,9 @@ metadata:
 - ✅ **#6 expense-claim (เบิกค่าใช้จ่าย)** — ยื่น → อนุมัติ/ปฏิเสธ → จ่ายคืน + ลงบัญชี
   (migration 0020 `expense_claims`): Create/Approve/Reject/Pay + PostExpense (`expenseClaimEntryLines`
   DR ค่าใช้จ่าย/CR เงินสด, source `expense`) · หน้า `/shop/hr/expenses` · done
+- ✅ **#7 deposit-installment (มัดจำ/ผ่อนชำระ)** — ตั้งแผนผ่อนจากใบแจ้งหนี้ → เก็บแต่ละงวด → ปิดยอด
+  (migration 0021 `installment_plans`): `installment.ts` buildSchedule + CreateInstallmentPlan/PayInstallment
+  (reuse RegisterPayment+PostPayment) · หน้า `/shop/sales/installments` · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend

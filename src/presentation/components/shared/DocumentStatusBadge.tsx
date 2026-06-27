@@ -34,6 +34,9 @@ const STATUS: Record<string, StatusMeta> = {
   submitted: { label: "รออนุมัติ", variant: "warning" },
   approved: { label: "อนุมัติแล้ว", variant: "brand" },
   rejected: { label: "ปฏิเสธ", variant: "error" },
+  // installment plan
+  active: { label: "กำลังผ่อน", variant: "brand" },
+  completed: { label: "ผ่อนครบแล้ว", variant: "success" },
 };
 
 export function DocumentStatusBadge({ status }: { status: string }) {

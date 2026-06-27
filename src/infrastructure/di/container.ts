@@ -12,6 +12,7 @@ import { DrizzleStockCountRepository } from "@/src/infrastructure/repositories/d
 import { DrizzleSalesOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleSalesOrderRepository";
 import { DrizzleInvoiceRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleInvoiceRepository";
 import { DrizzleSalesReturnRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleSalesReturnRepository";
+import { DrizzleInstallmentPlanRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleInstallmentPlanRepository";
 import { DrizzlePaymentRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePaymentRepository";
 import { DrizzlePurchaseOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePurchaseOrderRepository";
 import { DrizzleVendorBillRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleVendorBillRepository";
@@ -51,6 +52,7 @@ import type { IStockCountRepository } from "@/src/application/repositories/IStoc
 import type { ISalesOrderRepository } from "@/src/application/repositories/ISalesOrderRepository";
 import type { IInvoiceRepository } from "@/src/application/repositories/IInvoiceRepository";
 import type { ISalesReturnRepository } from "@/src/application/repositories/ISalesReturnRepository";
+import type { IInstallmentPlanRepository } from "@/src/application/repositories/IInstallmentPlanRepository";
 import type { IPaymentRepository } from "@/src/application/repositories/IPaymentRepository";
 import type { IPurchaseOrderRepository } from "@/src/application/repositories/IPurchaseOrderRepository";
 import type { IVendorBillRepository } from "@/src/application/repositories/IVendorBillRepository";
@@ -96,6 +98,7 @@ class Container {
   readonly salesOrderRepository: ISalesOrderRepository = new DrizzleSalesOrderRepository();
   readonly invoiceRepository: IInvoiceRepository = new DrizzleInvoiceRepository();
   readonly salesReturnRepository: ISalesReturnRepository = new DrizzleSalesReturnRepository();
+  readonly installmentPlanRepository: IInstallmentPlanRepository = new DrizzleInstallmentPlanRepository();
   readonly paymentRepository: IPaymentRepository = new DrizzlePaymentRepository();
   readonly purchaseOrderRepository: IPurchaseOrderRepository =
     new DrizzlePurchaseOrderRepository();

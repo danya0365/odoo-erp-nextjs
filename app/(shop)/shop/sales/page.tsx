@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, FileText, Undo2 } from "lucide-react";
+import { Plus, FileText, Undo2, CalendarClock } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { container } from "@/src/infrastructure/di/container";
@@ -42,6 +42,12 @@ export default async function SalesPage({
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">การขาย</h1>
         <div className="flex items-center gap-2">
+          <Link href="/shop/sales/installments">
+            <Button variant="secondary">
+              <CalendarClock className="size-4" />
+              ผ่อนชำระ
+            </Button>
+          </Link>
           <Link href="/shop/sales/returns">
             <Button variant="secondary">
               <Undo2 className="size-4" />

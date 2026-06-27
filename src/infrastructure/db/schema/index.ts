@@ -12,6 +12,7 @@ export * from "./stock-counts";
 export * from "./sales-orders";
 export * from "./invoices";
 export * from "./sales-returns";
+export * from "./installment-plans";
 export * from "./payments";
 export * from "./purchase-orders";
 export * from "./vendor-bills";

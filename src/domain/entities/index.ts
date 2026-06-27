@@ -315,6 +315,36 @@ export interface VendorBillLine {
   lineTotal: number;
 }
 
+export type InstallmentPlanStatus = "active" | "completed" | "cancelled";
+export type InstallmentLineStatus = "pending" | "paid";
+
+/** แผนผ่อนชำระผูกกับใบแจ้งหนี้ */
+export interface InstallmentPlan {
+  id: string;
+  shopId: string;
+  invoiceId: string;
+  customerId: string;
+  totalAmount: number;
+  status: InstallmentPlanStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InstallmentLine {
+  id: string;
+  shopId: string;
+  installmentPlanId: string;
+  seq: number;
+  dueDate: string;
+  amount: number;
+  paidAmount: number;
+  status: InstallmentLineStatus;
+}
+
+export interface InstallmentPlanWithLines extends InstallmentPlan {
+  lines: InstallmentLine[];
+}
+
 export type PurchaseReturnStatus = "draft" | "credited" | "cancelled";
 
 /** ใบคืนของให้ผู้ขาย / ใบลดหนี้ผู้ขาย (vendor credit note) — กลับด้านใบตั้งหนี้ */
