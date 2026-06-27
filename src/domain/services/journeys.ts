@@ -355,13 +355,13 @@ export const JOURNEYS: readonly Journey[] = [
     title: "งานบริการ / ซ่อม / นัดหมาย",
     description: "ลูกค้าแจ้งซ่อม เปิด ticket นัดหมาย มอบหมายช่าง ปิดงานและเก็บเงิน",
     icon: "Wrench",
-    estimatedTime: "—",
+    estimatedTime: "2-3 นาที",
     kind: "real-world",
     steps: [
-      { title: "ลูกค้าแจ้งปัญหา/ขอบริการ", description: "รับเรื่อง + รายละเอียด", status: "missing", note: "ต้องมี: helpdesk/service ticket" },
-      { title: "เปิด ticket + นัดหมาย", description: "ตั้งวันนัด + SLA", status: "missing", note: "ต้องมี: ticket + scheduling" },
-      { title: "มอบหมายช่าง/ทีม", description: "assign + ติดตามสถานะ", status: "missing", note: "ต้องมี: assignment + สถานะงาน" },
-      { title: "ปิดงาน + เก็บเงิน", description: "สรุปงาน → ออกใบขาย/เก็บเงิน", route: "/shop/sales/new", status: "partial", note: "ออกใบขายได้ แต่ยังไม่เชื่อมจาก ticket" },
+      { title: "ลูกค้าแจ้งปัญหา/ขอบริการ", description: "เปิดใบงาน + เรื่อง/รายละเอียด", route: "/shop/service/new", status: "done", note: "CreateServiceTicket (open)" },
+      { title: "นัดหมาย", description: "ตั้งวัน-เวลานัดหมาย", route: "/shop/service", status: "done", note: "scheduledAt ตอนมอบหมาย" },
+      { title: "มอบหมายช่าง/ทีม", description: "assign + เปลี่ยนสถานะ", route: "/shop/service", status: "done", note: "AssignServiceTicket → assigned" },
+      { title: "ปิดงาน + เก็บเงิน", description: "ปิดงาน → ออกใบขาย/เก็บเงิน", route: "/shop/service", status: "done", note: "CloseServiceTicket + ลิงก์ออกใบขาย" },
     ],
   },
 ];

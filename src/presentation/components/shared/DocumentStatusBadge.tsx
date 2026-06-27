@@ -37,6 +37,9 @@ const STATUS: Record<string, StatusMeta> = {
   // installment plan
   active: { label: "กำลังผ่อน", variant: "brand" },
   completed: { label: "ผ่อนครบแล้ว", variant: "success" },
+  // service ticket
+  open: { label: "เปิดงาน", variant: "warning" },
+  assigned: { label: "มอบหมายแล้ว", variant: "brand" },
 };
 
 export function DocumentStatusBadge({ status }: { status: string }) {

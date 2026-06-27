@@ -32,3 +32,4 @@ export * from "./timeoff";
 export * from "./online-orders";
 export * from "./projects";
 export * from "./store-reviews";
+export * from "./service-tickets";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Users, Package, FileText, ShoppingCart, Calculator, Target, BarChart3, Warehouse, Store, Factory, Users2, Globe, FolderKanban, ListChecks, Route, ArrowRight } from "lucide-react";
+import { Users, Package, FileText, ShoppingCart, Calculator, Target, BarChart3, Warehouse, Store, Factory, Users2, Globe, FolderKanban, ListChecks, Route, Wrench, ArrowRight } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { Container } from "@/src/presentation/components/ui/Container";
@@ -19,6 +19,7 @@ const MODULES = [
   { href: "/shop/accounting", label: "บัญชี", desc: "สมุดรายวัน→ผังบัญชี→งบทดลอง", icon: Calculator },
   { href: "/shop/hr", label: "บุคลากร", desc: "พนักงาน→เงินเดือน→ลงบัญชี", icon: Users2 },
   { href: "/shop/projects", label: "โครงการ", desc: "งาน→ลงเวลา→สรุปชั่วโมง", icon: FolderKanban },
+  { href: "/shop/service", label: "งานบริการ/ซ่อม", desc: "แจ้งซ่อม→มอบหมาย→ปิดงาน", icon: Wrench },
   { href: "/shop/reports", label: "รายงาน", desc: "ภาพรวมกิจการ + วิเคราะห์", icon: BarChart3 },
   { href: "/shop/roadmap", label: "โรดแมป", desc: "สถานะฟีเจอร์ — ทำแล้ว/ยังไม่ทำ", icon: ListChecks },
   { href: "/shop/journey", label: "เส้นทางการใช้งาน", desc: "เดินดู flow จริง + เช็ค URL/สถานะ", icon: Route },

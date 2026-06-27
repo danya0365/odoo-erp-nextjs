@@ -34,6 +34,7 @@ import { DrizzleManufacturingOrderRepository } from "@/src/infrastructure/reposi
 import { DrizzleEmployeeRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleEmployeeRepository";
 import { DrizzleExpenseClaimRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleExpenseClaimRepository";
 import { DrizzleAttendanceRepository, DrizzleLeaveRequestRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleTimeoffRepository";
+import { DrizzleServiceTicketRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleServiceTicketRepository";
 import { DrizzlePayrollRunRepository } from "@/src/infrastructure/repositories/drizzle/DrizzlePayrollRunRepository";
 import { DrizzleOnlineOrderRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleOnlineOrderRepository";
 import { DrizzleProjectRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleProjectRepository";
@@ -76,6 +77,7 @@ import type { IManufacturingOrderRepository } from "@/src/application/repositori
 import type { IEmployeeRepository } from "@/src/application/repositories/IEmployeeRepository";
 import type { IExpenseClaimRepository } from "@/src/application/repositories/IExpenseClaimRepository";
 import type { IAttendanceRepository, ILeaveRequestRepository } from "@/src/application/repositories/ITimeoffRepository";
+import type { IServiceTicketRepository } from "@/src/application/repositories/IServiceTicketRepository";
 import type { IPayrollRunRepository } from "@/src/application/repositories/IPayrollRunRepository";
 import type { IOnlineOrderRepository } from "@/src/application/repositories/IOnlineOrderRepository";
 import type { IProjectRepository } from "@/src/application/repositories/IProjectRepository";
@@ -130,6 +132,7 @@ class Container {
   readonly expenseClaimRepository: IExpenseClaimRepository = new DrizzleExpenseClaimRepository();
   readonly attendanceRepository: IAttendanceRepository = new DrizzleAttendanceRepository();
   readonly leaveRequestRepository: ILeaveRequestRepository = new DrizzleLeaveRequestRepository();
+  readonly serviceTicketRepository: IServiceTicketRepository = new DrizzleServiceTicketRepository();
   readonly payrollRunRepository: IPayrollRunRepository = new DrizzlePayrollRunRepository();
   readonly onlineOrderRepository: IOnlineOrderRepository = new DrizzleOnlineOrderRepository();
   readonly projectRepository: IProjectRepository = new DrizzleProjectRepository();

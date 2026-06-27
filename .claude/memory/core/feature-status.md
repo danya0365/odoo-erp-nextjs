@@ -41,6 +41,8 @@ metadata:
 - ✅ **#9 leave-attendance (ลงเวลา/การลา/OT)** — ลงเวลา+OT, ยื่นลา→อนุมัติ/ปฏิเสธ, สรุปชั่วโมงต่อพนักงาน
   (migration 0023 `attendance_records` + `leave_requests`): LogAttendance/CreateLeave/DecideLeave ·
   หน้า `/shop/hr/timeoff` · done
+- ✅ **#10 service-ticket (งานบริการ/ซ่อม)** — แจ้งซ่อม → มอบหมายช่าง+นัดหมาย → ปิดงาน + ลิงก์ออกใบขาย
+  (migration 0024 `service_tickets`): Create/Assign/Close + state machine · หน้า `/shop/service` + tile แดชบอร์ด · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend

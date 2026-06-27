@@ -315,6 +315,23 @@ export interface VendorBillLine {
   lineTotal: number;
 }
 
+export type ServiceTicketStatus = "open" | "assigned" | "done" | "cancelled";
+
+/** ใบงานบริการ/ซ่อม (helpdesk/field service) */
+export interface ServiceTicket {
+  id: string;
+  shopId: string;
+  docNumber: string;
+  customerId: string;
+  subject: string;
+  description: string;
+  status: ServiceTicketStatus;
+  assigneeId: string | null; // employee
+  scheduledAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type InstallmentPlanStatus = "active" | "completed" | "cancelled";
 export type InstallmentLineStatus = "pending" | "paid";
 
