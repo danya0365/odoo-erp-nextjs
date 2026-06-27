@@ -12,6 +12,7 @@ export interface CreatePartnerInput {
   city?: string | null;
   country?: string | null;
   isCompany?: boolean;
+  creditTermDays?: number | null;
   parentId?: string | null;
 }
 

@@ -26,6 +26,7 @@ function toPartner(row: Row): Partner {
     city: row.city,
     country: row.country,
     isCompany: row.isCompany,
+    creditTermDays: row.creditTermDays,
     parentId: row.parentId,
     isActive: row.isActive,
     createdAt: row.createdAt,
@@ -50,6 +51,7 @@ export class DrizzlePartnerRepository implements IPartnerRepository {
         city: input.city ?? null,
         country: input.country ?? null,
         isCompany: input.isCompany ?? false,
+        creditTermDays: input.creditTermDays ?? null,
         parentId: input.parentId ?? null,
       })
       .returning();
@@ -120,6 +122,7 @@ export class DrizzlePartnerRepository implements IPartnerRepository {
         ...(input.city !== undefined && { city: input.city }),
         ...(input.country !== undefined && { country: input.country }),
         ...(input.isCompany !== undefined && { isCompany: input.isCompany }),
+        ...(input.creditTermDays !== undefined && { creditTermDays: input.creditTermDays }),
         ...(input.parentId !== undefined && { parentId: input.parentId }),
       })
       .where(and(eq(schema.partners.shopId, shopId), eq(schema.partners.id, id)))

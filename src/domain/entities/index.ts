@@ -677,8 +677,19 @@ export interface Partner {
   city: string | null;
   country: string | null;
   isCompany: boolean;
+  creditTermDays: number | null;
   parentId: string | null;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface DunningLog {
+  id: string;
+  shopId: string;
+  customerId: string;
+  amount: number;
+  note: string | null;
+  sentAt: string;
+  createdAt: string;
 }

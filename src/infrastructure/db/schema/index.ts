@@ -4,6 +4,7 @@ export * from "./users";
 export * from "./sessions";
 export * from "./sequences";
 export * from "./partners";
+export * from "./dunning-logs";
 export * from "./products";
 export * from "./stock-locations";
 export * from "./stock-moves";

@@ -236,17 +236,17 @@ export const JOURNEYS: readonly Journey[] = [
   // --- การเงิน/บัญชี/ภาษี ---
   {
     id: "credit-collection",
-    title: "ขายเชื่อ → วางบิลรอบเดือน → ทวงหนี้",
-    description: "ขายเครดิตเทอม วางบิลรวมรอบเดือน ดูอายุหนี้ ส่งใบทวง และรับชำระ",
+    title: "ขายเชื่อ → ดูอายุหนี้ → ทวงหนี้",
+    description: "ตั้งเครดิตเทอม ดูอายุลูกหนี้ ส่งใบทวง และรับชำระ",
     icon: "Receipt",
-    estimatedTime: "—",
+    estimatedTime: "3-4 นาที",
     kind: "real-world",
     steps: [
-      { title: "ตั้งเครดิตเทอมลูกค้า", description: "เช่น เครดิต 30 วัน + วงเงิน", status: "missing", note: "ต้องมี: credit term/limit ที่ partner" },
-      { title: "วางบิลรอบเดือน (statement)", description: "รวมหลายใบเป็นใบวางบิล", status: "missing", note: "ต้องมี: billing statement" },
-      { title: "ดูรายงานอายุหนี้ (AR aging)", description: "ค้าง 0-30/31-60/60+ วัน", status: "missing", note: "ต้องมี: AR aging report" },
-      { title: "ส่งใบทวงหนี้ (dunning)", description: "เตือนลูกค้าค้างชำระ", status: "missing", note: "ต้องมี: dunning + เทมเพลต" },
-      { title: "รับชำระ", description: "ตัดยอดลูกหนี้", route: "/shop/sales", status: "partial", note: "รับชำระต่อใบได้ แต่ไม่ใช่ตามรอบบิล" },
+      { title: "ตั้งเครดิตเทอมลูกค้า", description: "จำนวนวันให้เครดิต", route: "/shop/contacts/new", status: "done", note: "ฟิลด์ creditTermDays บน partner" },
+      { title: "ดูยอดค้างต่อลูกค้า (statement)", description: "ยอดค้างรวม + แยกช่วงอายุ", route: "/shop/accounting/receivables", status: "done", note: "สรุปต่อลูกค้าในรายงานอายุหนี้" },
+      { title: "ดูรายงานอายุหนี้ (AR aging)", description: "ค้าง 0-30/31-60/61-90/90+ วัน", route: "/shop/accounting/receivables", status: "done", note: "GetArAging (summarizeAging)" },
+      { title: "ส่งใบทวงหนี้ (dunning)", description: "บันทึกการทวง + วันที่ล่าสุด", route: "/shop/accounting/receivables", status: "done", note: "RecordDunning (dunning_logs)" },
+      { title: "รับชำระ", description: "ตัดยอดลูกหนี้", route: "/shop/sales", status: "done", note: "รับชำระต่อใบในหน้าใบขาย" },
     ],
   },
   {

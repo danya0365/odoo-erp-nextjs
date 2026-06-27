@@ -21,6 +21,8 @@ export const partners = sqliteTable(
     city: text(),
     country: text(),
     isCompany: integer({ mode: "boolean" }).notNull().default(false),
+    // เครดิตเทอม (จำนวนวันให้เครดิตลูกค้า) — nullable
+    creditTermDays: integer({ mode: "number" }),
     // self-FK: contact ภายใต้บริษัท (nullable)
     parentId: text(),
     isActive: integer({ mode: "boolean" }).notNull().default(true),

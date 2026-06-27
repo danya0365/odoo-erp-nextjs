@@ -26,6 +26,7 @@ const partnerSchema = z.object({
   street: z.preprocess(emptyToUndef, z.string().optional()),
   city: z.preprocess(emptyToUndef, z.string().optional()),
   country: z.preprocess(emptyToUndef, z.string().optional()),
+  creditTermDays: z.preprocess(emptyToUndef, z.coerce.number().int().min(0).optional()),
   isCompany: z.boolean(),
 });
 
@@ -39,6 +40,7 @@ function parsePartner(formData: FormData) {
     street: formData.get("street"),
     city: formData.get("city"),
     country: formData.get("country"),
+    creditTermDays: formData.get("creditTermDays"),
     isCompany: formData.get("isCompany") === "on",
   });
 }

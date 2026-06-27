@@ -58,6 +58,15 @@ export function PartnerForm({
         <FormField label="ประเทศ">
           <Input name="country" defaultValue={partner?.country ?? ""} />
         </FormField>
+        <FormField label="เครดิตเทอม (วัน)">
+          <Input
+            name="creditTermDays"
+            type="number"
+            inputMode="numeric"
+            defaultValue={partner?.creditTermDays ?? ""}
+            placeholder="เช่น 30"
+          />
+        </FormField>
       </div>
 
       <label className="flex items-center gap-2 text-sm">

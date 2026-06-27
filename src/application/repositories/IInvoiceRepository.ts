@@ -29,6 +29,8 @@ export interface IInvoiceRepository {
   createWithLines(input: CreateInvoiceInput): Promise<Invoice>;
   findById(shopId: string, id: string): Promise<Invoice | null>;
   listLines(shopId: string, invoiceId: string): Promise<InvoiceLine[]>;
+  /** ใบแจ้งหนี้ที่ยังค้างชำระ (status posted) */
+  listOutstanding(shopId: string): Promise<Invoice[]>;
   listBySalesOrder(shopId: string, salesOrderId: string): Promise<Invoice[]>;
   list(shopId: string, query: PageQuery): Promise<Page<Invoice>>;
   update(

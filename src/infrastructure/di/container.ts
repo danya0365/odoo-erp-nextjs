@@ -20,6 +20,7 @@ import { DrizzleAccountRepository } from "@/src/infrastructure/repositories/driz
 import { DrizzleJournalRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalRepository";
 import { DrizzleJournalEntryRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleJournalEntryRepository";
 import { DrizzleVatFilingRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleVatFilingRepository";
+import { DrizzleDunningLogRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleDunningLogRepository";
 import { DrizzleCrmStageRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleCrmStageRepository";
 import { DrizzleOpportunityRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleOpportunityRepository";
 import { DrizzleReportingRepository } from "@/src/infrastructure/repositories/drizzle/DrizzleReportingRepository";
@@ -57,6 +58,7 @@ import type { IAccountRepository } from "@/src/application/repositories/IAccount
 import type { IJournalRepository } from "@/src/application/repositories/IJournalRepository";
 import type { IJournalEntryRepository } from "@/src/application/repositories/IJournalEntryRepository";
 import type { IVatFilingRepository } from "@/src/application/repositories/IVatFilingRepository";
+import type { IDunningLogRepository } from "@/src/application/repositories/IDunningLogRepository";
 import type { ICrmStageRepository } from "@/src/application/repositories/ICrmStageRepository";
 import type { IOpportunityRepository } from "@/src/application/repositories/IOpportunityRepository";
 import type { IReportingRepository } from "@/src/application/repositories/IReportingRepository";
@@ -102,6 +104,7 @@ class Container {
   readonly journalEntryRepository: IJournalEntryRepository =
     new DrizzleJournalEntryRepository();
   readonly vatFilingRepository: IVatFilingRepository = new DrizzleVatFilingRepository();
+  readonly dunningLogRepository: IDunningLogRepository = new DrizzleDunningLogRepository();
   readonly crmStageRepository: ICrmStageRepository = new DrizzleCrmStageRepository();
   readonly opportunityRepository: IOpportunityRepository =
     new DrizzleOpportunityRepository();

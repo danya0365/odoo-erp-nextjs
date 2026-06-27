@@ -26,6 +26,9 @@ metadata:
 - ✅ **#4 purchase-return-qc (คืนของผู้ขาย)** — คืนของจากใบตั้งหนี้ + QC → stock OUT + ใบลดหนี้ผู้ขาย
   (migration 0018 `purchase_returns`): CreatePurchaseReturn/ConfirmPurchaseReturn + PostVendorCredit
   (`vendorCreditNoteEntryLines` DR เจ้าหนี้/CR ค่าใช้จ่าย+ภาษีซื้อ) · หน้า `/shop/purchase/returns` · done
+- ✅ **#5 credit-collection (อายุลูกหนี้/ทวงหนี้)** — เครดิตเทอม (partner.creditTermDays) + AR aging report
+  (`ar-aging.ts` summarizeAging) + บันทึกการทวง (migration 0019: partners.credit_term_days + `dunning_logs`):
+  GetArAging/RecordDunning · หน้า `/shop/accounting/receivables` · done
 - เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
 
 ## Legend

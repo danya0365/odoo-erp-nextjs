@@ -102,6 +102,15 @@ export class DrizzleInvoiceRepository implements IInvoiceRepository {
     }));
   }
 
+  async listOutstanding(shopId: string): Promise<Invoice[]> {
+    const rows = await this.db
+      .select()
+      .from(schema.invoices)
+      .where(and(eq(schema.invoices.shopId, shopId), eq(schema.invoices.status, "posted")))
+      .orderBy(desc(schema.invoices.createdAt));
+    return rows.map(toInvoice);
+  }
+
   async listBySalesOrder(shopId: string, salesOrderId: string): Promise<Invoice[]> {
     const rows = await this.db
       .select()

@@ -11,6 +11,7 @@ import { monthRange } from "@/src/domain/services/tax";
 import { CreateManualJournalEntryUseCase } from "@/src/application/use-cases/accounting/CreateManualJournalEntryUseCase";
 import { GetVatReportUseCase } from "@/src/application/use-cases/accounting/GetVatReportUseCase";
 import { FileVatReturnUseCase } from "@/src/application/use-cases/accounting/FileVatReturnUseCase";
+import { RecordDunningUseCase } from "@/src/application/use-cases/accounting/RecordDunningUseCase";
 
 export interface FormState {
   error?: string;
@@ -90,4 +91,19 @@ export async function fileVatReturnAction(formData: FormData): Promise<void> {
     new Date().toISOString(),
   );
   revalidatePath("/shop/accounting/vat");
+}
+
+/** ส่งใบทวงหนี้ลูกค้า (บันทึก dunning log) */
+export async function recordDunningAction(formData: FormData): Promise<void> {
+  const user = await requireRole("shop_owner");
+  const customerId = String(formData.get("customerId") ?? "");
+  const amount = Number(formData.get("amount") ?? "0") || 0;
+  await new RecordDunningUseCase(container.dunningLogRepository).execute(
+    user.shopId!,
+    customerId,
+    amount,
+    null,
+    new Date().toISOString(),
+  );
+  revalidatePath("/shop/accounting/receivables");
 }
