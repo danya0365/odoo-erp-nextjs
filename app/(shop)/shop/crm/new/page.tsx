@@ -8,14 +8,7 @@ import { OpportunityForm } from "@/src/presentation/components/crm/OpportunityFo
 export default async function NewOpportunityPage() {
   const user = await requireRole("shop_owner");
   const shopId = user.shopId!;
-  const result = await container.partnerRepository.list(shopId, {
-    page: 1,
-    pageSize: 100,
-    status: "",
-  });
-  const customers = result.items
-    .filter((p) => p.type === "customer" || p.type === "both")
-    .map((p) => ({ id: p.id, name: p.name }));
+  const customers = (await container.partnerRepository.listActiveByType(shopId, "customer")).map((p) => ({ id: p.id, name: p.name }));
 
   return (
     <Container className="max-w-2xl space-y-6 py-8">

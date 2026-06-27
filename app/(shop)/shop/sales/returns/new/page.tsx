@@ -60,8 +60,7 @@ export default async function NewSalesReturnPage({
   }
 
   // ── ขั้นที่ 1: เลือกใบแจ้งหนี้ที่จะคืน (เฉพาะที่ลงบัญชี/ชำระแล้ว) ──
-  const result = await container.invoiceRepository.list(shopId, { page: 1, pageSize: 50, status: "" });
-  const invoices = result.items.filter((i) => i.status === "posted" || i.status === "paid");
+  const invoices = await container.invoiceRepository.listByStatuses(shopId, ["posted", "paid"]);
   const customers = await Promise.all(
     invoices.map((i) => container.partnerRepository.findById(shopId, i.customerId)),
   );

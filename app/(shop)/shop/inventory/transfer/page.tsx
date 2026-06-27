@@ -13,15 +13,13 @@ export default async function TransferPage() {
   const shopId = user.shopId!;
 
   await container.stockLocationRepository.ensureDefault(shopId);
-  const [locations, productPage, transfers] = await Promise.all([
+  const [locations, stockable, transfers] = await Promise.all([
     container.stockLocationRepository.list(shopId),
-    container.productRepository.list(shopId, { page: 1, pageSize: 100, status: "" }),
+    container.productRepository.listStockable(shopId),
     container.stockMoveRepository.listBySourceType(shopId, "transfer", 20),
   ]);
-  const products = productPage.items
-    .filter((p) => p.type === "stockable")
-    .map((p) => ({ id: p.id, name: p.name }));
-  const productName = new Map(productPage.items.map((p) => [p.id, p.name]));
+  const products = stockable.map((p) => ({ id: p.id, name: p.name }));
+  const productName = new Map(stockable.map((p) => [p.id, p.name]));
 
   // แสดงเฉพาะขา OUT (qtyDelta < 0) เป็น 1 รายการต่อการโอน
   const outMoves = transfers.filter((m) => m.qtyDelta < 0);

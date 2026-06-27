@@ -1,5 +1,5 @@
 import "server-only";
-import { and, eq, desc, count } from "drizzle-orm";
+import { and, eq, desc, count, inArray } from "drizzle-orm";
 
 import { db as defaultDb, schema, type Database } from "@/src/infrastructure/db/client";
 import type { Invoice, InvoiceLine } from "@/src/domain/entities";
@@ -107,6 +107,16 @@ export class DrizzleInvoiceRepository implements IInvoiceRepository {
       .select()
       .from(schema.invoices)
       .where(and(eq(schema.invoices.shopId, shopId), eq(schema.invoices.status, "posted")))
+      .orderBy(desc(schema.invoices.createdAt));
+    return rows.map(toInvoice);
+  }
+
+  async listByStatuses(shopId: string, statuses: Invoice["status"][]): Promise<Invoice[]> {
+    if (statuses.length === 0) return [];
+    const rows = await this.db
+      .select()
+      .from(schema.invoices)
+      .where(and(eq(schema.invoices.shopId, shopId), inArray(schema.invoices.status, statuses)))
       .orderBy(desc(schema.invoices.createdAt));
     return rows.map(toInvoice);
   }

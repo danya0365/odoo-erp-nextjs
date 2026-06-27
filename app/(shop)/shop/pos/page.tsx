@@ -55,13 +55,11 @@ async function PosOpenView({
   openingCash: number;
   openedAt: string;
 }) {
-  const [productPage, orders] = await Promise.all([
-    container.productRepository.list(shopId, { page: 1, pageSize: 100, status: "" }),
+  const [activeProducts, orders] = await Promise.all([
+    container.productRepository.listActive(shopId),
     container.posOrderRepository.listBySession(shopId, sessionId),
   ]);
-  const products = productPage.items
-    .filter((p) => p.isActive)
-    .map((p) => ({ id: p.id, name: p.name, salePrice: p.salePrice, taxRateBp: p.taxRateBp }));
+  const products = activeProducts.map((p) => ({ id: p.id, name: p.name, salePrice: p.salePrice, taxRateBp: p.taxRateBp }));
   const salesTotal = orders.reduce((s, o) => s + o.totalAmount, 0);
 
   return (

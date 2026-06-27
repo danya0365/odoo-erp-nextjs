@@ -8,8 +8,7 @@ import { BomForm } from "@/src/presentation/components/manufacturing/BomForm";
 export default async function NewBomPage() {
   const user = await requireRole("shop_owner");
   const shopId = user.shopId!;
-  const page = await container.productRepository.list(shopId, { page: 1, pageSize: 100, status: "" });
-  const products = page.items.filter((p) => p.isActive).map((p) => ({ id: p.id, name: p.name }));
+  const products = (await container.productRepository.listActive(shopId)).map((p) => ({ id: p.id, name: p.name }));
 
   return (
     <Container className="max-w-2xl space-y-6 py-8">

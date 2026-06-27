@@ -73,7 +73,7 @@ test("อนุมัติซ้ำไม่ได้ + scope-by-shop", async (
     );
     // B ไม่เห็นพนักงาน/งวดของ A
     assert.equal((await r.employees.listActive(b.shopId)).length, 0);
-    assert.equal((await r.runs.list(b.shopId)).length, 0);
+    assert.equal((await r.runs.list(b.shopId, { page: 1, pageSize: 20, status: "" })).total, 0);
   } finally {
     cleanup();
   }

@@ -15,8 +15,7 @@ export class CreateStockCountUseCase {
   ) {}
 
   async execute(shopId: string, note: string | null): Promise<StockCount> {
-    const page = await this.products.list(shopId, { page: 1, pageSize: 1000, status: "" });
-    const stockable = page.items.filter((p) => p.isActive && p.type === "stockable");
+    const stockable = await this.products.listStockable(shopId);
     const onHand = new Map((await this.stockMoves.onHandList(shopId)).map((r) => [r.productId, r.onHand]));
 
     const lines = stockable.map((p) => {

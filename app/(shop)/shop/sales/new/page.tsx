@@ -12,15 +12,13 @@ export default async function NewSalePage() {
   const user = await requireRole("shop_owner");
   const shopId = user.shopId!;
 
-  // ลูกค้า (customer/both) + สินค้าที่ขายได้ — ดึงชุดแรกพอสำหรับเลือก
+  // ลูกค้า + สินค้าที่ขายได้ (active) — filter ฝั่ง server
   const [partners, products] = await Promise.all([
-    container.partnerRepository.list(shopId, { page: 1, pageSize: 100, status: "customer" }),
-    container.productRepository.list(shopId, { page: 1, pageSize: 100 }),
+    container.partnerRepository.listActiveByType(shopId, "customer"),
+    container.productRepository.listActive(shopId),
   ]);
-  const customers = partners.items.filter((p) => p.isActive).map((p) => ({ id: p.id, name: p.name }));
-  const productOptions = products.items
-    .filter((p) => p.isActive)
-    .map((p) => ({ id: p.id, name: p.name, salePrice: p.salePrice, taxRateBp: p.taxRateBp }));
+  const customers = partners.map((p) => ({ id: p.id, name: p.name }));
+  const productOptions = products.map((p) => ({ id: p.id, name: p.name, salePrice: p.salePrice, taxRateBp: p.taxRateBp }));
 
   return (
     <Container className="max-w-4xl space-y-6 py-8">

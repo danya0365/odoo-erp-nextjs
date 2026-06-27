@@ -29,6 +29,8 @@ export interface IVendorBillRepository {
   createWithLines(input: CreateVendorBillInput): Promise<VendorBill>;
   findById(shopId: string, id: string): Promise<VendorBill | null>;
   listLines(shopId: string, vendorBillId: string): Promise<VendorBillLine[]>;
+  /** ใบตั้งหนี้ตามชุดสถานะ (สำหรับ picker) — filter ใน SQL */
+  listByStatuses(shopId: string, statuses: VendorBillStatus[]): Promise<VendorBill[]>;
   listByPurchaseOrder(shopId: string, purchaseOrderId: string): Promise<VendorBill[]>;
   list(shopId: string, query: PageQuery): Promise<Page<VendorBill>>;
   update(

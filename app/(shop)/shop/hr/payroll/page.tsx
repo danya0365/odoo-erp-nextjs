@@ -10,10 +10,19 @@ import { EmptyState } from "@/src/presentation/components/ui/EmptyState";
 import { Breadcrumb } from "@/src/presentation/components/ui/Breadcrumb";
 import { Table, THead, TBody, Tr, Th, Td } from "@/src/presentation/components/ui/Table";
 import { DocumentStatusBadge } from "@/src/presentation/components/shared/DocumentStatusBadge";
+import { PagerNav } from "@/src/presentation/components/shared/PagerNav";
+import { DEFAULT_PAGE_SIZE } from "@/src/application/repositories/pagination";
 
-export default async function PayrollPage() {
+export default async function PayrollPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const user = await requireRole("shop_owner");
-  const runs = await container.payrollRunRepository.list(user.shopId!);
+  const page = Math.max(1, Number((await searchParams).page ?? "1") || 1);
+  const result = await container.payrollRunRepository.list(user.shopId!, { page, pageSize: DEFAULT_PAGE_SIZE, status: "" });
+  const runs = result.items;
+  const totalPages = Math.ceil(result.total / result.pageSize);
 
   return (
     <Container className="space-y-6 py-8">
@@ -62,6 +71,8 @@ export default async function PayrollPage() {
           </Table>
         </Card>
       )}
+
+      <PagerNav page={page} totalPages={totalPages} />
     </Container>
   );
 }

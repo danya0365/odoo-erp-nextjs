@@ -17,13 +17,13 @@ export default async function MarketingPage() {
   const user = await requireRole("shop_owner");
   const shopId = user.shopId!;
 
-  const [promos, accounts, customerPage] = await Promise.all([
+  const [promos, accounts, customers] = await Promise.all([
     container.promotionRepository.list(shopId),
     container.loyaltyRepository.list(shopId),
-    container.partnerRepository.list(shopId, { page: 1, pageSize: 200, status: "customer" }),
+    container.partnerRepository.listActiveByType(shopId, "customer"),
   ]);
-  const custName = new Map(customerPage.items.map((c) => [c.id, c.name]));
-  const options = customerPage.items.filter((c) => c.isActive).map((c) => ({ id: c.id, name: c.name }));
+  const custName = new Map(customers.map((c) => [c.id, c.name]));
+  const options = customers.map((c) => ({ id: c.id, name: c.name }));
 
   const promoLabel = (p: (typeof promos)[number]) =>
     p.discountType === "percent" ? `ลด ${p.value}%` : `ลด ฿${formatScaled(p.value, 100)}`;

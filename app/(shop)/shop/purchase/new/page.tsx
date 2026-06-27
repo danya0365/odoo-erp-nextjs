@@ -19,13 +19,11 @@ export default async function NewPurchasePage({
   const { product: defaultProductId } = await searchParams;
 
   const [partners, products] = await Promise.all([
-    container.partnerRepository.list(shopId, { page: 1, pageSize: 100, status: "vendor" }),
-    container.productRepository.list(shopId, { page: 1, pageSize: 100 }),
+    container.partnerRepository.listActiveByType(shopId, "vendor"),
+    container.productRepository.listActive(shopId),
   ]);
-  const vendors = partners.items.filter((p) => p.isActive).map((p) => ({ id: p.id, name: p.name }));
-  const productOptions = products.items
-    .filter((p) => p.isActive)
-    .map((p) => ({ id: p.id, name: p.name, costPrice: p.costPrice, taxRateBp: p.taxRateBp }));
+  const vendors = partners.map((p) => ({ id: p.id, name: p.name }));
+  const productOptions = products.map((p) => ({ id: p.id, name: p.name, costPrice: p.costPrice, taxRateBp: p.taxRateBp }));
 
   return (
     <Container className="max-w-4xl space-y-6 py-8">

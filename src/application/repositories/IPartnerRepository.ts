@@ -23,6 +23,8 @@ export interface IPartnerRepository {
   /** scope ด้วย shopId เสมอ */
   findById(shopId: string, id: string): Promise<Partner | null>;
   findByEmail(shopId: string, email: string): Promise<Partner | null>;
+  /** ผู้ติดต่อที่ใช้งานอยู่ตามชนิด (customer→[customer,both], vendor→[vendor,both]) สำหรับ select — filter ใน SQL */
+  listActiveByType(shopId: string, type: "customer" | "vendor"): Promise<Partner[]>;
   list(shopId: string, query: PageQuery): Promise<Page<Partner>>;
   update(shopId: string, id: string, input: UpdatePartnerInput): Promise<Partner>;
   setActive(shopId: string, id: string, isActive: boolean): Promise<Partner>;

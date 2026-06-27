@@ -1,5 +1,5 @@
 import "server-only";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, count } from "drizzle-orm";
 
 import { db as defaultDb, schema, type Database } from "@/src/infrastructure/db/client";
 import type { PosSession } from "@/src/domain/entities";
@@ -8,6 +8,8 @@ import type {
   IPosSessionRepository,
   OpenSessionInput,
 } from "@/src/application/repositories/IPosSessionRepository";
+import type { Page, PageQuery } from "@/src/application/repositories/pagination";
+import { toOffsetLimit } from "@/src/application/repositories/pagination";
 
 type Row = typeof schema.posSessions.$inferSelect;
 
@@ -57,13 +59,14 @@ export class DrizzlePosSessionRepository implements IPosSessionRepository {
     return row ? toSession(row) : null;
   }
 
-  async list(shopId: string): Promise<PosSession[]> {
-    const rows = await this.db
-      .select()
-      .from(schema.posSessions)
-      .where(eq(schema.posSessions.shopId, shopId))
-      .orderBy(desc(schema.posSessions.openedAt));
-    return rows.map(toSession);
+  async list(shopId: string, query: PageQuery): Promise<Page<PosSession>> {
+    const { offset, limit } = toOffsetLimit(query);
+    const where = eq(schema.posSessions.shopId, shopId);
+    const [items, [{ total }]] = await Promise.all([
+      this.db.select().from(schema.posSessions).where(where).orderBy(desc(schema.posSessions.openedAt)).limit(limit).offset(offset),
+      this.db.select({ total: count() }).from(schema.posSessions).where(where),
+    ]);
+    return { items: items.map(toSession), total, page: query.page, pageSize: limit };
   }
 
   async close(shopId: string, id: string, patch: CloseSessionPatch): Promise<PosSession> {

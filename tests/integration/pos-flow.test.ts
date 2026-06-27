@@ -95,7 +95,7 @@ test("เปิดกะซ้ำไม่ได้ + scope-by-shop (B ไม่
       /เปิดอยู่แล้ว/,
     );
     assert.equal(await r.sessions.findOpen(b.shopId), null); // B ไม่เห็นของ A
-    assert.equal((await r.sessions.list(b.shopId)).length, 0);
+    assert.equal((await r.sessions.list(b.shopId, { page: 1, pageSize: 20, status: "" })).total, 0);
   } finally {
     cleanup();
   }

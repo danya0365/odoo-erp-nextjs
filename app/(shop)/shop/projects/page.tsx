@@ -10,11 +10,20 @@ import { Badge } from "@/src/presentation/components/ui/Badge";
 import { EmptyState } from "@/src/presentation/components/ui/EmptyState";
 import { Breadcrumb } from "@/src/presentation/components/ui/Breadcrumb";
 import { Table, THead, TBody, Tr, Th, Td } from "@/src/presentation/components/ui/Table";
+import { PagerNav } from "@/src/presentation/components/shared/PagerNav";
+import { DEFAULT_PAGE_SIZE } from "@/src/application/repositories/pagination";
 
-export default async function ProjectsPage() {
+export default async function ProjectsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const user = await requireRole("shop_owner");
   const shopId = user.shopId!;
-  const projects = await container.projectRepository.list(shopId);
+  const page = Math.max(1, Number((await searchParams).page ?? "1") || 1);
+  const result = await container.projectRepository.list(shopId, { page, pageSize: DEFAULT_PAGE_SIZE, status: "" });
+  const projects = result.items;
+  const totalPages = Math.ceil(result.total / result.pageSize);
   const customers = await Promise.all(
     projects.map((p) => (p.customerId ? container.partnerRepository.findById(shopId, p.customerId) : Promise.resolve(null))),
   );
@@ -61,6 +70,8 @@ export default async function ProjectsPage() {
           </Table>
         </Card>
       )}
+
+      <PagerNav page={page} totalPages={totalPages} />
     </Container>
   );
 }

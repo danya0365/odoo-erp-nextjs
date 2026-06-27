@@ -17,12 +17,12 @@ export default async function LotsPage() {
   const shopId = user.shopId!;
   const asOf = new Date().toISOString();
 
-  const [lots, productPage] = await Promise.all([
+  const [lots, stockable] = await Promise.all([
     container.productLotRepository.listAll(shopId),
-    container.productRepository.list(shopId, { page: 1, pageSize: 500, status: "" }),
+    container.productRepository.listStockable(shopId),
   ]);
-  const productName = new Map(productPage.items.map((p) => [p.id, p.name]));
-  const options = productPage.items.filter((p) => p.isActive && p.type === "stockable").map((p) => ({ id: p.id, name: p.name }));
+  const productName = new Map(stockable.map((p) => [p.id, p.name]));
+  const options = stockable.map((p) => ({ id: p.id, name: p.name }));
   const alerts = lots.filter((l) => l.qty > 0 && (isExpired(l.expiryDate, asOf) || isExpiringSoon(l.expiryDate, asOf, 30)));
 
   return (

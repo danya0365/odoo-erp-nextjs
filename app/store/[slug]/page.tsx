@@ -21,14 +21,12 @@ export default async function StorePage({
   const shop = await container.shopRepository.findBySlug(slug);
   if (!shop || !shop.isActive) notFound();
 
-  const [page, reviews, ratings] = await Promise.all([
-    container.productRepository.list(shop.id, { page: 1, pageSize: 100, status: "" }),
+  const [activeProducts, reviews, ratings] = await Promise.all([
+    container.productRepository.listActive(shop.id),
     container.storeReviewRepository.listByShop(shop.id, 20),
     container.storeReviewRepository.ratings(shop.id),
   ]);
-  const products = page.items
-    .filter((p) => p.isActive)
-    .map((p) => ({ id: p.id, name: p.name, salePrice: p.salePrice, taxRateBp: p.taxRateBp }));
+  const products = activeProducts.map((p) => ({ id: p.id, name: p.name, salePrice: p.salePrice, taxRateBp: p.taxRateBp }));
   const summary = ratingSummary(ratings);
 
   return (

@@ -9,8 +9,7 @@ import { ServiceTicketForm } from "@/src/presentation/components/service/Service
 export default async function NewServiceTicketPage() {
   const user = await requireRole("shop_owner");
   const shopId = user.shopId!;
-  const page = await container.partnerRepository.list(shopId, { page: 1, pageSize: 200, status: "customer" });
-  const customers = page.items.filter((p) => p.isActive).map((p) => ({ id: p.id, name: p.name }));
+  const customers = (await container.partnerRepository.listActiveByType(shopId, "customer")).map((p) => ({ id: p.id, name: p.name }));
 
   return (
     <Container className="max-w-2xl space-y-6 py-8">

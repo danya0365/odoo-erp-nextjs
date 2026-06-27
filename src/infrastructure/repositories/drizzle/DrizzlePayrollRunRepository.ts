@@ -1,5 +1,5 @@
 import "server-only";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, count } from "drizzle-orm";
 
 import { db as defaultDb, schema, type Database } from "@/src/infrastructure/db/client";
 import type { PayrollRun, Payslip, PayrollRunWithSlips } from "@/src/domain/entities";
@@ -8,6 +8,8 @@ import type {
   IPayrollRunRepository,
   PayrollRunPatch,
 } from "@/src/application/repositories/IPayrollRunRepository";
+import type { Page, PageQuery } from "@/src/application/repositories/pagination";
+import { toOffsetLimit } from "@/src/application/repositories/pagination";
 
 type Row = typeof schema.payrollRuns.$inferSelect;
 type SlipRow = typeof schema.payslips.$inferSelect;
@@ -74,13 +76,14 @@ export class DrizzlePayrollRunRepository implements IPayrollRunRepository {
     return { ...toRun(run), slips: slips.map(toSlip) };
   }
 
-  async list(shopId: string): Promise<PayrollRun[]> {
-    const rows = await this.db
-      .select()
-      .from(schema.payrollRuns)
-      .where(eq(schema.payrollRuns.shopId, shopId))
-      .orderBy(desc(schema.payrollRuns.createdAt));
-    return rows.map(toRun);
+  async list(shopId: string, query: PageQuery): Promise<Page<PayrollRun>> {
+    const { offset, limit } = toOffsetLimit(query);
+    const where = eq(schema.payrollRuns.shopId, shopId);
+    const [items, [{ total }]] = await Promise.all([
+      this.db.select().from(schema.payrollRuns).where(where).orderBy(desc(schema.payrollRuns.createdAt)).limit(limit).offset(offset),
+      this.db.select({ total: count() }).from(schema.payrollRuns).where(where),
+    ]);
+    return { items: items.map(toRun), total, page: query.page, pageSize: limit };
   }
 
   async update(shopId: string, id: string, patch: PayrollRunPatch): Promise<PayrollRun> {

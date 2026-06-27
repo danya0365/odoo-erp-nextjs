@@ -1,4 +1,5 @@
 import type { PayrollRun, PayrollRunStatus, PayrollRunWithSlips } from "@/src/domain/entities";
+import type { Page, PageQuery } from "@/src/application/repositories/pagination";
 
 export interface CreatePayslipInput {
   employeeId: string;
@@ -22,6 +23,6 @@ export interface PayrollRunPatch {
 export interface IPayrollRunRepository {
   createWithSlips(input: CreatePayrollRunInput): Promise<PayrollRun>;
   findById(shopId: string, id: string): Promise<PayrollRunWithSlips | null>;
-  list(shopId: string): Promise<PayrollRun[]>;
+  list(shopId: string, query: PageQuery): Promise<Page<PayrollRun>>;
   update(shopId: string, id: string, patch: PayrollRunPatch): Promise<PayrollRun>;
 }

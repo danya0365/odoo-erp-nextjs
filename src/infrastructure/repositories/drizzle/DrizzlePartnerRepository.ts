@@ -72,6 +72,22 @@ export class DrizzlePartnerRepository implements IPartnerRepository {
     return row ? toPartner(row) : null;
   }
 
+  async listActiveByType(shopId: string, type: "customer" | "vendor"): Promise<Partner[]> {
+    const types = type === "customer" ? (["customer", "both"] as const) : (["vendor", "both"] as const);
+    const rows = await this.db
+      .select()
+      .from(schema.partners)
+      .where(
+        and(
+          eq(schema.partners.shopId, shopId),
+          eq(schema.partners.isActive, true),
+          inArray(schema.partners.type, [...types]),
+        ),
+      )
+      .orderBy(desc(schema.partners.name));
+    return rows.map(toPartner);
+  }
+
   async list(shopId: string, query: PageQuery): Promise<Page<Partner>> {
     const { offset, limit } = toOffsetLimit(query);
     const filters: SQL[] = [eq(schema.partners.shopId, shopId)];

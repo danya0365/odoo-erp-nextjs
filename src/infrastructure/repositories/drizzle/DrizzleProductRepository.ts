@@ -76,6 +76,30 @@ export class DrizzleProductRepository implements IProductRepository {
     return { items: items.map(toProduct), total, page: query.page, pageSize: limit };
   }
 
+  async listActive(shopId: string): Promise<Product[]> {
+    const rows = await this.db
+      .select()
+      .from(schema.products)
+      .where(and(eq(schema.products.shopId, shopId), eq(schema.products.isActive, true)))
+      .orderBy(desc(schema.products.createdAt));
+    return rows.map(toProduct);
+  }
+
+  async listStockable(shopId: string): Promise<Product[]> {
+    const rows = await this.db
+      .select()
+      .from(schema.products)
+      .where(
+        and(
+          eq(schema.products.shopId, shopId),
+          eq(schema.products.isActive, true),
+          eq(schema.products.type, "stockable"),
+        ),
+      )
+      .orderBy(desc(schema.products.createdAt));
+    return rows.map(toProduct);
+  }
+
   async update(shopId: string, id: string, input: UpdateProductInput): Promise<Product> {
     const [row] = await this.db
       .update(schema.products)

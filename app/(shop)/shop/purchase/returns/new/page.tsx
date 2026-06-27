@@ -51,8 +51,7 @@ export default async function NewPurchaseReturnPage({
     );
   }
 
-  const result = await container.vendorBillRepository.list(shopId, { page: 1, pageSize: 50, status: "" });
-  const bills = result.items.filter((b) => b.status === "posted" || b.status === "paid");
+  const bills = await container.vendorBillRepository.listByStatuses(shopId, ["posted", "paid"]);
   const vendors = await Promise.all(bills.map((b) => container.partnerRepository.findById(shopId, b.vendorId)));
 
   return (

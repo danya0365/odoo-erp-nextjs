@@ -31,6 +31,8 @@ export interface IInvoiceRepository {
   listLines(shopId: string, invoiceId: string): Promise<InvoiceLine[]>;
   /** ใบแจ้งหนี้ที่ยังค้างชำระ (status posted) */
   listOutstanding(shopId: string): Promise<Invoice[]>;
+  /** ใบแจ้งหนี้ตามชุดสถานะ (สำหรับ picker) — filter ใน SQL */
+  listByStatuses(shopId: string, statuses: InvoiceStatus[]): Promise<Invoice[]>;
   listBySalesOrder(shopId: string, salesOrderId: string): Promise<Invoice[]>;
   list(shopId: string, query: PageQuery): Promise<Page<Invoice>>;
   update(

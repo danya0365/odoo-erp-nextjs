@@ -1,5 +1,5 @@
 import "server-only";
-import { and, eq, desc, count } from "drizzle-orm";
+import { and, eq, desc, count, inArray } from "drizzle-orm";
 
 import { db as defaultDb, schema, type Database } from "@/src/infrastructure/db/client";
 import type { VendorBill, VendorBillLine } from "@/src/domain/entities";
@@ -100,6 +100,16 @@ export class DrizzleVendorBillRepository implements IVendorBillRepository {
       lineTax: r.lineTax,
       lineTotal: r.lineTotal,
     }));
+  }
+
+  async listByStatuses(shopId: string, statuses: VendorBill["status"][]): Promise<VendorBill[]> {
+    if (statuses.length === 0) return [];
+    const rows = await this.db
+      .select()
+      .from(schema.vendorBills)
+      .where(and(eq(schema.vendorBills.shopId, shopId), inArray(schema.vendorBills.status, statuses)))
+      .orderBy(desc(schema.vendorBills.createdAt));
+    return rows.map(toBill);
   }
 
   async listByPurchaseOrder(

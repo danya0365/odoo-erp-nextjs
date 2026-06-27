@@ -9,12 +9,21 @@ import { Badge } from "@/src/presentation/components/ui/Badge";
 import { EmptyState } from "@/src/presentation/components/ui/EmptyState";
 import { Breadcrumb } from "@/src/presentation/components/ui/Breadcrumb";
 import { Table, THead, TBody, Tr, Th, Td } from "@/src/presentation/components/ui/Table";
+import { PagerNav } from "@/src/presentation/components/shared/PagerNav";
+import { DEFAULT_PAGE_SIZE } from "@/src/application/repositories/pagination";
 
 const baht = (v: number | null) => (v === null ? "—" : `฿${formatScaled(v, 100)}`);
 
-export default async function PosSessionsPage() {
+export default async function PosSessionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const user = await requireRole("shop_owner");
-  const sessions = await container.posSessionRepository.list(user.shopId!);
+  const page = Math.max(1, Number((await searchParams).page ?? "1") || 1);
+  const result = await container.posSessionRepository.list(user.shopId!, { page, pageSize: DEFAULT_PAGE_SIZE, status: "" });
+  const sessions = result.items;
+  const totalPages = Math.ceil(result.total / result.pageSize);
 
   return (
     <Container className="space-y-6 py-8">
@@ -68,6 +77,8 @@ export default async function PosSessionsPage() {
           </Table>
         </Card>
       )}
+
+      <PagerNav page={page} totalPages={totalPages} />
     </Container>
   );
 }
