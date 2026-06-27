@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Warehouse, ArrowLeftRight, PackageSearch, ClipboardCheck, ArrowRight } from "lucide-react";
+import { Warehouse, ArrowLeftRight, PackageSearch, ClipboardCheck, PackageCheck, ArrowRight } from "lucide-react";
 
 import { requireRole } from "@/src/infrastructure/auth/session";
 import { container } from "@/src/infrastructure/di/container";
@@ -16,6 +16,7 @@ const LINKS = [
   { href: "/shop/inventory/transfer", label: "โอนย้ายสต๊อก", desc: "ย้ายระหว่างคลัง", icon: ArrowLeftRight },
   { href: "/shop/inventory/reorder", label: "จุดสั่งซื้อซ้ำ", desc: "ตั้ง min/max + รายการที่ต้องเติม", icon: PackageSearch },
   { href: "/shop/inventory/stocktake", label: "ตรวจนับสต๊อก", desc: "นับจริง → ปรับยอดตามส่วนต่าง", icon: ClipboardCheck },
+  { href: "/shop/inventory/lots", label: "ล็อต/วันหมดอายุ", desc: "รับเข้าล็อต → ตัด FEFO → เตือนหมดอายุ", icon: PackageCheck },
 ];
 
 export default async function InventoryHubPage() {

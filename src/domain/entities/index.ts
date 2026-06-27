@@ -79,6 +79,18 @@ export interface ReorderRule {
   updatedAt: string;
 }
 
+/** ล็อตสินค้า + วันหมดอายุ (lot/batch tracking) */
+export interface ProductLot {
+  id: string;
+  shopId: string;
+  productId: string;
+  lotNumber: string;
+  expiryDate: string; // "YYYY-MM-DD"
+  qty: number; // คงเหลือในล็อต (scale QTY_SCALE)
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type StockCountStatus = "draft" | "applied" | "cancelled";
 
 /** รอบตรวจนับสต๊อก (physical inventory) — นับจริงแล้วปรับยอดตามส่วนต่าง */

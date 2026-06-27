@@ -46,7 +46,13 @@ metadata:
 - ✅ **#11 promotion-loyalty (โปรโมชั่น/แต้ม)** — สร้างโปร/คูปอง + คิดส่วนลดตามเงื่อนไข + สะสม/แลกแต้ม
   (migration 0025 `promotions` + `loyalty_accounts`): `promotion.ts` discountAmount/pointsFromSpend +
   CreatePromotion/ApplyPromotion/Earn/Redeem · หน้า `/shop/marketing` + tile · done
-- เลือก journey ถัดไปจาก Gap backlog (`/shop/journey/coverage`) — กำลังไล่ทำต่อเนื่อง (autonomous)
+- ✅ **#12 lot-expiry (ล็อต/วันหมดอายุ FEFO)** — รับเข้าระบุล็อต+วันหมดอายุ + ตัด FEFO + เตือนใกล้หมดอายุ
+  (migration 0026 `product_lots`): `lot.ts` allocateFefo/isExpiringSoon + ReceiveLot/AllocateFefo ·
+  หน้า `/shop/inventory/lots` · done
+
+🎉 **ครบทั้ง 12 real-world journeys แล้ว** — Gap backlog ว่าง (ไม่เหลือ step `missing`) ·
+real-world journeys ทุกอัน coverage 100% (เหลือเพียง 2 partial ใน supported journeys: lead-to-order convert,
+auto-replenish PO — ปุ่มเชื่อมตรงระหว่างหน้า ไม่ใช่ฟีเจอร์ที่ขาด)
 
 ## Legend
 ✅ เสร็จ+เทสต์ครบ 3 ชั้น · 🟡 ใช้ได้แต่มี gap/รอตัดสินใจ · ⬜ ยังไม่เริ่ม (อยู่ใน roadmap)

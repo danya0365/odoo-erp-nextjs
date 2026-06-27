@@ -298,12 +298,12 @@ export const JOURNEYS: readonly Journey[] = [
     title: "ติดตามล็อต / วันหมดอายุ (FEFO)",
     description: "รับเข้าระบุล็อต+วันหมดอายุ ขายตัดแบบหมดอายุก่อน และเตือนใกล้หมดอายุ",
     icon: "PackageCheck",
-    estimatedTime: "—",
+    estimatedTime: "2-3 นาที",
     kind: "real-world",
     steps: [
-      { title: "รับเข้าระบุล็อต/วันหมดอายุ", description: "ผูกล็อตกับการรับของ", status: "missing", note: "ต้องมี: lot/serial + expiry tracking" },
-      { title: "ขายตัดสต๊อกแบบ FEFO", description: "หมดอายุก่อน-ออกก่อน", status: "missing", note: "ต้องมี: FEFO allocation" },
-      { title: "แจ้งเตือนสินค้าใกล้หมดอายุ", description: "รายการล็อตที่ใกล้หมดอายุ", status: "missing", note: "ต้องมี: expiry alert report" },
+      { title: "รับเข้าระบุล็อต/วันหมดอายุ", description: "ผูกล็อต+วันหมดอายุกับการรับของ", route: "/shop/inventory/lots", status: "done", note: "ReceiveLot (product_lots)" },
+      { title: "ขายตัดสต๊อกแบบ FEFO", description: "หมดอายุก่อน-ออกก่อน", route: "/shop/inventory/lots", status: "done", note: "AllocateFefo (allocateFefo)" },
+      { title: "แจ้งเตือนสินค้าใกล้หมดอายุ", description: "รายการล็อตใกล้/หมดอายุ", route: "/shop/inventory/lots", status: "done", note: "isExpiringSoon/isExpired (≤30 วัน)" },
     ],
   },
   {
